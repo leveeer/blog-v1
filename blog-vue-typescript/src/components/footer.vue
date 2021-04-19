@@ -12,5 +12,7 @@ export default class Footer extends Vue {}
   text-align: center;
   padding: 20px;
   font-weight: bold;
+  margin-bottom: 0;
+  width: 100%;
 }
 </style>

@@ -68,6 +68,7 @@ export default class Archive extends Vue {
     const data: ArchiveData = await this.$https.get(this.$urls.getArticleList, {
       params: this.params
     });
+    console.log(data)
     this.isLoading = false;
     this.articlesList = [...this.articlesList, ...data.list];
     this.total = data.count;

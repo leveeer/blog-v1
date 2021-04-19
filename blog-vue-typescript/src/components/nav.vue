@@ -8,7 +8,7 @@
             <router-link to="/">
               <img class="logo"
                    src="../assets/user_logo.jpg"
-                   alt="Enison">
+                   alt="BiaoChenXuYing">
             </router-link>
           </el-col>
           <el-col :span="16">
@@ -67,8 +67,8 @@
         <div class="nav-mobile-logo">
           <router-link to="/">
             <img class="logo fl"
-                 src="../assets/logo.jpg"
-                 alt="BiaoChenXuYing">
+                 src="../assets/user_logo.jpg"
+                 alt="Einson">
           </router-link>
         </div>
         <div class="title">{{title}}</div>
