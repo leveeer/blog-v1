@@ -178,7 +178,7 @@ export default class Slider extends Vue {
   }
   25% {
     transform: rotate(0deg) scale(1, 1);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
     transform: rotate(0deg) scale(0.8, 0.8);
@@ -193,7 +193,7 @@ export default class Slider extends Vue {
   }
   25% {
     transform: rotate(0deg) scale(1, 1);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
     transform: rotate(0deg) scale(0.8, 0.8);
@@ -208,7 +208,7 @@ export default class Slider extends Vue {
   }
   25% {
     transform: rotate(0deg) scale(1, 1);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
     transform: rotate(0deg) scale(0.8, 0.8);
@@ -223,7 +223,7 @@ export default class Slider extends Vue {
   }
   25% {
     transform: rotate(0deg) scale(1, 1);
-    opacity: 0.8;
+    opacity: 1;
   }
   100% {
     transform: rotate(0deg) scale(0.8, 0.8);

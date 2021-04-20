@@ -9,7 +9,7 @@ import { Vue, Component } from "vue-property-decorator";
 @Component
 export default class Footer extends Vue {}
 </script>
-<style>
+<style scoped>
 .el-footer {
   font-size: 14px;
   /*font-weight: bold;*/

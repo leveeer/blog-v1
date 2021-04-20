@@ -25,7 +25,10 @@ import {
   Timeline,
   TimelineItem,
   Card,
-  Tag, Container, Footer
+  Tag,
+  Container,
+  Footer,
+  Divider,
 } from "element-ui";
 import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 import mixin from "./mixins";

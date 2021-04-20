@@ -10,8 +10,8 @@
           <div class="author">
             <div class="avatar">
               <img class="auth-logo"
-                src="../assets/userLogo.jpeg"
-                alt="BiaoChenXuYing"/>
+                src="../assets/user_logo.jpg"
+                alt="Einson"/>
             </div>
             <div class="info">
               <span class="name">

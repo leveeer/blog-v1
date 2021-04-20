@@ -14,44 +14,44 @@
         <div class="list">
           <router-link class="link"
                        to="/articles">
-            文章
+            <el-tag type="" effect="dark" size="medium" hit=true>文章</el-tag>
           </router-link>
           <router-link class="link"
                        to="/project">
-            项目
+            <el-tag type="" effect="dark" size="medium" hit=true>项目</el-tag>
           </router-link>
           <a target="_blank"
              rel="noopener noreferrer"
              class="link"
              href="https://github.com/biaochenxuying">
-            github
+            <el-tag type="" effect="dark" size="medium" hit=true>github</el-tag>
           </a>
           <a target="_blank"
              rel="noopener noreferrer"
              class="link"
              href="https://juejin.im/user/591d6b4d0ce463006926ae40">
-            掘金
+            <el-tag type="" effect="dark" size="medium" hit=true>掘金</el-tag>
           </a>
           <a target="_blank"
              rel="noopener noreferrer"
              class="link"
              href="https://www.zhihu.com/people/gu-jian-qi-tan-shui/activities">
-            知乎
+            <el-tag type="" effect="dark" size="medium" hit=true>知乎</el-tag>
           </a>
           <a target="_blank"
              rel="noopener noreferrer"
              class="link"
              href="https://segmentfault.com/u/biaochenxuying">
-            segmentfault
+            <el-tag type="" effect="dark" size="medium" hit=true>segmentfault</el-tag>
           </a>
           <a target="_blank"
              rel="noopener noreferrer"
              class="link"
              href="https://www.jianshu.com/u/91717b553bfd">
-            简书
+            <el-tag type="" effect="dark" size="medium" hit=true>简书</el-tag>
           </a>
         </div>
-        <div class="introduce"> 你知道的越多，不知道的就越多 </div>
+        <div class="introduce"><el-tag type="" effect="dark" size="medium" hit=true>你知道的越多，不知道的就越多</el-tag>  </div>
       </div>
     </div>
   </div>
@@ -106,12 +106,12 @@ export default class Home extends Vue {
         vec4 pos = uModelview * vec4(aPosition + uOffset, 1.0);
         gl_Position = uProjection * pos;
         gl_PointSize = aMisc.x * uProjection[1][1] / -pos.z * uResolution.y * 0.5;
-        
+
         pposition = pos.xyz;
         psize = aMisc.x;
         pdist = length(pos.xyz);
         palpha = smoothstep(0.0, 1.0, (pdist - 0.1) / uFade.z);
-        
+
         vec3 elrsn = sin(aEuler);
         vec3 elrcs = cos(aEuler);
         mat3 rotx = mat3(
@@ -125,13 +125,13 @@ export default class Home extends Vue {
             elrsn.y, 0.0, elrcs.y
         );
         mat3 rotz = mat3(
-            elrcs.z, elrsn.z, 0.0, 
+            elrcs.z, elrsn.z, 0.0,
             -elrsn.z, elrcs.z, 0.0,
             0.0, 0.0, 1.0
         );
         mat3 rotmat = rotx * roty * rotz;
         normal = rotmat[2];
-        
+
         mat3 trrotm = mat3(
             rotmat[0][0], rotmat[1][0], rotmat[2][0],
             rotmat[0][1], rotmat[1][1], rotmat[2][1],
@@ -140,16 +140,16 @@ export default class Home extends Vue {
         normX = trrotm[0];
         normY = trrotm[1];
         normZ = trrotm[2];
-        
+
         const vec3 lit = vec3(0.6917144638660746, 0.6917144638660746, -0.20751433915982237);
-        
+
         float tmpdfs = dot(lit, normal);
         if(tmpdfs < 0.0) {
             normal = -normal;
             tmpdfs = dot(lit, normal);
         }
         diffuse = 0.4 + tmpdfs;
-        
+
         vec3 eyev = normalize(-pos.xyz);
         if(dot(eyev, normal) > 0.0) {
             vec3 hv = normalize(eyev + lit);
@@ -158,7 +158,7 @@ export default class Home extends Vue {
         else {
             specular = 0.0;
         }
-        
+
         rstop = clamp((abs(pdist - uDOF.x) - uDOF.y) / uDOF.z, 0.0, 1.0);
         rstop = pow(rstop, 0.5);
         //-0.69315 = ln(0.5)
@@ -201,17 +201,17 @@ export default class Home extends Vue {
         vec3 d = vec3(0.0, 0.0, -1.0);
         float nd = normZ.z; //dot(-normZ, d);
         if(abs(nd) < 0.0001) discard;
-        
+
         float np = dot(normZ, p);
         vec3 tp = p + d * np / nd;
         vec2 coord = vec2(dot(normX, tp), dot(normY, tp));
-        
+
         //angle = 15 degree
         const float flwrsn = 0.258819045102521;
         const float flwrcs = 0.965925826289068;
         mat2 flwrm = mat2(flwrcs, -flwrsn, flwrsn, flwrcs);
         vec2 flwrp = vec2(abs(coord.x), coord.y) * flwrm;
-        
+
         float r;
         if(flwrp.x < 0.0) {
             r = ellipse(flwrp, vec2(0.065, 0.024) * 0.5, vec2(0.36, 0.96) * 0.5);
@@ -219,20 +219,20 @@ export default class Home extends Vue {
         else {
             r = ellipse(flwrp, vec2(0.065, 0.024) * 0.5, vec2(0.58, 0.96) * 0.5);
         }
-        
+
         if(r > rstop) discard;
-        
+
         vec3 col = mix(vec3(1.0, 0.8, 0.75), vec3(1.0, 0.9, 0.87), r);
         float grady = mix(0.0, 1.0, pow(coord.y * 0.5 + 0.5, 0.35));
         col *= vec3(1.0, grady, grady);
         col *= mix(0.8, 1.0, pow(abs(coord.x), 0.3));
         col = col * diffuse + specular;
-        
+
         col = mix(fadeCol, col, distancefade);
-        
+
         float alpha = (rstop > 0.001)? (0.5 - r / (rstop * 2.0)) : 1.0;
         alpha = smoothstep(0.0, 1.0, alpha) * palpha;
-        
+
         gl_FragColor = vec4(col * 0.5, alpha);
     }`;
     let fx_common_vsh: string = `
@@ -328,7 +328,7 @@ export default class Home extends Vue {
         col = srccol + bloomcol * (vec4(1.0) + srccol);
         col *= smoothstep(1.0, 0.0, pow(length((texCoord - vec2(0.5)) * 2.0), 1.2) * 0.5);
         col = pow(col, vec4(0.45454545454545)); //(1.0 / 2.2)
-        
+
         gl_FragColor = vec4(col.rgb, 1.0);
         gl_FragColor.a = 1.0;
     }`;
@@ -1387,6 +1387,7 @@ export default class Home extends Vue {
       }
     }
     .introduce {
+      font-size: 20px;
       padding-top: 20px;
       color: #fff;
     }

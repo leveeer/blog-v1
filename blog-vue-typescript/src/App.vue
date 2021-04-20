@@ -53,17 +53,11 @@ export default class App extends Vue {
       this.isShowNav = true;
       referrer.setAttribute("content", "never");
     }
-    if (
-      val.path === "/articles" ||
-      val.path === "/archive" ||
-      val.path === "/project" ||
-      val.path === "/timeline" ||
-      val.path === "/message"
-    ) {
-      this.isShowSlider = true;
-    } else {
-      this.isShowSlider = false;
-    }
+    this.isShowSlider = val.path === "/articles" ||
+        val.path === "/archive" ||
+        val.path === "/project" ||
+        val.path === "/timeline" ||
+        val.path === "/message";
     if (isMobileOrPc()) {
       this.isShowSlider = false;
     }
@@ -75,14 +69,14 @@ export default class App extends Vue {
 @import url("./less/index.less");
 @import url("./less/mobile.less");
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: "PingFang SC", Monaco,serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: left;
+  text-align: center;
   color: #2c3e50;
-  width: 1200px;
+  width: 1400px;
   margin: 0 auto;
-  padding-top: 61px;
+  padding-top: 60px;
 }
 img {
   vertical-align: bottom;

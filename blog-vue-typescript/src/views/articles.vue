@@ -1,7 +1,18 @@
 <template>
   <div class="left clearfix">
     <h3 v-if="params.tag_id"
-        class="left-title">{{ tag_name }} 相关的文章：</h3>
+        class="left-title">{{ tag_name }} 相关的文章：
+    </h3>
+    <div class="article-container">
+      <el-card class="article-card" :body-style="{ padding: '0px'}" shadow="hover" v-for="(hr,index) in 10" :key="index">
+        <img style="width: 100%;display: block" src="../assets/logo5.jpg" class="image" alt="">
+        <p>文章{{ index }}</p>
+        <p>{{new Date() | data}}</p>
+      </el-card>
+    </div>
+
+
+
     <ul class="articles-list"
         id="list">
       <transition-group name="el-fade-in">
@@ -147,10 +158,7 @@ export default class Articles extends Vue {
   private async handleSearch(): Promise<void> {
     this.isLoading = true;
     const data: ArticlesData = await this.$https.get(
-      this.$urls.getArticleList,
-      {
-        params: this.params
-      }
+      this.$urls.getArticleList, {params: this.params}
     );
     this.isLoading = false;
     this.articlesList = [...this.articlesList, ...data.list];
@@ -170,6 +178,21 @@ export default class Articles extends Vue {
 </script>
 
 <style lang="less" scoped>
+
+.article-container {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.article-card {
+  width: 260px;
+  height: 350px;
+  margin-bottom: 40px;
+  //border-radius: 10px;
+}
+
 .left {
   .articles-list {
     margin: 0;
@@ -209,8 +232,7 @@ export default class Articles extends Vue {
       line-height: 20px;
       position: relative;
       // width: 100%;
-      padding: 15px 0px;
-      padding-right: 150px;
+      padding: 15px 150px 15px 0;
       border-bottom: 1px solid #f0f0f0;
       word-wrap: break-word;
       cursor: pointer;
@@ -239,7 +261,7 @@ export default class Articles extends Vue {
           margin-right: 10px;
           color: #b4b4b4;
 
-          &::hover {
+          &:hover {
             transition: 0.1s ease-in;
             -webkit-transition: 0.1s ease-in;
             -moz-transition: 0.1s ease-in;

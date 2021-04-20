@@ -7,8 +7,8 @@
           <el-col :span="3">
             <router-link to="/">
               <img class="logo"
-                   src="../assets/user_logo.jpg"
-                   alt="BiaoChenXuYing">
+                   src="../assets/logo5.jpg"
+                   alt="Einson">
             </router-link>
           </el-col>
           <el-col :span="16">
@@ -17,7 +17,9 @@
                      active-text-color="#409eff"
                      class="el-menu-demo"
                      mode="horizontal"
-                     @select="handleSelect">
+                     @select="handleSelect"
+                     text-color="#fff"
+                     background-color="#000000">
               <el-menuItem :route="l.path"
                            :index="l.index"
                            v-for="l in list"
@@ -36,11 +38,11 @@
                 <img v-if="!userInfo.avatar"
                      class="user-img"
                      src="../assets/user.png"
-                     alt="BiaoChenXuYing">
+                     alt="Einson">
                 <img v-if="userInfo.avatar"
                      class="user-img"
                      :src="userInfo.avatar"
-                     alt="BiaoChenXuYing">
+                     alt="Einson">
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="logout">登 出</el-dropdown-item>
                 </el-dropdown-menu>
@@ -55,7 +57,7 @@
                          @click="handleClick('login')">登录</el-button>
               <el-button size="small"
                          type="danger"
-                         @click="handleClick('register')">注册</el-button>
+                         @click="handleClick('register')" style="margin-left: 80px">注册</el-button>
             </div>
           </el-col>
         </el-row>
@@ -133,7 +135,8 @@
                       :isMobile="isMobile"
                       :handleFlag="handleFlag"
                       @ok="handleOk"
-                      @cancel="handleCancel"></RegisterAndLogin>
+                      @cancel="handleCancel">
+    </RegisterAndLogin>
   </div>
 </template>
 
@@ -374,16 +377,16 @@ export default class Nav extends Vue {
   z-index: 1000;
   width: 100%;
   border-bottom: 1px solid #eee;
-  background-color: #fff;
+  background-color: #000000;
   .nav-content {
     width: 1200px;
     margin: 0 auto;
+
   }
   .logo {
     height: 50px;
-    margin: 0;
     border-radius: 50%;
-    margin-top: 5px;
+    margin: 5px 0 0;
   }
   .el-menu.el-menu--horizontal {
     border-bottom: none;
@@ -391,8 +394,13 @@ export default class Nav extends Vue {
   .el-menu--horizontal > .el-menu-item {
     cursor: pointer;
     color: #333;
+    //position: relative;
+    left: 50px;
+    width: 100px;
+    text-align: center;
   }
   .nav-right {
+    width: 260px;
     position: relative;
     padding-top: 15px;
     text-align: right;
