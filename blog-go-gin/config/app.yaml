@@ -1,0 +1,9 @@
+# 常规配置
+appname: blog-go-gin
+httpport: 3000
+runmode: dev
+autorender: false
+copyrequestbody: true
+EnableDocs: true
+sqlconn:
+sessionon: true

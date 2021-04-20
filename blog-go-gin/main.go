@@ -1,22 +1,32 @@
 package main
 
 import (
-	"fmt"
+	"blog-go-gin/models"
+	"blog-go-gin/routers"
 	"github.com/gin-gonic/gin"
+	"github.com/mattn/go-colorable" // 改包可完美解决问题
+	"strconv"
+	"sync"
 )
 
+var OnceDo = sync.Once{}
+var Conf *models.Config
+
+
 func main() {
-	r := gin.Default()
+	// 启用gin的日志输出带颜色
+	gin.ForceConsoleColor()
+	// 替换默认Writer（关键步骤）
+	gin.DefaultWriter = colorable.NewColorableStdout()
 
-	r.GET("/getArticleList", getArticleList)
-	err := r.Run(":3000")
-	if err != nil {
-		fmt.Println("server run filed, err:", err)
-	}
+	var router *gin.Engine
+	OnceDo.Do(func() {
+		var config models.Config
+		Conf = config.GetConf()
+		router = routers.InitWebRouter(Conf)
+	})
+
+	_ = router.Run(":" + strconv.Itoa(int(Conf.HttpPort)))
 
 }
 
-func getArticleList(c *gin.Context) {
-	fmt.Println("ok")
-
-}
