@@ -32,7 +32,7 @@ func InitWebRouter(config *models.Config) *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
-	//   /getArticleList?keyword=&likes=&state=1&tag_id=&category_id=&pageNum=1&pageSize=10
+
 	r.GET("/getArticleList", ArticleRestApi.GetArticleList)
 
 	return r

@@ -4,7 +4,7 @@ import (
 	"blog-go-gin/models"
 	"blog-go-gin/routers"
 	"github.com/gin-gonic/gin"
-	"github.com/mattn/go-colorable" // 改包可完美解决问题
+	"github.com/mattn/go-colorable"
 	"strconv"
 	"sync"
 )
@@ -23,10 +23,9 @@ func main() {
 	OnceDo.Do(func() {
 		var config models.Config
 		Conf = config.GetConf()
-		router = routers.InitWebRouter(Conf)
 	})
 
+	router = routers.InitWebRouter(Conf)
 	_ = router.Run(":" + strconv.Itoa(int(Conf.HttpPort)))
-
 }
 
