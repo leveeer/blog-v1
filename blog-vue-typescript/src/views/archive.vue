@@ -56,8 +56,6 @@ export default class Archive extends Vue {
     pageNum: 1,
     pageSize: 10
   };
-  $urls: any;
-  $https: any;
 
   mounted(): void {
     this.handleSearch();

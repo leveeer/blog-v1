@@ -63,6 +63,7 @@ import {
 import LoadEnd from "@/components/loadEnd.vue";
 import LoadingCustom from "@/components/loading.vue";
 import {ArticlesParams, ArticlesData} from "@/types/index";
+import logger from "vuex/dist/logger";
 
 // 获取可视区域的高度
 const viewHeight = window.innerHeight || document.documentElement.clientHeight;
@@ -116,8 +117,6 @@ export default class Articles extends Vue {
       process.env.NODE_ENV === "development"
           ? "http://localhost:3001/articleDetail?article_id="
           : "https://biaochenxuying.cn/articleDetail?article_id=";
-  $https: any;
-  $urls: any;
 
   // lifecycle hook
   mounted(): void {
@@ -157,9 +156,11 @@ export default class Articles extends Vue {
 
   private async handleSearch(): Promise<void> {
     this.isLoading = true;
+    console.log(this.params)
     const data: ArticlesData = await this.$https.get(
       this.$urls.getArticleList, {params: this.params}
     );
+    console.log(data)
     this.isLoading = false;
     this.articlesList = [...this.articlesList, ...data.list];
     this.total = data.count;
