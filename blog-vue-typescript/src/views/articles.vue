@@ -4,46 +4,46 @@
         class="left-title">{{ tag_name }} 相关的文章：
     </h3>
     <div class="article-container">
-      <el-card class="article-card" :body-style="{ padding: '0px'}" shadow="hover" v-for="(hr,index) in 10"
+      <el-card class="article-card" :body-style="{ padding: '0px'}" shadow="hover" v-for="(article,index) in articlesList"
                :key="index">
         <img style="width: 100%;display: block" src="../assets/logo5.jpg" class="image" alt="">
-        <p>文章{{ index }}</p>
-        <p>{{ new Date() }}</p>
+        <p>{{ article.title }}</p>
+        <p>{{ article.createTime }}</p>
       </el-card>
     </div>
 
 
-    <ul class="articles-list"
-        id="list">
-      <transition-group name="el-fade-in">
-        <li @click="articleDetail(article._id)"
-            v-for="(article) in articlesList"
-            :key="article._id"
-            class="item">
-          <a :href="href + article._id"
-             target="_blank">
-            <img class="wrap-img img-blur-done"
-                 :data-src="article.img_url"
-                 data-has-lazy-src="false"
-                 src="../assets/bg.jpg"
-                 alt="文章封面"/>
-            <div class="content">
-              <h4 class="title">{{ article.title }}</h4>
-              <p class="abstract">{{ article.desc }}</p>
-              <div class="meta">
-                <span>查看 {{ article.meta.views }}</span>
-                <span>评论 {{ article.meta.comments }}</span>
-                <span>赞 {{ article.meta.likes }}</span>
-                <span v-if="article.create_time"
-                      class="time">
-                  {{ formatTime(article.create_time) }}
-                </span>
-              </div>
-            </div>
-          </a>
-        </li>
-      </transition-group>
-    </ul>
+<!--    <ul class="articles-list"-->
+<!--        id="list">-->
+<!--      <transition-group name="el-fade-in">-->
+<!--        <li @click="articleDetail(article._id)"-->
+<!--            v-for="(article) in articlesList"-->
+<!--            :key="article._id"-->
+<!--            class="item">-->
+<!--          <a :href="href + article._id"-->
+<!--             target="_blank">-->
+<!--            <img class="wrap-img img-blur-done"-->
+<!--                 :data-src="article.img_url"-->
+<!--                 data-has-lazy-src="false"-->
+<!--                 src="../assets/bg.jpg"-->
+<!--                 alt="文章封面"/>-->
+<!--            <div class="content">-->
+<!--              <h4 class="title">{{ article.title }}</h4>-->
+<!--              <p class="abstract">{{ article.desc }}</p>-->
+<!--              <div class="meta">-->
+<!--                <span>查看 {{ article.meta.views }}</span>-->
+<!--                <span>评论 {{ article.meta.comments }}</span>-->
+<!--                <span>赞 {{ article.meta.likes }}</span>-->
+<!--                <span v-if="article.create_time"-->
+<!--                      class="time">-->
+<!--                  {{ formatTime(article.create_time) }}-->
+<!--                </span>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </a>-->
+<!--        </li>-->
+<!--      </transition-group>-->
+<!--    </ul>-->
     <LoadingCustom v-if="isLoading"></LoadingCustom>
     <LoadEnd v-if="isLoadEnd"></LoadEnd>
   </div>
@@ -66,30 +66,30 @@ import {ArticlesParams, ArticlesData} from "@/types/index";
 import logger from "vuex/dist/logger";
 
 // 获取可视区域的高度
-const viewHeight = window.innerHeight || document.documentElement.clientHeight;
-// 用新的 throttle 包装 scroll 的回调
-const lazyload = throttle(() => {
-  // 获取所有的图片标签
-  const imgs = document.querySelectorAll("#list .item img");
-  // num 用于统计当前显示到了哪一张图片，避免每次都从第一张图片开始检查是否露出
-  let num = 0;
-  for (let i = num; i < imgs.length; i++) {
-    // 用可视区域高度减去元素顶部距离可视区域顶部的高度
-    let distance = viewHeight - imgs[i].getBoundingClientRect().top;
-    let imgItem: any = imgs[i];
-    // 如果可视区域高度大于等于元素顶部距离可视区域顶部的高度，说明元素露出
-    if (distance >= 100) {
-      // 给元素写入真实的 src，展示图片
-      let hasLaySrc = imgItem.getAttribute("data-has-lazy-src");
-      if (hasLaySrc === "false") {
-        imgItem.src = imgItem.getAttribute("data-src");
-        imgItem.setAttribute("data-has-lazy-src", "true");
-      }
-      // 前 i 张图片已经加载完毕，下次从第 i+1 张开始检查是否露出
-      num = i + 1;
-    }
-  }
-}, 1000);
+// const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+// // 用新的 throttle 包装 scroll 的回调
+// const lazyload = throttle(() => {
+//   // 获取所有的图片标签
+//   const imgs = document.querySelectorAll("#list .item img");
+//   // num 用于统计当前显示到了哪一张图片，避免每次都从第一张图片开始检查是否露出
+//   let num = 0;
+//   for (let i = num; i < imgs.length; i++) {
+//     // 用可视区域高度减去元素顶部距离可视区域顶部的高度
+//     let distance = viewHeight - imgs[i].getBoundingClientRect().top;
+//     let imgItem: any = imgs[i];
+//     // 如果可视区域高度大于等于元素顶部距离可视区域顶部的高度，说明元素露出
+//     if (distance >= 100) {
+//       // 给元素写入真实的 src，展示图片
+//       let hasLaySrc = imgItem.getAttribute("data-has-lazy-src");
+//       if (hasLaySrc === "false") {
+//         imgItem.src = imgItem.getAttribute("data-src");
+//         imgItem.setAttribute("data-has-lazy-src", "true");
+//       }
+//       // 前 i 张图片已经加载完毕，下次从第 i+1 张开始检查是否露出
+//       num = i + 1;
+//     }
+//   }
+// }, 1000);
 
 @Component({
   components: {
@@ -118,15 +118,15 @@ export default class Articles extends Vue {
   // lifecycle hook
   mounted(): void {
     this.handleSearch();
-    window.onscroll = () => {
-      if (getScrollTop() + getWindowHeight() > getDocumentHeight() - 150) {
-        // 如果不是已经没有数据了，都可以继续滚动加载
-        if (!this.isLoadEnd && !this.isLoading) {
-          this.handleSearch();
-        }
-      }
-    };
-    document.addEventListener("scroll", lazyload);
+    // window.onscroll = () => {
+    //   if (getScrollTop() + getWindowHeight() > getDocumentHeight() - 150) {
+    //     // 如果不是已经没有数据了，都可以继续滚动加载
+    //     if (!this.isLoadEnd && !this.isLoading) {
+    //       this.handleSearch();
+    //     }
+    //   }
+    // };
+    // document.addEventListener("scroll", lazyload);
   }
 
   @Watch("$route")
@@ -158,15 +158,15 @@ export default class Articles extends Vue {
     this.articlesList = [...this.articlesList, ...data.list];
     this.total = data.count;
     this.params.currentPage++;
-    this.$nextTick(() => {
-      lazyload();
-    });
-    if (data.list.length === 0 || this.total === this.articlesList.length) {
-      this.isLoadEnd = true;
-      document.removeEventListener("scroll", () => {
-      });
-      window.onscroll = null;
-    }
+    // this.$nextTick(() => {
+    //   lazyload();
+    // });
+    // if (data.list.length === 0 || this.total === this.articlesList.length) {
+    //   this.isLoadEnd = true;
+    //   document.removeEventListener("scroll", () => {
+    //   });
+    //   window.onscroll = null;
+    // }
   }
 }
 </script>
