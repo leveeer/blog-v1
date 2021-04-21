@@ -21,6 +21,8 @@ func (c *BlogRestApi) GetBlogList(context *gin.Context) {
 		fmt.Println("BindQuery failed, err:", err)
 	}
 
+	fmt.Println(blogVO)
+
 	blogList := service.GetBlogList(blogVO)
 	context.JSON(http.StatusOK, gin.H{
 		"code":  http.StatusOK,

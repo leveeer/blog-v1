@@ -1,8 +1,5 @@
 <template>
   <div class="left clearfix">
-    <h3 v-if="params.tag_id"
-        class="left-title">{{ tag_name }} 相关的文章：
-    </h3>
     <div class="article-container">
       <el-card class="article-card" :body-style="{ padding: '0px'}" shadow="hover" v-for="(article,index) in articlesList"
                :key="index">
@@ -10,42 +7,26 @@
         <p>{{ article.title }}</p>
         <p>{{ article.createTime }}</p>
       </el-card>
+
+      <div style="display: flex;justify-content: flex-end">
+        <el-pagination
+            background
+            @current-change="this.handleCurrentChange"
+            @size-change="this.handleSizeChange"
+            layout="sizes, prev, pager, next, jumper, ->, total, slot"
+            :current-page="this.params.currentPage"
+            :page-sizes="[6, 12, 18, 24]"
+            :page-size="6"
+            :total="this.total">
+        </el-pagination>
+      </div>
     </div>
 
 
-<!--    <ul class="articles-list"-->
-<!--        id="list">-->
-<!--      <transition-group name="el-fade-in">-->
-<!--        <li @click="articleDetail(article._id)"-->
-<!--            v-for="(article) in articlesList"-->
-<!--            :key="article._id"-->
-<!--            class="item">-->
-<!--          <a :href="href + article._id"-->
-<!--             target="_blank">-->
-<!--            <img class="wrap-img img-blur-done"-->
-<!--                 :data-src="article.img_url"-->
-<!--                 data-has-lazy-src="false"-->
-<!--                 src="../assets/bg.jpg"-->
-<!--                 alt="文章封面"/>-->
-<!--            <div class="content">-->
-<!--              <h4 class="title">{{ article.title }}</h4>-->
-<!--              <p class="abstract">{{ article.desc }}</p>-->
-<!--              <div class="meta">-->
-<!--                <span>查看 {{ article.meta.views }}</span>-->
-<!--                <span>评论 {{ article.meta.comments }}</span>-->
-<!--                <span>赞 {{ article.meta.likes }}</span>-->
-<!--                <span v-if="article.create_time"-->
-<!--                      class="time">-->
-<!--                  {{ formatTime(article.create_time) }}-->
-<!--                </span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </a>-->
-<!--        </li>-->
-<!--      </transition-group>-->
-<!--    </ul>-->
+  <div>
     <LoadingCustom v-if="isLoading"></LoadingCustom>
     <LoadEnd v-if="isLoadEnd"></LoadEnd>
+  </div>
   </div>
 </template>
 
@@ -148,6 +129,15 @@ export default class Articles extends Vue {
     //   url = "https://biaochenxuying.cn/articleDetail?";
     // }
     // window.open(url + `article_id=${id}`);
+  }
+
+  handleSizeChange(val) {
+    console.log(`每页 ${val} 条`);
+  }
+
+
+  handleCurrentChange(val) {
+    console.log(`当前页: ${val}`);
   }
 
   private async handleSearch(): Promise<void> {

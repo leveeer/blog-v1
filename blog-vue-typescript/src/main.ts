@@ -27,6 +27,7 @@ import {
   Tag,
   Container,
   Footer,
+  Pagination,
 } from "element-ui";
 import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 import mixin from "./mixins";
@@ -53,7 +54,8 @@ Vue.component(TimelineItem.name, TimelineItem);
 Vue.component(Card.name, Card);
 Vue.component(Tag.name, Tag);
 Vue.component(Container.name,Container);
-Vue.component(Footer.name,Footer)
+Vue.component(Footer.name,Footer);
+Vue.component(Pagination.name,Pagination);
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message;
 Vue.prototype.$loading = Loading.service;
