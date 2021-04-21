@@ -4,13 +4,13 @@
         class="left-title">{{ tag_name }} 相关的文章：
     </h3>
     <div class="article-container">
-      <el-card class="article-card" :body-style="{ padding: '0px'}" shadow="hover" v-for="(hr,index) in 10" :key="index">
+      <el-card class="article-card" :body-style="{ padding: '0px'}" shadow="hover" v-for="(hr,index) in 10"
+               :key="index">
         <img style="width: 100%;display: block" src="../assets/logo5.jpg" class="image" alt="">
         <p>文章{{ index }}</p>
-        <p>{{new Date() | data}}</p>
+        <p>{{ new Date() }}</p>
       </el-card>
     </div>
-
 
 
     <ul class="articles-list"
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Prop, Vue, Watch} from "vue-property-decorator";
+import {Component, Vue, Watch} from "vue-property-decorator";
 import {Route} from "vue-router";
 import {
   throttle,
@@ -106,11 +106,8 @@ export default class Articles extends Vue {
   private tag_name: string = decodeURI(getQueryStringByName("tag_name"));
   private params: ArticlesParams = {
     keyword: "",
-    likes: "", // 是否是热门文章
-    state: 1, // 文章发布状态 => 0 草稿，1 已发布,'' 代表所有文章
-    tag_id: getQueryStringByName("tag_id"),
-    category_id: getQueryStringByName("category_id"),
-    pageNum: 1,
+    status: 1, // 文章发布状态 => 0 草稿，1 已发布,'' 代表所有文章
+    currentPage: 1,
     pageSize: 10
   };
   private href: string =
@@ -135,10 +132,9 @@ export default class Articles extends Vue {
   @Watch("$route")
   routeChange(val: Route, oldVal: Route): void {
     this.tag_name = decodeURI(getQueryStringByName("tag_name"));
-    this.params.tag_id = getQueryStringByName("tag_id");
-    this.params.category_id = getQueryStringByName("category_id");
+    this.params.tagUid = getQueryStringByName("tag_id");
     this.articlesList = [];
-    this.params.pageNum = 1;
+    this.params.currentPage = 1;
     this.handleSearch();
   }
 
@@ -156,15 +152,12 @@ export default class Articles extends Vue {
 
   private async handleSearch(): Promise<void> {
     this.isLoading = true;
-    console.log(this.params)
-    const data: ArticlesData = await this.$https.get(
-      this.$urls.getArticleList, {params: this.params}
-    );
+    const data  = await this.$https.get(this.$urls.getArticleList, {params: this.params});
     console.log(data)
     this.isLoading = false;
     this.articlesList = [...this.articlesList, ...data.list];
     this.total = data.count;
-    this.params.pageNum++;
+    this.params.currentPage++;
     this.$nextTick(() => {
       lazyload();
     });

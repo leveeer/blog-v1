@@ -12,13 +12,13 @@ let service: AxiosInstance | any;
 if (process.env.NODE_ENV === "development") {
   service = axios.create({
     baseURL: "/api", // api 的 base_url
-    timeout: 50000 // 请求超时时间
+    timeout: 5000 // 请求超时时间
   });
 } else {
   // 生产环境下
   service = axios.create({
     baseURL: "/api",
-    timeout: 50000
+    timeout: 5000
   });
 }
 
@@ -40,15 +40,19 @@ service.interceptors.response.use(
     // Some example codes here:
     // code == 0: success
     if (res.status === 200) {
-      const data: ResponseData = res.data
-      if (data.code === 0) {
-        return data.data;
-      } else {
-        Message({
-          message: data.message,
-          type: "error"
-        });
-      }
+
+      return res.data
+      // const data: ResponseData = res.data
+      //
+      // console.log("service.interceptors.response.use",data)
+      // if (data.code === 200) {
+      //   return data.data;
+      // } else {
+      //   Message({
+      //     message: data.message,
+      //     type: "error"
+      //   });
+      // }
     } else {
       Message({
         message: "网络错误!",

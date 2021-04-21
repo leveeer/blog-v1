@@ -27,7 +27,6 @@ import {
   Tag,
   Container,
   Footer,
-  Divider,
 } from "element-ui";
 import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 import mixin from "./mixins";
@@ -63,7 +62,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$https = service; // 其他页面在使用 axios 的时候直接  this.$http 就可以了
 Vue.prototype.$urls = urls; // 其他页面在使用 URLS 的时候直接  this.$urls 就可以了
 
-// Vue.prototype.$https.options.emulateJSON = true
+Vue.prototype.$https.options.emulateJSON = true
 
 // https://www.npmjs.com/package/vue-class-component#adding-custom-hooks
 Component.registerHooks([
@@ -75,5 +74,5 @@ Component.registerHooks([
 new Vue({
   router,
   store,
-  render: (h: (arg0: typeof App) => any) => h(App)
+  render: h => h(App)
 }).$mount("#app");

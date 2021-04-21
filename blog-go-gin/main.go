@@ -1,6 +1,7 @@
 package main
 
 import (
+	"blog-go-gin/dao"
 	"blog-go-gin/models"
 	"blog-go-gin/routers"
 	"github.com/gin-gonic/gin"
@@ -24,7 +25,7 @@ func main() {
 		var config models.Config
 		Conf = config.GetConf()
 	})
-
+	dao.InitMysql(Conf)
 	router = routers.InitWebRouter(Conf)
 	_ = router.Run(":" + strconv.Itoa(int(Conf.HttpPort)))
 }

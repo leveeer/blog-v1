@@ -7,3 +7,12 @@ copyrequestbody: true
 EnableDocs: true
 sqlconn:
 sessionon: true
+
+#mysql配置
+mysql:
+  type: mysql
+  user: root
+  password: root
+  host: 47.119.168.227
+  port: 3306
+  dbName: mogu_blog_go

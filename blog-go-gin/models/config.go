@@ -11,6 +11,16 @@ type Config struct {
 	HttpPort  uint32 `yaml:"httpport"`
 	RunMode   string `yaml:"runmode"`
 	SessionOn string `yaml:"sessionon"`
+	Mysql     Mysql  `yaml:"mysql"`
+}
+
+type Mysql struct {
+	Type     string `yaml:"type"`
+	User     string `yaml:"user"`
+	Password string `yaml:"password"`
+	Host     string `yaml:"host"`
+	Port     uint32 `yaml:"port"`
+	DbName   string `yaml:"dbName"`
 }
 
 func (c *Config) GetConf() *Config {

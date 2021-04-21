@@ -131,11 +131,33 @@ export interface LikeParams {
 // 文章列表
 export interface ArticlesParams {
   keyword: string;
-  likes: string; // 是否是热门文章
-  state: number; // 文章发布状态 => 0 草稿，1 已发布,'' 代表所有文章
-  tag_id: string;
-  category_id: string;
-  pageNum: number;
+  uid: string;
+  status: number;
+  title: string;
+  summary: string;
+  tagUid: string;
+  blogSortUid: string;
+  fileUid: string;
+  adminUid: string;
+  isPublish: string;
+  isOriginal: string;
+  author: string;
+  articlesPart: string;
+  level: string;
+  type: string;
+  outsideLink: string;
+  content: string;
+  tagList: string;
+  photoList: string[];
+  blogSort: string;
+  parseCount: string;
+  copyright: string;
+  levelKeyword: any;
+  userSort: number;
+  sort: number;
+  orderByDescColumn: string;
+  orderByAscColumn: string
+  currentPage: number;
   pageSize: number;
 }
 
