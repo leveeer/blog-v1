@@ -8,6 +8,7 @@ import (
 )
 
 type ArticleRestApi struct {
+
 }
 
 /*
