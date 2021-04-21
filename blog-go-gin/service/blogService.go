@@ -16,7 +16,7 @@ func GetBlogList(blogVO vo.BlogVO) []models.Blog{
 
 	var blogList []models.Blog
 
-	dao.Db.Find(&blogList)
+	dao.Db.Debug().Find(&blogList)
 
 	return blogList
 }
