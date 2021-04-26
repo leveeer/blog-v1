@@ -16,18 +16,20 @@
         </el-col>
       </el-row>
     </div>
-        <div style="display: flex;justify-content: center; margin-top: 25px">
-          <el-pagination
-              background
-              @current-change="this.handleCurrentChange"
-              @size-change="this.handleSizeChange"
-              layout="sizes, prev, pager, next, jumper, ->, total, slot"
-              :current-page="this.params.currentPage"
-              :page-sizes="[6, 12, 18, 24]"
-              :page-size="6"
-              :total="this.total">
-          </el-pagination>
-        </div>
+    <div style="display: flex;justify-content: center; margin-top: 25px">
+      <el-pagination
+          background
+          @current-change="this.handleCurrentChange"
+          @size-change="this.handleSizeChange"
+          layout="sizes, prev, pager, next, jumper, ->, total, slot"
+          :current-page="this.params.currentPage"
+          :page-sizes="this.pageSizeList"
+          :page-size="this.params.pageSize"
+          :total="this.total">
+      </el-pagination>
+    </div>
+    <LoadingCustom v-if="isLoading"></LoadingCustom>
+    <LoadEnd v-if="isLoadEnd"></LoadEnd>
   </div>
 </template>
 <script lang="ts">
@@ -47,13 +49,38 @@ import {ArticlesParams, ArticlesData} from "@/types/index";
   }
 })
 export default class Articles extends Vue {
-  // initial data
-  private isLoadEnd: boolean = false;
-  private isLoading: boolean = false;
+  isLoading = false;
+  isLoadEnd = false;
   private articlesList: Array<object> = [];
   private total: number = 0;
   private tag_name: string = decodeURI(getQueryStringByName("tag_name"));
+  private pageSizeList = [6, 12, 18, 24]
   private params: ArticlesParams = {
+    adminUid: "",
+    articlesPart: "",
+    author: "",
+    blogSort: "",
+    blogSortUid: "",
+    content: "",
+    copyright: "",
+    fileUid: "",
+    isOriginal: "",
+    isPublish: "",
+    level: "",
+    levelKeyword: undefined,
+    orderByAscColumn: "",
+    orderByDescColumn: "",
+    outsideLink: "",
+    parseCount: "",
+    photoList: [],
+    sort: 0,
+    summary: "",
+    tagList: "",
+    tagUid: "",
+    title: "",
+    type: "",
+    uid: "",
+    userSort: 0,
     keyword: "",
     status: 1, // 文章发布状态 => 0 草稿，1 已发布,'' 代表所有文章
     currentPage: 1,
@@ -66,15 +93,21 @@ export default class Articles extends Vue {
 
   // lifecycle hook
   mounted(): void {
-    this.handleSearch();
+    // this.handleSearch();
   }
 
-  @Watch("$route")
-  routeChange(val: Route, oldVal: Route): void {
-    this.tag_name = decodeURI(getQueryStringByName("tag_name"));
-    this.params.tagUid = getQueryStringByName("tag_id");
-    this.articlesList = [];
-    this.params.currentPage = 1;
+  // @Watch("$route")
+  // routeChange(val: Route, oldVal: Route): void {
+  //   this.tag_name = decodeURI(getQueryStringByName("tag_name"));
+  //   this.params.tagUid = getQueryStringByName("tag_id");
+  //   this.articlesList = [];
+  //   this.params.currentPage = 1;
+  //   this.handleSearch();
+  // }
+
+  @Watch("params", {immediate: true, deep: true})
+  onParamsChange(newVal: ArticlesParams, oldValue: ArticlesParams){
+    this.pageSizeList = [6, 12, 18, 24];
     this.handleSearch();
   }
 
@@ -91,11 +124,11 @@ export default class Articles extends Vue {
   }
 
   handleSizeChange(val: number) {
-    console.log(`每页 ${val} 条`);
+    this.params.pageSize = val
   }
 
   handleCurrentChange(val: number) {
-    console.log(`当前页: ${val}`);
+    this.params.currentPage = val
   }
 
   private async handleSearch(): Promise<void> {
@@ -106,7 +139,6 @@ export default class Articles extends Vue {
     this.isLoading = false;
     this.articlesList = [...this.articlesList, ...data.list];
     this.total = data.count;
-    this.params.currentPage++;
   }
 }
 </script>

@@ -16,7 +16,7 @@ func GetBlogList(blogVO vo.BlogVO) []models.Blog{
 
 	var blogList []models.Blog
 
-	dao.Db.Debug().Limit(blogVO.PageSize).Offset(blogVO.CurrentPage).Find(&blogList)
+	dao.Db.Debug().Table("t_blog").Limit(blogVO.PageSize).Offset(blogVO.CurrentPage).Find(&blogList)
 
 	return blogList
 }
