@@ -1,5 +1,5 @@
 <template>
-  <div class="right slider" style="position: fixed;right: 100px">
+  <div class="right slider" style="position: fixed;right: 20px">
     <img class="right-logo"
          src="../assets/user_logo.jpg"
          alt="">
