@@ -1,76 +1,44 @@
 <template>
-  <div class="left clearfix">
-    <div class="article-container">
-      <el-card class="article-card" :body-style="{ padding: '0px'}" shadow="hover" v-for="(article,index) in articlesList"
-               :key="index">
-        <img style="width: 100%;display: block" src="../assets/logo5.jpg" class="image" alt="">
-        <p>{{ article.title }}</p>
-        <p>{{ article.createTime }}</p>
-      </el-card>
-
-      <div style="display: flex;justify-content: flex-end">
-        <el-pagination
-            background
-            @current-change="this.handleCurrentChange"
-            @size-change="this.handleSizeChange"
-            layout="sizes, prev, pager, next, jumper, ->, total, slot"
-            :current-page="this.params.currentPage"
-            :page-sizes="[6, 12, 18, 24]"
-            :page-size="6"
-            :total="this.total">
-        </el-pagination>
-      </div>
+  <div id="pro_form" style="width: 90%;margin-bottom: 100px">
+    <div style="position: relative;top: 20px;left:100px;">
+      <el-row>
+        <!--就改这里一行-->
+        <el-col :span="6" v-for="(article, index) in articlesList" :key="index" :offset="1"
+                style="margin-bottom:30px" type="flex">
+          <el-card :body-style="{ padding: '0px', height:'350px'}" shadow="hover" style="width: 270px;height: 350px;">
+            <img style="width: 100%;display: block"
+                 src="../assets/logo5.jpg"
+                 class="image"
+                 alt=""/>
+            <p>{{ article.title }}</p>
+            <p>{{ article.createTime }}</p>
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
-
-
-  <div>
-    <LoadingCustom v-if="isLoading"></LoadingCustom>
-    <LoadEnd v-if="isLoadEnd"></LoadEnd>
-  </div>
+        <div style="display: flex;justify-content: center; margin-top: 25px">
+          <el-pagination
+              background
+              @current-change="this.handleCurrentChange"
+              @size-change="this.handleSizeChange"
+              layout="sizes, prev, pager, next, jumper, ->, total, slot"
+              :current-page="this.params.currentPage"
+              :page-sizes="[6, 12, 18, 24]"
+              :page-size="6"
+              :total="this.total">
+          </el-pagination>
+        </div>
   </div>
 </template>
-
 <script lang="ts">
 import {Component, Vue, Watch} from "vue-property-decorator";
 import {Route} from "vue-router";
 import {
-  throttle,
-  getScrollTop,
-  getDocumentHeight,
-  getWindowHeight,
   getQueryStringByName,
-  timestampToTime
 } from "@/utils/utils";
 import LoadEnd from "@/components/loadEnd.vue";
 import LoadingCustom from "@/components/loading.vue";
 import {ArticlesParams, ArticlesData} from "@/types/index";
-import logger from "vuex/dist/logger";
-
-// 获取可视区域的高度
-// const viewHeight = window.innerHeight || document.documentElement.clientHeight;
-// // 用新的 throttle 包装 scroll 的回调
-// const lazyload = throttle(() => {
-//   // 获取所有的图片标签
-//   const imgs = document.querySelectorAll("#list .item img");
-//   // num 用于统计当前显示到了哪一张图片，避免每次都从第一张图片开始检查是否露出
-//   let num = 0;
-//   for (let i = num; i < imgs.length; i++) {
-//     // 用可视区域高度减去元素顶部距离可视区域顶部的高度
-//     let distance = viewHeight - imgs[i].getBoundingClientRect().top;
-//     let imgItem: any = imgs[i];
-//     // 如果可视区域高度大于等于元素顶部距离可视区域顶部的高度，说明元素露出
-//     if (distance >= 100) {
-//       // 给元素写入真实的 src，展示图片
-//       let hasLaySrc = imgItem.getAttribute("data-has-lazy-src");
-//       if (hasLaySrc === "false") {
-//         imgItem.src = imgItem.getAttribute("data-src");
-//         imgItem.setAttribute("data-has-lazy-src", "true");
-//       }
-//       // 前 i 张图片已经加载完毕，下次从第 i+1 张开始检查是否露出
-//       num = i + 1;
-//     }
-//   }
-// }, 1000);
 
 @Component({
   components: {
@@ -89,7 +57,7 @@ export default class Articles extends Vue {
     keyword: "",
     status: 1, // 文章发布状态 => 0 草稿，1 已发布,'' 代表所有文章
     currentPage: 1,
-    pageSize: 10
+    pageSize: 6
   };
   private href: string =
       process.env.NODE_ENV === "development"
@@ -99,15 +67,6 @@ export default class Articles extends Vue {
   // lifecycle hook
   mounted(): void {
     this.handleSearch();
-    // window.onscroll = () => {
-    //   if (getScrollTop() + getWindowHeight() > getDocumentHeight() - 150) {
-    //     // 如果不是已经没有数据了，都可以继续滚动加载
-    //     if (!this.isLoadEnd && !this.isLoading) {
-    //       this.handleSearch();
-    //     }
-    //   }
-    // };
-    // document.addEventListener("scroll", lazyload);
   }
 
   @Watch("$route")
@@ -131,51 +90,28 @@ export default class Articles extends Vue {
     // window.open(url + `article_id=${id}`);
   }
 
-  handleSizeChange(val) {
+  handleSizeChange(val: number) {
     console.log(`每页 ${val} 条`);
   }
 
-
-  handleCurrentChange(val) {
+  handleCurrentChange(val: number) {
     console.log(`当前页: ${val}`);
   }
 
   private async handleSearch(): Promise<void> {
     this.isLoading = true;
-    const data  = await this.$https.get(this.$urls.getArticleList, {params: this.params});
-    console.log(data)
+    const data = await this.$https.get(this.$urls.getArticleList, {
+      params: this.params
+    });
     this.isLoading = false;
     this.articlesList = [...this.articlesList, ...data.list];
     this.total = data.count;
     this.params.currentPage++;
-    // this.$nextTick(() => {
-    //   lazyload();
-    // });
-    // if (data.list.length === 0 || this.total === this.articlesList.length) {
-    //   this.isLoadEnd = true;
-    //   document.removeEventListener("scroll", () => {
-    //   });
-    //   window.onscroll = null;
-    // }
   }
 }
 </script>
 
 <style lang="less" scoped>
-
-.article-container {
-  margin-top: 40px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.article-card {
-  width: 260px;
-  height: 350px;
-  margin-bottom: 40px;
-  //border-radius: 10px;
-}
 
 .left {
   .articles-list {

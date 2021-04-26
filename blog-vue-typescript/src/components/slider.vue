@@ -1,22 +1,10 @@
 <template>
-  <div class="right slider">
+  <div class="right slider" style="position: fixed;right: 100px">
     <img class="right-logo"
          src="../assets/user_logo.jpg"
          alt="">
     <div class="title">Einson</div>
     <div class="right-content">
-      <!-- <div class="item">
-        <div class="num">123</div>粉丝
-      </div>
-      <div class="item">
-        <div class="num">123</div>文章
-      </div>
-      <div class="item">
-        <div class="num">123</div>字数
-      </div>
-      <div class="item">
-        <div class="num">123</div>收获喜欢
-      </div> -->
     </div>
     <div class="tags">
       <div class="title">标签云</div>

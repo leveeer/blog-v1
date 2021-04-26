@@ -2,7 +2,7 @@
   <div id="app"
        class="container">
     <Nav v-if="isShowNav" />
-    <div class=" layout">
+    <div class="layout">
       <router-view />
       <Slider v-if="isShowSlider"></Slider>
     </div>
@@ -18,16 +18,6 @@ import Nav from "@/components/nav.vue"; // @ is an alias to /src
 import Slider from "@/components/slider.vue"; // @ is an alias to /src
 import Footer from "@/components/footer.vue"; // @ is an alias to /src
 import ArrowUp from "@/components/arrowUp.vue"; // @ is an alias to /src
-import { isMobileOrPc } from "@/utils/utils";
-
-// 移动端 rem 单位适配
-if (isMobileOrPc()) {
-  // width * 100 / 750 = width / 7.5
-  // 1rem = 100px
-  var width = window.screen.width;
-  window.document.getElementsByTagName("html")[0].style.fontSize =
-    width / 7.5 + "px";
-}
 
 @Component({
   components: {
@@ -58,9 +48,6 @@ export default class App extends Vue {
         val.path === "/project" ||
         val.path === "/timeline" ||
         val.path === "/message";
-    if (isMobileOrPc()) {
-      this.isShowSlider = false;
-    }
   }
 }
 </script>

@@ -12,7 +12,7 @@ export default class Footer extends Vue {}
 <style scoped>
 .el-footer {
   font-size: 14px;
-  /*font-weight: bold;*/
+  font-weight: bold;
   color: #f8f8f2;
   background-color: #000000;
   text-align: center;
