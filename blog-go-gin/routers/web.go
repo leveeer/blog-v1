@@ -34,6 +34,7 @@ func InitWebRouter(config *models.Config) *gin.Engine {
 
 
 	r.GET("/getArticleList", BlogRestApi.GetBlogList)
+	r.POST("/getArticleDetail", BlogRestApi.GetArticleByUid)
 
 	return r
 }
