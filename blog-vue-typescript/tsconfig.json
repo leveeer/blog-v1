@@ -5,7 +5,7 @@
     // 采用的模块系统
     "module": "esnext",
     // 以严格模式解析
-    "strict": true,
+    "strict": false,
     "jsx": "preserve",
     // 从 tslib 导入外部帮助库: 比如__extends，__rest等
     "importHelpers": true,
@@ -24,7 +24,7 @@
     "sourceMap": true,
     // 忽略 this 的类型检查, Raise error on this expressions with an implied any type.
     "noImplicitThis": false,
-    // 解析非相对模块名的基准目录 
+    // 解析非相对模块名的基准目录
     "baseUrl": "./",
     // 给错误和消息设置样式，使用颜色和上下文。
     "pretty": true,

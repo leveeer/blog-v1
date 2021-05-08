@@ -12,10 +12,13 @@ export interface ToUser {
     type: number;
 }
 
-export interface Params {
-    keyword: string;
-    pageNum: number;
-    pageSize: number;
+export interface PageParams {
+    records:any;
+    total:number;
+    optimizeCountSql:boolean;
+    isSearchCount:boolean;
+    current: number;
+    size: number;
 }
 
 // 登录
@@ -105,6 +108,7 @@ export interface Comments {
 }
 
 export interface ArticleDetailIF {
+    toc: string,
     uid: string
     title: string
     summary: string
@@ -158,7 +162,7 @@ export interface BlogSort {
 }
 
 export interface ArticleDetailParams {
-    id: string | string[];
+    uid: string | string[];
     type: number;
 }
 
@@ -279,5 +283,5 @@ export interface TagList {
 
 export interface TagsData {
     count: number;
-    list: TagList | any;
+    list: Tag | any;
 }

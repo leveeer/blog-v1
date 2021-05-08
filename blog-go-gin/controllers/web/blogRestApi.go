@@ -30,7 +30,20 @@ func (c *BlogRestApi) GetBlogList(ctx *gin.Context) {
 	})
 }
 
-func (c *BlogRestApi) GetArticleByUid(ctx *gin.Context)  {
-	uid := ctx.Query("id")
-	fmt.Println(uid)
+func (c *BlogRestApi) GetArticleByUid(ctx *gin.Context) {
+	//data, _ := ioutil.ReadAll(ctx.Request.Body)
+	//fmt.Printf("ctx.Request.body: %v", string(data))
+	var blogVO vo.BlogVO
+	err := ctx.BindJSON(&blogVO)
+	if err != nil {
+		fmt.Println("BindJSON failed, err:", err)
+	}
+	fmt.Println(blogVO)
+
+	blog := service.GetArticleByUid(blogVO.Uid)
+	ctx.JSON(http.StatusOK, gin.H{
+		"code":  http.StatusOK,
+		"content":  blog,
+		"msg":   "查询成功",
+	})
 }

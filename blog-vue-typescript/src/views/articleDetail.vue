@@ -50,8 +50,7 @@
           </div>
         </div>
         <div class="content">
-          <div id="content"
-               class="article-detail"
+          <div id="content" class="article-detail"
                v-html="articleDetail.content">
           </div>
         </div>
@@ -80,22 +79,31 @@
         <!--                     :article_id="articleDetail.uid"-->
         <!--                     @refreshArticle="refreshArticle"/>-->
       </div>
-      <!--      <div v-if="!isMobileOrPc"-->
-      <!--           style="width: 23%"-->
-      <!--           class="article-right fr anchor"-->
-      <!--           v-html="articleDetail.toc"></div>-->
-      <!--      <LoadingCustom v-if="isLoading"></LoadingCustom>-->
+
+      <div class="directories-container">
+        <div class="directories-list">
+          <h2 style="text-align: center">目录</h2>
+          <div :class="{'highlight-title':item.isActive}" v-for="(item,index) in toc" :key="index"
+               style="padding: 5px 12px;">
+            <a href="javascript:void(0)" @click="goAnchor(index)">
+              {{ item.title }}
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
 </template>
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
-import {isMobileOrPc} from "@/utils/utils";
+import {getClientHeight, getScrollHeight, getScrollTop, isMobileOrPc, unique} from "@/utils/utils";
 import markdown from "@/utils/markdown";
 import LoadingCustom from "@/components/loading.vue";
 import CommentList from "@/components/commentList.vue";
-import {ArticleDetailIF, ArticleDetailParams, BlogSort, LikeParams} from "@/types/index";
+import {ArticleDetailIF, ArticleDetailParams, LikeParams} from "@/types/index";
+import el from "element-ui/src/locale/lang/el";
+// import {Marked} from '@ts-stack/markdown';
 
 declare let document: Document | any;
 
@@ -106,15 +114,17 @@ declare let document: Document | any;
   }
 })
 export default class ArticleDetail extends Vue {
+  private toc: { title: string, offsetTop: number, isActive: boolean }[] = [];
   private btnLoading: boolean = false;
   private isLoading: boolean = false;
   private isMobileOrPc: boolean = isMobileOrPc();
   private params: ArticleDetailParams = {
-    id: "",
+    uid: "",
     type: 1
   };
   private content: string = "";
   private articleDetail: ArticleDetailIF = {
+    toc: "",
     uid: "",
     title: "",
     summary: "",
@@ -159,13 +169,61 @@ export default class ArticleDetail extends Vue {
   private times: number = 0; // 评论次数
   private likeTimes: number = 0; // 点赞次数
 
+
+  // 退出页面时，应该取消监听
+  destroyed() {
+    window.removeEventListener("scroll", this.handleScroll);
+  }
+
+  goAnchor(index) {
+    if (index == this.toc.length - 1) { //最后一个特殊处理
+      this.toc.forEach((element, index) => {
+        element.isActive = false;
+      })
+      this.toc[index].isActive = true
+    }
+    document.documentElement.scrollTop = this.toc[index].offsetTop - 60;
+  }
+
+  handleScroll(e) {
+    let scrollTop = document.documentElement.scrollTop + 120 //当前滚动距离
+    this.toc.forEach((element, index) => {
+      if ((scrollTop) >= element.offsetTop) {//当前滚动距离大于某一目录项时。
+        for (let i = 0; i < index; i++) {
+          this.toc[i].isActive = false //同一时刻，只能有一个目录项的状态位为Active，即此时其他目录项的isActive = false
+        }
+        element.isActive = true; //将对应的目录项状态位置为true
+      } else {
+        element.isActive = false;
+      }
+    })
+
+    //如果最后一部分没有一整页的特殊处理
+    if (getScrollTop() + getClientHeight() == getScrollHeight()) {
+      for (let i = 0; i < this.toc.length; i++) {
+        this.toc[i].isActive = false
+      }
+      this.toc[this.toc.length - 1].isActive = true
+    }
+  }
+
+
   mounted(): void {
-    this.params.id = this.$route.query.id;
+    this.params.uid = this.$route.query.id;
     // this.params.id = "5c8cfe5d26bb39b22d3a7aec";
     if (this.$route.path === "/about") {
       this.params.type = 3;
     }
     this.handleSearch();
+    window.addEventListener("scroll", this.handleScroll);
+
+    // this.$nextTick(() => {
+    //    this.initDirectories()
+    // })
+
+    setTimeout(() => {
+      this.initDirectories()
+    }, 1000)
   }
 
   refreshArticle(): void {
@@ -275,17 +333,59 @@ export default class ArticleDetail extends Vue {
     const data: any = await this.$https.post(this.$urls.getArticleDetail, this.params);
     this.isLoading = false;
 
-    this.articleDetail = data;
-    const article = markdown.marked(data.content);
+    this.articleDetail = data.content;
+    const article = markdown.marked(data.content.content);
+
     article.then((res: any) => {
       this.articleDetail.content = res.content;
-      // this.articleDetail.toc = res.toc;
+      this.articleDetail.toc = res.toc;
+
+      let tocArr: { anchor: string, level: number, text: string, subTitle: any[] }[] = [];
+      for (let i = 0; i < res.toc.length; i++) {
+        for (let j = 1; j < res.toc.length; j++) {
+          console.log(tocArr)
+          console.log("i=", i)
+          console.log("j=", j)
+          if (res.toc[i].level < res.toc[j].level) {
+            //是子标题
+            tocArr[i].subTitle.push({
+              anchor: res.toc[j].anchor,
+              level: res.toc[j].level,
+              text: res.toc[j].text,
+              subTitle: [],
+            })
+          }else {
+            tocArr.push({
+              anchor: res.toc[i].anchor,
+              level: res.toc[i].level,
+              text: res.toc[i].text,
+              subTitle: [],
+            })
+            i = j
+          }
+        }
+      }
+      console.log("================================")
+      // const arr = unique(tocArr);
+      let arr = [...new Set(tocArr)]
+      console.log(arr)
     });
-    let keyword = data.keyword.join(",");
-    let description = data.desc;
-    document.title = data.title;
-    document.querySelector("#keywords").setAttribute("content", keyword);
-    document.querySelector("#description").setAttribute("content", description);
+    document.title = data.content.title;
+
+
+  }
+
+
+  initDirectories() {
+    let directories = document.getElementsByClassName("anchor3"); //找到属于文章内容的h1标签
+    for (let i = 0; i < directories.length; i++) {
+      directories[i].id = "anchor-" + i;//添加id
+      this.toc.push({
+        title: directories[i].innerText, //h1标签文本内容
+        offsetTop: directories[i].offsetTop, //记录当前h1标签的偏移量，方便后面计算滚动距离。
+        isActive: false //是否被选中
+      });
+    }
   }
 
   async likeArticle(): Promise<void> {
@@ -330,37 +430,54 @@ export default class ArticleDetail extends Vue {
       type: "success"
     });
   }
+
+
 }
 </script>
 <style lang="less" scoped>
-.anchor {
+
+.directories-container {
+  width: 240px;
+  float: right;
+  transition: all 0.5s;
+  margin-right: 50px;
   display: block;
   position: sticky;
-  top: 213px;
-  margin-top: 213px;
-  border-left: 1px solid #eee;
+  top: 50px;
+  border-left: 2px solid #eee;
+  //visibility: hidden;
+  text-align: left;
 
-  .anchor-ul {
-    position: relative;
-    top: 0;
-    max-width: 250px;
-    border: none;
-    -moz-box-shadow: 0 0px 0px #fff;
-    -webkit-box-shadow: 0 0px 0px #fff;
-    box-shadow: 0 0px 0px #fff;
+  .highlight-title {
+    border-left: 5px solid rgb(15, 116, 223);
+    background-color: rgb(243, 243, 243);
+    z-index: -1;
 
-    li.active {
-      color: #009a61;
+    a {
+      color: rgb(15, 105, 223)
     }
   }
 
-  a {
-    color: #333;
+  .directories-list {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    word-wrap: break-word;
+    background-color: #ffffff;
+    border-left: 1px solid rgb(236, 236, 236);
+    z-index: 999;
+
+    a {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
 
 .article {
   width: 100%;
+  background-color: #f5fffa;
 
   .header {
     .title {
@@ -433,6 +550,9 @@ export default class ArticleDetail extends Vue {
 
   .content {
     min-height: 300px;
+    text-align: left;
+    font-family: "PingFang", Monaco, monospace;
+    margin-left: 150px;
   }
 }
 

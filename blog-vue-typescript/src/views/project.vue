@@ -13,13 +13,13 @@
             <img :src="l.img"
                  class="image">
             <div style="padding: 14px;">
-              <h4>{{l.title}}</h4>
-              <div class="content">{{l.content}}</div>
+              <h4>{{ l.title }}</h4>
+              <div class="content">{{ l.content }}</div>
               <span>
-                {{formatTime(l.start_time)}}--
+                {{ formatTime(l.start_time) }}--
               </span>
               <span>
-                {{formatTime(l.end_time)}}
+                {{ formatTime(l.end_time) }}
               </span>
             </div>
           </el-card>
@@ -31,7 +31,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Prop, Vue } from "vue-property-decorator";
+import {Component, Prop, Vue} from "vue-property-decorator";
 import LoadEnd from "@/components/loadEnd.vue";
 import LoadingCustom from "@/components/loading.vue";
 import {
@@ -43,7 +43,7 @@ import {
   timestampToTime,
   isMobileOrPc
 } from "@/utils/utils";
-import { Params, ProjectList, ProjectsData } from "@/types/index";
+import {PageParams, ProjectList, ProjectsData} from "@/types/index";
 
 @Component({
   components: {
@@ -58,10 +58,13 @@ export default class Timeline extends Vue {
   private isMobileOrPc: boolean = isMobileOrPc();
   private list: ProjectList[] = [];
   private total: number = 0;
-  private params: Params = {
-    keyword: "",
-    pageNum: 1,
-    pageSize: 10
+  private params: PageParams = {
+    current: 1,
+    size: 100,
+    records: {},
+    total: 0,
+    optimizeCountSql: false,
+    isSearchCount: false,
   };
 
   // lifecycle hook
@@ -86,7 +89,7 @@ export default class Timeline extends Vue {
 
     this.list = [...this.list, ...data.list];
     this.total = data.count;
-    this.params.pageNum++;
+    this.params.current++;
     if (this.total === this.list.length) {
       this.isLoadEnd = true;
     }
@@ -97,13 +100,16 @@ export default class Timeline extends Vue {
 .project {
   overflow: hidden;
   padding: 40px 0;
+
   .el-col-pointer {
     cursor: pointer;
   }
+
   .content {
     height: 70px;
     text-overflow: ellipsis;
   }
+
   .image {
     width: 100%;
     height: 250px;

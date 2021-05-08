@@ -34,7 +34,7 @@ import {
   getQueryStringByName,
   timestampToTime
 } from "@/utils/utils";
-import { Params, TimelineList, TimelinesData } from "@/types/index";
+import {PageParams, TimelineList, TimelinesData} from "@/types/index";
 
 @Component({
   components: {
@@ -47,10 +47,13 @@ export default class Timeline extends Vue {
   private isLoading: boolean = false;
   private list: Array<TimelineList> = [];
   private total: number = 0;
-  private params: Params = {
-    keyword: "",
-    pageNum: 1,
-    pageSize: 10
+  private params: PageParams = {
+    current: 1,
+    size: 10,
+    records: {},
+    total: 0,
+    optimizeCountSql: false,
+    isSearchCount: false,
   };
 
   // lifecycle hook
@@ -78,7 +81,7 @@ export default class Timeline extends Vue {
 
     this.list = [...this.list, ...data.list];
     this.total = data.count;
-    this.params.pageNum++;
+    this.params.current++;
     if (this.total === this.list.length) {
       this.isLoadEnd = true;
     }

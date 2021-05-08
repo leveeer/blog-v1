@@ -1,9 +1,9 @@
 <template>
   <div id="app"
        class="container">
-    <Nav v-if="isShowNav" />
+    <Nav v-if="isShowNav"/>
     <div class="layout">
-      <router-view />
+      <router-view/>
       <Slider v-if="isShowSlider"></Slider>
     </div>
     <ArrowUp></ArrowUp>
@@ -11,9 +11,9 @@
   </div>
 </template>
 <script lang="ts">
-import { Vue, Watch } from "vue-property-decorator";
+import {Vue, Watch} from "vue-property-decorator";
 import Component from "vue-class-component";
-import { Route } from "vue-router";
+import {Route} from "vue-router";
 import Nav from "@/components/nav.vue"; // @ is an alias to /src
 import Slider from "@/components/slider.vue"; // @ is an alias to /src
 import Footer from "@/components/footer.vue"; // @ is an alias to /src
@@ -30,9 +30,11 @@ import ArrowUp from "@/components/arrowUp.vue"; // @ is an alias to /src
 export default class App extends Vue {
   private isShowNav: boolean = false;
   private isShowSlider: boolean = false;
+
   mounted(): void {
     this.routeChange(this.$route, this.$route);
   }
+
   @Watch("$route")
   routeChange(val: Route, oldVal: Route): void {
     const referrer: any = document.getElementById("referrer");
@@ -55,8 +57,14 @@ export default class App extends Vue {
 <style lang="less">
 @import url("./less/index.less");
 @import url("./less/mobile.less");
+@import "../public/css/font.css";
+
+body {
+  font-family: Consolas, "PingFang", monospace;
+}
+
 #app {
-  font-family: "PingFang SC", Monaco,serif;
+  font-family: Consolas, "PingFang", monospace;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -65,6 +73,7 @@ export default class App extends Vue {
   margin: 0 auto;
   padding-top: 60px;
 }
+
 img {
   vertical-align: bottom;
 }

@@ -28,6 +28,7 @@ import {
   Container,
   Footer,
   Pagination,
+  Collapse,
 } from "element-ui";
 import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 import mixin from "./mixins";
@@ -56,6 +57,7 @@ Vue.component(Tag.name, Tag);
 Vue.component(Container.name,Container);
 Vue.component(Footer.name,Footer);
 Vue.component(Pagination.name,Pagination);
+Vue.component(Collapse.name,Collapse);
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message;
 Vue.prototype.$loading = Loading.service;
