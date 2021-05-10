@@ -186,3 +186,12 @@ export function getClientHeight() {
 export function unique (arr) {
     return Array.from(new Set(arr))
 }
+
+export function convert(array) {
+    return array.filter((item) => {
+        item.subTitle = array.filter((child) => {
+            return item.id === child.parentId
+        })
+        return item.parentId === 0
+    })
+}

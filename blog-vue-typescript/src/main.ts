@@ -28,7 +28,7 @@ import {
   Container,
   Footer,
   Pagination,
-  Collapse,
+  Collapse, Submenu,
 } from "element-ui";
 import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 import mixin from "./mixins";
@@ -43,6 +43,7 @@ Vue.component(Input.name, Input);
 Vue.component(Button.name, Button);
 Vue.component(Message.name, Message);
 Vue.component(Menu.name, Menu);
+Vue.component(Submenu.name, Submenu);
 Vue.component(MenuItem.name, MenuItem);
 Vue.component(Row.name, Row);
 Vue.component(Col.name, Col);

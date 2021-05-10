@@ -73,15 +73,15 @@
                      @click="handleAddComment">发 送
           </el-button>
         </div>
-        <!--        <CommentList v-if="!isLoading"-->
-        <!--                     :numbers="articleDetail.meta.comments"-->
-        <!--                     :list="articleDetail.openComment"-->
-        <!--                     :article_id="articleDetail.uid"-->
-        <!--                     @refreshArticle="refreshArticle"/>-->
+        <!--<CommentList v-if="!isLoading"
+                     :numbers="articleDetail.meta.comments"
+                     :list="articleDetail.openComment"
+                     :article_id="articleDetail.uid"
+                     @refreshArticle="refreshArticle"/>-->
       </div>
 
       <div class="directories-container">
-        <div class="directories-list">
+        <!--<div class="directories-list">
           <h2 style="text-align: center">目录</h2>
           <div :class="{'highlight-title':item.isActive}" v-for="(item,index) in toc" :key="index"
                style="padding: 5px 12px;">
@@ -89,32 +89,44 @@
               {{ item.title }}
             </a>
           </div>
+        </div>-->
+        <div class="directories-list">
+          <el-menu
+              default-active="0"
+              class="el-menu-vertical-demo"
+              background-color="#F0F6F6"
+              text-color="#3C3F41"
+              unique-opened="true"
+              collapse-transition="true"
+              active-text-color="black">
+            <muti-menu :navMenus="navMenus"></muti-menu>
+          </el-menu>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 <script lang="ts">
 import {Component, Vue} from "vue-property-decorator";
-import {getClientHeight, getScrollHeight, getScrollTop, isMobileOrPc, unique} from "@/utils/utils";
+import {getClientHeight, getScrollHeight, getScrollTop, isMobileOrPc} from "@/utils/utils";
 import markdown from "@/utils/markdown";
 import LoadingCustom from "@/components/loading.vue";
 import CommentList from "@/components/commentList.vue";
 import {ArticleDetailIF, ArticleDetailParams, LikeParams} from "@/types/index";
-import el from "element-ui/src/locale/lang/el";
-// import {Marked} from '@ts-stack/markdown';
+import MutiMenu from "@/components/mutiMenu.vue";
 
 declare let document: Document | any;
 
 @Component({
   components: {
+    MutiMenu,
     LoadingCustom,
     CommentList
   }
 })
 export default class ArticleDetail extends Vue {
-  private toc: { title: string, offsetTop: number, isActive: boolean }[] = [];
+  private toc = [];
+  private navMenus = [];
   private btnLoading: boolean = false;
   private isLoading: boolean = false;
   private isMobileOrPc: boolean = isMobileOrPc();
@@ -338,41 +350,10 @@ export default class ArticleDetail extends Vue {
 
     article.then((res: any) => {
       this.articleDetail.content = res.content;
-      this.articleDetail.toc = res.toc;
-
-      let tocArr: { anchor: string, level: number, text: string, subTitle: any[] }[] = [];
-      for (let i = 0; i < res.toc.length; i++) {
-        for (let j = 1; j < res.toc.length; j++) {
-          console.log(tocArr)
-          console.log("i=", i)
-          console.log("j=", j)
-          if (res.toc[i].level < res.toc[j].level) {
-            //是子标题
-            tocArr[i].subTitle.push({
-              anchor: res.toc[j].anchor,
-              level: res.toc[j].level,
-              text: res.toc[j].text,
-              subTitle: [],
-            })
-          }else {
-            tocArr.push({
-              anchor: res.toc[i].anchor,
-              level: res.toc[i].level,
-              text: res.toc[i].text,
-              subTitle: [],
-            })
-            i = j
-          }
-        }
-      }
-      console.log("================================")
-      // const arr = unique(tocArr);
-      let arr = [...new Set(tocArr)]
-      console.log(arr)
+      this.navMenus = res.toc;
+      console.log(this.navMenus)
     });
     document.title = data.content.title;
-
-
   }
 
 
