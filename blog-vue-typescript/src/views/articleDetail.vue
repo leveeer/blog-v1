@@ -9,9 +9,9 @@
               <div class="author">
                 <div class="avatar">
                   <img
-                    class="auth-logo"
-                    src="../assets/user_logo.jpg"
-                    alt="Einson"
+                      class="auth-logo"
+                      src="../assets/user_logo.jpg"
+                      alt="Einson"
                   />
                 </div>
                 <div class="info">
@@ -23,27 +23,29 @@
                     <span class="publish-time">
                       发布时间：{{
                         articleDetail.createTime
-                          ? formatTime(articleDetail.createTime)
-                          : ""
+                            ? formatTime(articleDetail.createTime)
+                            : ""
                       }}
                     </span>
                     <div>
                       <span class="publish-time">
                         修改时间：{{
                           articleDetail.updateTime
-                            ? formatTime(articleDetail.updateTime)
-                            : ""
+                              ? formatTime(articleDetail.updateTime)
+                              : ""
                         }}
                       </span>
                     </div>
 
+                    <el-divider direction="vertical"></el-divider>
+
                     <span
-                      ><i class="el-icon-star-off"></i>
+                    ><i class="el-icon-star-off"></i>
                       {{ articleDetail.collectCount }}
                     </span>
                     <el-divider direction="vertical"></el-divider>
                     <span
-                      ><i class="el-icon-view"></i>
+                    ><i class="el-icon-view"></i>
                       {{ articleDetail.clickCount }}
                     </span>
                   </div>
@@ -52,50 +54,50 @@
                 </div>
                 <div class="tags " title="标签">
                   <el-tag
-                    size="mini"
-                    v-for="tag in articleDetail.tagList"
-                    :key="tag.uid"
-                    class="tag"
-                    type="success"
-                    >{{ tag.content }}
+                      size="mini"
+                      v-for="tag in articleDetail.tagList"
+                      :key="tag.uid"
+                      class="tag"
+                      type="success"
+                  >{{ tag.content }}
                   </el-tag>
                 </div>
-                <span class="clearfix" />
+                <span class="clearfix"/>
               </div>
             </el-card>
           </div>
           <div class="content">
             <el-card style="margin-top: 20px">
               <div
-                id="content"
-                class="article-detail"
-                v-html="articleDetail.content"
+                  id="content"
+                  class="article-detail"
+                  v-html="articleDetail.content"
               ></div>
             </el-card>
           </div>
           <div class="heart">
             <el-button
-              type="danger"
-              size="large"
-              icon="heart"
-              :loading="isLoading"
-              @click="likeArticle"
+                type="danger"
+                size="large"
+                icon="heart"
+                :loading="isLoading"
+                @click="likeArticle"
             >
               点赞
             </el-button>
           </div>
           <div class="comment">
             <el-input
-              placeholder="文明社会，理性评论"
-              type="textarea"
-              v-model="content"
+                placeholder="文明社会，理性评论"
+                type="textarea"
+                v-model="content"
             ></el-input>
             <el-button
-              style="margin-top: 15px"
-              type="primary"
-              :loading="btnLoading"
-              @click="handleAddComment"
-              >发 送
+                style="margin-top: 15px"
+                type="primary"
+                :loading="btnLoading"
+                @click="handleAddComment"
+            >发 送
             </el-button>
           </div>
           <!--<CommentList v-if="!isLoading"
@@ -108,17 +110,17 @@
     </div>
     <div class="directories-container">
       <vue-custom-scrollbar
-        class="scroll-area"
-        :settings="settings"
-        @select="select"
+          class="scroll-area"
+          :settings="settings"
+          @select="select"
       >
         <h2 style="margin-left: 80px"><i class="el-icon-document"></i>目录</h2>
         <el-menu
-          defult-actiev="1"
-          active-text-color="#409EFF"
-          class="el-menu-vertical-demo"
-          :unique-opened="true"
-          :collapse-transition="true"
+            defult-actiev="1"
+            active-text-color="#409EFF"
+            class="el-menu-vertical-demo"
+            :unique-opened="true"
+            :collapse-transition="true"
         >
           <muti-menu :navMenus="navMenus"></muti-menu>
         </el-menu>
@@ -127,13 +129,7 @@
   </div>
 </template>
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import {
-  getClientHeight,
-  getScrollHeight,
-  getScrollTop,
-  isMobileOrPc
-} from "@/utils/utils";
+import {Component, Vue} from "vue-property-decorator";
 import markdown from "@/utils/markdown";
 import LoadingCustom from "@/components/loading.vue";
 import CommentList from "@/components/commentList.vue";
@@ -346,14 +342,14 @@ export default class ArticleDetail extends Vue {
   beforeDestroy(): void {
     document.title = "Einson的博客网站";
     document
-      .getElementById("keywords")
-      .setAttribute("content", "Einson的博客网站");
+        .getElementById("keywords")
+        .setAttribute("content", "Einson的博客网站");
     document
-      .getElementById("description")
-      .setAttribute(
-        "content",
-        "分享开发等相关的技术文章，热点资源，全栈程序员的成长之路。"
-      );
+        .getElementById("description")
+        .setAttribute(
+            "content",
+            "分享开发等相关的技术文章，热点资源，全栈程序员的成长之路。"
+        );
   }
 
   // // The class component now treats beforeRouteEnter
@@ -381,8 +377,8 @@ export default class ArticleDetail extends Vue {
   async handleSearch(): Promise<void> {
     this.isLoading = true;
     const data: any = await this.$https.post(
-      this.$urls.getArticleDetail,
-      this.params
+        this.$urls.getArticleDetail,
+        this.params
     );
     this.isLoading = false;
 
@@ -530,7 +526,7 @@ export default class ArticleDetail extends Vue {
         text-align: left;
         float: left;
         vertical-align: middle;
-        // display: inline-block;
+        display: inline-block;
         margin-left: 8px;
 
         a {
@@ -546,7 +542,7 @@ export default class ArticleDetail extends Vue {
 
       .meta {
         margin-top: 8px;
-        font-size: 12px;
+        font-size: 14px;
         color: #969696;
 
         span {
