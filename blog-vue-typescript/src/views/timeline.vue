@@ -1,20 +1,20 @@
 <template>
   <div class="timeline left">
     <el-timeline>
-      <el-timeline-item v-for="(l, i) in list"
-                        :key="l._id"
-                        :color="l.state === 1 ? 'green' : l.state === 3 ? 'red' : ''"
-                        placement="top"
-                        hide-timestamp>
+      <el-timeline-item
+        v-for="(l, i) in list"
+        :key="l._id"
+        :color="l.state === 1 ? 'green' : l.state === 3 ? 'red' : ''"
+        placement="top"
+        hide-timestamp
+      >
         <el-card>
-          <h3>{{l.title}}</h3>
-          <p>{{l.content}}</p>
+          <h3>{{ l.title }}</h3>
+          <p>{{ l.content }}</p>
           <p>
+            <span> {{ formatTime(l.start_time) }}-- </span>
             <span>
-              {{formatTime(l.start_time)}}--
-            </span>
-            <span>
-              {{formatTime(l.end_time)}}
+              {{ formatTime(l.end_time) }}
             </span>
           </p>
         </el-card>
@@ -34,7 +34,7 @@ import {
   getQueryStringByName,
   timestampToTime
 } from "@/utils/utils";
-import {PageParams, TimelineList, TimelinesData} from "@/types/index";
+import { PageParams, TimelineList, TimelinesData } from "@/types/index";
 
 @Component({
   components: {
@@ -53,7 +53,7 @@ export default class Timeline extends Vue {
     records: {},
     total: 0,
     optimizeCountSql: false,
-    isSearchCount: false,
+    isSearchCount: false
   };
 
   // lifecycle hook
@@ -108,4 +108,3 @@ export default class Timeline extends Vue {
   }
 }
 </style>
-

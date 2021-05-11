@@ -1,4 +1,3 @@
-
 import Vue from "vue";
 import Component from "vue-class-component";
 import App from "./App.vue";
@@ -28,9 +27,13 @@ import {
   Container,
   Footer,
   Pagination,
-  Collapse, Submenu,
+  Collapse,
+  Submenu,
+  Scrollbar,
+  Divider
 } from "element-ui";
 import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
+// import Divider from "element-ui/lib/theme-chalk/divider.css";
 import mixin from "./mixins";
 
 Vue.mixin(mixin);
@@ -55,10 +58,12 @@ Vue.component(Timeline.name, Timeline);
 Vue.component(TimelineItem.name, TimelineItem);
 Vue.component(Card.name, Card);
 Vue.component(Tag.name, Tag);
-Vue.component(Container.name,Container);
-Vue.component(Footer.name,Footer);
-Vue.component(Pagination.name,Pagination);
-Vue.component(Collapse.name,Collapse);
+Vue.component(Container.name, Container);
+Vue.component(Footer.name, Footer);
+Vue.component(Pagination.name, Pagination);
+Vue.component(Collapse.name, Collapse);
+Vue.component(Scrollbar.name, Scrollbar);
+Vue.component(Divider.name, Divider);
 Vue.use(Loading.directive);
 Vue.prototype.$message = Message;
 Vue.prototype.$loading = Loading.service;
@@ -67,7 +72,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$https = service; // 其他页面在使用 axios 的时候直接  this.$http 就可以了
 Vue.prototype.$urls = urls; // 其他页面在使用 URLS 的时候直接  this.$urls 就可以了
 
-Vue.prototype.$https.options.emulateJSON = true
+Vue.prototype.$https.options.emulateJSON = true;
 
 // https://www.npmjs.com/package/vue-class-component#adding-custom-hooks
 Component.registerHooks([

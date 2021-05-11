@@ -10,21 +10,19 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@ts-stack/markdown": "^1.4.0",
     "axios": "^0.18.0",
-    "element-ui": "^2.6.3",
+    "element-ui": "^2.15.1",
     "highlight.js": "^9.15.6",
-    "marked": "^0.6.3",
     "tslib": "^2.2.0",
     "vue": "^2.6.6",
     "vue-class-component": "^6.0.0",
+    "vue-custom-scrollbar": "^1.4.0",
     "vue-property-decorator": "^7.0.0",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.0",
-    "@types/marked": "^2.0.2",
     "@types/mocha": "^5.2.4",
     "@vue/cli-plugin-babel": "^3.5.0",
     "@vue/cli-plugin-eslint": "^3.5.0",

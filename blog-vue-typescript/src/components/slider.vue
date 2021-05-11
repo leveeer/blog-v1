@@ -1,17 +1,18 @@
 <template>
   <div class="right slider" style="position: fixed;right: 20px">
-    <img class="right-logo"
-         src="../assets/user_logo.jpg"
-         alt="">
+    <img class="right-logo" src="../assets/user_logo.jpg" alt="" />
     <div class="title">Einson</div>
-    <div class="right-content">
-    </div>
+    <div class="right-content"></div>
     <div class="tags">
       <div class="title">标签云</div>
-      <router-link v-for="item in list"
-                   class="item"
-                   :key="item.uid"
-                   :to="`/articles?tagUid=${item.uid}&tag_name=${item.content}&category_id=`">
+      <router-link
+        v-for="item in list"
+        class="item"
+        :key="item.uid"
+        :to="
+          `/articles?tagUid=${item.uid}&tag_name=${item.content}&category_id=`
+        "
+      >
         <span :key="item._id">{{ item.content }}</span>
       </router-link>
     </div>
@@ -31,8 +32,8 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
-import {PageParams, Tag, TagsData} from "@/types/index";
+import { Component, Vue } from "vue-property-decorator";
+import { PageParams, Tag, TagsData } from "@/types/index";
 
 @Component
 export default class Slider extends Vue {
@@ -46,8 +47,7 @@ export default class Slider extends Vue {
     records: {},
     total: 0,
     optimizeCountSql: false,
-    isSearchCount: false,
-
+    isSearchCount: false
   };
 
   mounted(): void {

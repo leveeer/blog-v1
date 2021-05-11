@@ -1,57 +1,73 @@
 <template>
-  <el-dialog title="登录"
-             :width="isMobile ? '90%' : '50%'"
-             :visible="dialogVisible"
-             @close="cancel">
+  <el-dialog
+    title="登录"
+    :width="isMobile ? '90%' : '50%'"
+    :visible="dialogVisible"
+    @close="cancel"
+  >
     <el-form>
-      <el-formItem label="邮箱"
-                   :label-width="formLabelWidth">
-        <el-input v-model="params.email"
-                  placeholder="邮箱"
-                  autocomplete="off">
+      <el-formItem label="邮箱" :label-width="formLabelWidth">
+        <el-input v-model="params.email" placeholder="邮箱" autocomplete="off">
         </el-input>
       </el-formItem>
-      <el-formItem label="密码"
-                   :label-width="formLabelWidth">
-        <el-input type="password"
-                  placeholder="密码"
-                  v-model="params.password"
-                  autocomplete="off"></el-input>
+      <el-formItem label="密码" :label-width="formLabelWidth">
+        <el-input
+          type="password"
+          placeholder="密码"
+          v-model="params.password"
+          autocomplete="off"
+        ></el-input>
       </el-formItem>
-      <el-formItem v-if="handleFlag === 'register'"
-                   label="昵称"
-                   :label-width="formLabelWidth">
-        <el-input v-model="params.name"
-                  placeholder="用户名或昵称"
-                  autocomplete="off"></el-input>
+      <el-formItem
+        v-if="handleFlag === 'register'"
+        label="昵称"
+        :label-width="formLabelWidth"
+      >
+        <el-input
+          v-model="params.name"
+          placeholder="用户名或昵称"
+          autocomplete="off"
+        ></el-input>
       </el-formItem>
-      <el-formItem v-if="handleFlag === 'register'"
-                   label="手机"
-                   :label-width="formLabelWidth">
-        <el-input v-model="params.phone"
-                  placeholder="手机号"
-                  autocomplete="off"></el-input>
+      <el-formItem
+        v-if="handleFlag === 'register'"
+        label="手机"
+        :label-width="formLabelWidth"
+      >
+        <el-input
+          v-model="params.phone"
+          placeholder="手机号"
+          autocomplete="off"
+        ></el-input>
       </el-formItem>
-      <el-formItem v-if="handleFlag === 'register'"
-                   label="简介"
-                   :label-width="formLabelWidth">
-        <el-input v-model="params.desc"
-                  placeholder="个人简介"
-                  autocomplete="off"></el-input>
+      <el-formItem
+        v-if="handleFlag === 'register'"
+        label="简介"
+        :label-width="formLabelWidth"
+      >
+        <el-input
+          v-model="params.desc"
+          placeholder="个人简介"
+          autocomplete="off"
+        ></el-input>
       </el-formItem>
     </el-form>
-    <div slot="footer"
-         class="dialog-footer">
-      <el-button type="success"
-                 @click="handleOAuth">github 授权登录</el-button>
-      <el-button v-if="handleFlag === 'login'"
-                 :loading="btnLoading"
-                 type="primary"
-                 @click="handleOk('login')">登 录</el-button>
-      <el-button v-if="handleFlag === 'register'"
-                 :loading="btnLoading"
-                 type="primary"
-                 @click="handleOk('register')">注 册</el-button>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="success" @click="handleOAuth">github 授权登录</el-button>
+      <el-button
+        v-if="handleFlag === 'login'"
+        :loading="btnLoading"
+        type="primary"
+        @click="handleOk('login')"
+        >登 录</el-button
+      >
+      <el-button
+        v-if="handleFlag === 'register'"
+        :loading="btnLoading"
+        type="primary"
+        @click="handleOk('register')"
+        >注 册</el-button
+      >
     </div>
   </el-dialog>
 </template>
@@ -98,7 +114,9 @@ export default class RegisterAndLogin extends Vue {
     };
     window.sessionStorage.preventHistory = JSON.stringify(preventHistory);
     // window.location.href = 'https://github.com/login/oauth/authorize?client_id=6de90ab270aea2bdb01c&redirect_uri=http://biaochenxuying.cn/login'
-    window.location.href = `${config.oauth_uri}?client_id=${config.client_id}&redirect_uri=${config.redirect_uri}`;
+    window.location.href = `${config.oauth_uri}?client_id=${
+      config.client_id
+    }&redirect_uri=${config.redirect_uri}`;
   }
 
   private handleOk(): void {

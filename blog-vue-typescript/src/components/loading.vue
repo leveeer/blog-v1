@@ -1,7 +1,6 @@
 <template>
   <div class="loading">
-    <img src="../assets/loading.svg"
-         alt="拼命加载中...">
+    <img src="../assets/loading.svg" alt="拼命加载中..." />
   </div>
 </template>
 <script lang="ts">

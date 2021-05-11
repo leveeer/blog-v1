@@ -1,9 +1,6 @@
-
 <template>
   <div>
-    <i v-show="isShowBtn"
-       @click="topFunction"
-       class="el-icon-arrow-up"></i>
+    <i v-show="isShowBtn" @click="topFunction" class="el-icon-arrow-up"></i>
   </div>
 </template>
 <script lang="ts">
@@ -52,4 +49,3 @@ export default class ArrowUp extends Vue {
   background-color: #555;
 }
 </style>
-

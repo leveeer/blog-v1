@@ -3,55 +3,64 @@
     <div id="wave"></div>
     <div class="content">
       <div class="home-header">
-        <router-link class="link"
-                     to="/home">
-          <img class="home-logo"
-               src="../assets/user_logo.jpg"
-               alt="Enison logo" />
+        <router-link class="link" to="/home">
+          <img
+            class="home-logo"
+            src="../assets/user_logo.jpg"
+            alt="Enison logo"
+          />
         </router-link>
       </div>
       <div class="home-body">
         <div class="list">
-          <router-link class="link"
-                       to="/articles">
+          <router-link class="link" to="/articles">
             文章
           </router-link>
-          <router-link class="link"
-                       to="/project">
+          <router-link class="link" to="/project">
             项目
           </router-link>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://github.com/biaochenxuying">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://github.com/biaochenxuying"
+          >
             github
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://juejin.im/user/591d6b4d0ce463006926ae40">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://juejin.im/user/591d6b4d0ce463006926ae40"
+          >
             掘金
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://www.zhihu.com/people/gu-jian-qi-tan-shui/activities">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://www.zhihu.com/people/gu-jian-qi-tan-shui/activities"
+          >
             知乎
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://segmentfault.com/u/biaochenxuying">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://segmentfault.com/u/biaochenxuying"
+          >
             segmentfault
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://www.jianshu.com/u/91717b553bfd">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://www.jianshu.com/u/91717b553bfd"
+          >
             简书
           </a>
         </div>
-        <div class="introduce"> 你知道的越多，不知道的就越多 </div>
+        <div class="introduce">你知道的越多，不知道的就越多</div>
       </div>
     </div>
   </div>
@@ -277,4 +286,3 @@ export default class Home extends Vue {
   }
 }
 </style>
-

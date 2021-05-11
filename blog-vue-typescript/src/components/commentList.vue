@@ -1,82 +1,81 @@
-
 <template>
   <div class="comment-list">
     <div class="top-title">
-      <span>{{numbers}} 条评论</span>
+      <span>{{ numbers }} 条评论</span>
     </div>
-    <div v-for="(item, i) in list"
-         :key="i"
-         class="item">
+    <div v-for="(item, i) in list" :key="i" class="item">
       <div class="item-header">
         <div class="author">
           <div class="avatar">
-            <img v-if="item.user.avatar.length < 10"
-                 src="../assets/user.png"
-                 alt="默认图片">
-            <img v-else
-                 :src="item.user.avatar"
-                 alt="">
+            <img
+              v-if="item.user.avatar.length < 10"
+              src="../assets/user.png"
+              alt="默认图片"
+            />
+            <img v-else :src="item.user.avatar" alt="" />
           </div>
         </div>
         <div class="info">
           <div class="name">
-            {{item.user.name}}
-            {{item.user.type === 0 ? '(作者)' : ''}}
+            {{ item.user.name }}
+            {{ item.user.type === 0 ? "(作者)" : "" }}
           </div>
           <div class="time">
-            {{formatTime(item.create_time)}}
+            {{ formatTime(item.create_time) }}
           </div>
         </div>
       </div>
-      <div class="comment-detail">{{item.content}}</div>
+      <div class="comment-detail">{{ item.content }}</div>
       <div class="item-comment">
-        <div @click="showCommentModal(item._id, item.user)"
-             class="message">
+        <div @click="showCommentModal(item._id, item.user)" class="message">
           <el-button size="small">回复</el-button>
         </div>
       </div>
-      <div v-for="e in item.other_comments"
-           :key="e._id"
-           class="item-other">
+      <div v-for="e in item.other_comments" :key="e._id" class="item-other">
         <div class="item-header">
           <div class="author">
             <div class="avatar">
-              <img v-if="e.user.avatar.length < 10"
-                   src="../assets/user.png"
-                   alt="默认图片">
-              <img v-else
-                   :src="e.user.avatar"
-                   alt="">
+              <img
+                v-if="e.user.avatar.length < 10"
+                src="../assets/user.png"
+                alt="默认图片"
+              />
+              <img v-else :src="e.user.avatar" alt="" />
             </div>
           </div>
           <div class="info">
             <div class="name">
-              {{e.user.name}}
-              {{e.user.type === 0 ? '(作者)' : ''}}
+              {{ e.user.name }}
+              {{ e.user.type === 0 ? "(作者)" : "" }}
             </div>
             <div class="time">
-              {{formatTime(e.create_time)}}
+              {{ formatTime(e.create_time) }}
             </div>
           </div>
         </div>
         <div class="comment-detail">
-          {{'@' + e.to_user.name}}
-          {{e.to_user.type === 0 ? '(作者)' : ''}}：{{e.content}}
+          {{ "@" + e.to_user.name }}
+          {{ e.to_user.type === 0 ? "(作者)" : "" }}：{{ e.content }}
         </div>
         <div class="item-comment">
           <div class="message">
-            <el-button @click="showCommentModal(item._id, item.user, e.user)"
-                       size="small">回复</el-button>
+            <el-button
+              @click="showCommentModal(item._id, item.user, e.user)"
+              size="small"
+              >回复</el-button
+            >
           </div>
         </div>
       </div>
     </div>
-    <Comment :visible="visible"
-             :to_user="to_user"
-             :comment_id="comment_id"
-             :article_id="article_id"
-             @handleOk="handleOk"
-             @cancel="handleCancel" />
+    <Comment
+      :visible="visible"
+      :to_user="to_user"
+      :comment_id="comment_id"
+      :article_id="article_id"
+      @handleOk="handleOk"
+      @cancel="handleCancel"
+    />
   </div>
 </template>
 <script lang="ts">
@@ -261,4 +260,3 @@ export default class CommentList extends Vue {
   }
 }
 </style>
-

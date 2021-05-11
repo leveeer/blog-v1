@@ -2,16 +2,26 @@
   <div id="pro_form" style="width: 90%;margin-bottom: 100px">
     <div style="position: relative;top: 20px;left:100px;">
       <el-row>
-        <el-col :span="6" v-for="(article, index) in articlesList" :key="article.uid" :offset="1"
-                style="margin-bottom:30px" type="flex">
-          <el-card :body-style="{ padding: '0px', height:'350px'}"
-                   shadow="hover"
-                   @click.native="getBlogByUid(article.uid)"
-                   style="width: 270px;height: 350px">
-            <img style="width: 100%;display: block"
-                 src="../assets/logo5.jpg"
-                 class="image"
-                 alt=""/>
+        <el-col
+          :span="6"
+          v-for="(article, index) in articlesList"
+          :key="article.uid"
+          :offset="1"
+          style="margin-bottom:30px"
+          type="flex"
+        >
+          <el-card
+            :body-style="{ padding: '0px', height: '350px' }"
+            shadow="hover"
+            @click.native="getBlogByUid(article.uid)"
+            style="width: 270px;height: 350px"
+          >
+            <img
+              style="width: 100%;display: block"
+              src="../assets/logo5.jpg"
+              class="image"
+              alt=""
+            />
             <p>{{ article.title }}</p>
             <p>{{ article.createTime }}</p>
           </el-card>
@@ -20,14 +30,15 @@
     </div>
     <div style="display: flex;justify-content: center; margin-top: 25px">
       <el-pagination
-          background
-          @current-change="this.handleCurrentChange"
-          @size-change="this.handleSizeChange"
-          layout="sizes, prev, pager, next, jumper, ->, total, slot"
-          :current-page="this.params.currentPage"
-          :page-sizes="this.pageSizeList"
-          :page-size="this.params.pageSize"
-          :total="this.total">
+        background
+        @current-change="this.handleCurrentChange"
+        @size-change="this.handleSizeChange"
+        layout="sizes, prev, pager, next, jumper, ->, total, slot"
+        :current-page="this.params.currentPage"
+        :page-sizes="this.pageSizeList"
+        :page-size="this.params.pageSize"
+        :total="this.total"
+      >
       </el-pagination>
     </div>
     <LoadingCustom v-if="isLoading"></LoadingCustom>
@@ -35,10 +46,10 @@
   </div>
 </template>
 <script lang="ts">
-import {Component, Vue, Watch} from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import LoadEnd from "@/components/loadEnd.vue";
 import LoadingCustom from "@/components/loading.vue";
-import {ArticlesParams} from "@/types";
+import { ArticlesParams } from "@/types";
 
 @Component({
   components: {
@@ -53,7 +64,7 @@ export default class Articles extends Vue {
   private total: number = 0;
   private pageSizeList: Array<number> = [];
   private currentPage: number = 1;
-  private pageSize: number = 6
+  private pageSize: number = 6;
   private params: ArticlesParams = {
     adminUid: "",
     articlesPart: "",
@@ -83,12 +94,12 @@ export default class Articles extends Vue {
     keyword: "",
     status: 1, // 文章发布状态 => 0 草稿，1 已发布,'' 代表所有文章
     currentPage: this.currentPage ? this.currentPage : 1,
-    pageSize: this.pageSize ? this.pageSize : 6,
+    pageSize: this.pageSize ? this.pageSize : 6
   };
   private href: string =
-      process.env.NODE_ENV === "development"
-          ? "http://localhost:3001/articleDetail?article_id="
-          : "https://biaochenxuying.cn/articleDetail?article_id=";
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:3001/articleDetail?article_id="
+      : "https://biaochenxuying.cn/articleDetail?article_id=";
 
   // lifecycle hook
   mounted(): void {
@@ -105,29 +116,29 @@ export default class Articles extends Vue {
   //   this.handleSearch();
   // }
 
-  @Watch("params", {immediate: true, deep: true})
+  @Watch("params", { immediate: true, deep: true })
   onParamsChange(newVal: ArticlesParams, oldValue: ArticlesParams) {
     // this.pageSizeList = [6, 12, 18, 24];
-    this.articlesList = []
+    this.articlesList = [];
     this.handleSearch();
   }
 
   // method
   getBlogByUid(id: string): void {
     this.$router.push({
-      path:'/articleDetail',
-      query:{
-        id:id
+      path: "/articleDetail",
+      query: {
+        id: id
       }
-    })
+    });
   }
 
   handleSizeChange(val: number) {
-    this.params.pageSize = val
+    this.params.pageSize = val;
   }
 
   handleCurrentChange(val: number) {
-    this.params.currentPage = val
+    this.params.currentPage = val;
   }
 
   private async handleSearch(): Promise<void> {
@@ -143,7 +154,6 @@ export default class Articles extends Vue {
 </script>
 
 <style lang="less" scoped>
-
 .left {
   .articles-list {
     margin: 0;

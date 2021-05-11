@@ -3,55 +3,72 @@
     <canvas id="sakura" />
     <div class="content">
       <div class="home-header">
-        <router-link class="link"
-                     to="/home">
-          <img class="home-logo"
-               src="../assets/user_logo.jpg"
-               alt="Einson logo" />
+        <router-link class="link" to="/home">
+          <img
+            class="home-logo"
+            src="../assets/user_logo.jpg"
+            alt="Einson logo"
+          />
         </router-link>
       </div>
       <div class="home-body">
         <div class="list">
-          <router-link class="link"
-                       to="/articles">
-            <el-tag type="" effect="dark" size="medium" hit=true>文章</el-tag>
+          <router-link class="link" to="/articles">
+            <el-tag type="" effect="dark" size="medium" hit="true">文章</el-tag>
           </router-link>
-          <router-link class="link"
-                       to="/project">
-            <el-tag type="" effect="dark" size="medium" hit=true>项目</el-tag>
+          <router-link class="link" to="/project">
+            <el-tag type="" effect="dark" size="medium" hit="true">项目</el-tag>
           </router-link>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://github.com/biaochenxuying">
-            <el-tag type="" effect="dark" size="medium" hit=true>github</el-tag>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://github.com/biaochenxuying"
+          >
+            <el-tag type="" effect="dark" size="medium" hit="true"
+              >github</el-tag
+            >
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://juejin.im/user/591d6b4d0ce463006926ae40">
-            <el-tag type="" effect="dark" size="medium" hit=true>掘金</el-tag>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://juejin.im/user/591d6b4d0ce463006926ae40"
+          >
+            <el-tag type="" effect="dark" size="medium" hit="true">掘金</el-tag>
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://www.zhihu.com/people/gu-jian-qi-tan-shui/activities">
-            <el-tag type="" effect="dark" size="medium" hit=true>知乎</el-tag>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://www.zhihu.com/people/gu-jian-qi-tan-shui/activities"
+          >
+            <el-tag type="" effect="dark" size="medium" hit="true">知乎</el-tag>
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://segmentfault.com/u/biaochenxuying">
-            <el-tag type="" effect="dark" size="medium" hit=true>segmentfault</el-tag>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://segmentfault.com/u/biaochenxuying"
+          >
+            <el-tag type="" effect="dark" size="medium" hit="true"
+              >segmentfault</el-tag
+            >
           </a>
-          <a target="_blank"
-             rel="noopener noreferrer"
-             class="link"
-             href="https://www.jianshu.com/u/91717b553bfd">
-            <el-tag type="" effect="dark" size="medium" hit=true>简书</el-tag>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            class="link"
+            href="https://www.jianshu.com/u/91717b553bfd"
+          >
+            <el-tag type="" effect="dark" size="medium" hit="true">简书</el-tag>
           </a>
         </div>
-        <div class="introduce"><el-tag type="" effect="dark" size="medium" hit=true>你知道的越多，不知道的就越多</el-tag>  </div>
+        <div class="introduce">
+          <el-tag type="" effect="dark" size="medium" hit="true"
+            >你知道的越多，不知道的就越多</el-tag
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -1453,4 +1470,3 @@ export default class Home extends Vue {
   }
 }
 </style>
-

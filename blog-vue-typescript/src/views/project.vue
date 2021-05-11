@@ -1,23 +1,20 @@
 <template>
   <div class="project left">
     <el-row :gutter="20">
-      <el-col class="el-col-pointer"
-              :span="isMobileOrPc ? 24 : 12"
-              v-for="(l, index) in list"
-              :key="l._id"
-              style="margin-bottom: 20px">
-        <a :href="l.url"
-           target="_blank"
-           rel="noopener noreferrer">
+      <el-col
+        class="el-col-pointer"
+        :span="isMobileOrPc ? 24 : 12"
+        v-for="(l, index) in list"
+        :key="l._id"
+        style="margin-bottom: 20px"
+      >
+        <a :href="l.url" target="_blank" rel="noopener noreferrer">
           <el-card shadow="hover">
-            <img :src="l.img"
-                 class="image">
+            <img :src="l.img" class="image" />
             <div style="padding: 14px;">
               <h4>{{ l.title }}</h4>
               <div class="content">{{ l.content }}</div>
-              <span>
-                {{ formatTime(l.start_time) }}--
-              </span>
+              <span> {{ formatTime(l.start_time) }}-- </span>
               <span>
                 {{ formatTime(l.end_time) }}
               </span>
@@ -31,7 +28,7 @@
   </div>
 </template>
 <script lang="ts">
-import {Component, Prop, Vue} from "vue-property-decorator";
+import { Component, Prop, Vue } from "vue-property-decorator";
 import LoadEnd from "@/components/loadEnd.vue";
 import LoadingCustom from "@/components/loading.vue";
 import {
@@ -43,7 +40,7 @@ import {
   timestampToTime,
   isMobileOrPc
 } from "@/utils/utils";
-import {PageParams, ProjectList, ProjectsData} from "@/types/index";
+import { PageParams, ProjectList, ProjectsData } from "@/types/index";
 
 @Component({
   components: {
@@ -64,7 +61,7 @@ export default class Timeline extends Vue {
     records: {},
     total: 0,
     optimizeCountSql: false,
-    isSearchCount: false,
+    isSearchCount: false
   };
 
   // lifecycle hook
@@ -82,9 +79,12 @@ export default class Timeline extends Vue {
 
   private async handleSearch(): Promise<void> {
     this.isLoading = true;
-    const data: ProjectsData = await this.$https.get(this.$urls.getProjectList, {
-      params: this.params
-    });
+    const data: ProjectsData = await this.$https.get(
+      this.$urls.getProjectList,
+      {
+        params: this.params
+      }
+    );
     this.isLoading = false;
 
     this.list = [...this.list, ...data.list];
@@ -116,4 +116,3 @@ export default class Timeline extends Vue {
   }
 }
 </style>
-

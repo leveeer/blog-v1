@@ -1,9 +1,8 @@
 <template>
-  <div id="app"
-       class="container">
-    <Nav v-if="isShowNav"/>
+  <div id="app" class="container">
+    <Nav v-if="isShowNav" />
     <div class="layout">
-      <router-view/>
+      <router-view />
       <Slider v-if="isShowSlider"></Slider>
     </div>
     <ArrowUp></ArrowUp>
@@ -11,9 +10,9 @@
   </div>
 </template>
 <script lang="ts">
-import {Vue, Watch} from "vue-property-decorator";
+import { Vue, Watch } from "vue-property-decorator";
 import Component from "vue-class-component";
-import {Route} from "vue-router";
+import { Route } from "vue-router";
 import Nav from "@/components/nav.vue"; // @ is an alias to /src
 import Slider from "@/components/slider.vue"; // @ is an alias to /src
 import Footer from "@/components/footer.vue"; // @ is an alias to /src
@@ -45,11 +44,12 @@ export default class App extends Vue {
       this.isShowNav = true;
       referrer.setAttribute("content", "never");
     }
-    this.isShowSlider = val.path === "/articles" ||
-        val.path === "/archive" ||
-        val.path === "/project" ||
-        val.path === "/timeline" ||
-        val.path === "/message";
+    this.isShowSlider =
+      val.path === "/articles" ||
+      val.path === "/archive" ||
+      val.path === "/project" ||
+      val.path === "/timeline" ||
+      val.path === "/message";
   }
 }
 </script>

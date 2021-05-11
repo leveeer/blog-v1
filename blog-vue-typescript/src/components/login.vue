@@ -1,29 +1,21 @@
 <template>
-  <Dialog title="登录"
-          width="60%"
-          :visible="dialogVisible"
-          @close="cancel">
+  <Dialog title="登录" width="60%" :visible="dialogVisible" @close="cancel">
     <Form>
-      <FormItem label="邮箱"
-                placeholder="邮箱"
-                :label-width="formLabelWidth">
-        <Input v-model="params.email"
-               autocomplete="off"></Input>
+      <FormItem label="邮箱" placeholder="邮箱" :label-width="formLabelWidth">
+        <Input v-model="params.email" autocomplete="off"></Input>
       </FormItem>
-      <FormItem label="密码"
-                :label-width="formLabelWidth">
-        <Input type="password"
-               placeholder="密码"
-               v-model="params.password"
-               autocomplete="off"></Input>
+      <FormItem label="密码" :label-width="formLabelWidth">
+        <Input
+          type="password"
+          placeholder="密码"
+          v-model="params.password"
+          autocomplete="off"
+        ></Input>
       </FormItem>
     </Form>
-    <div slot="footer"
-         class="dialog-footer">
-      <Button type="success"
-              @click="handleOAuth">github 授权登录</Button>
-      <Button type="primary"
-              @click="handleOk">确 定</Button>
+    <div slot="footer" class="dialog-footer">
+      <Button type="success" @click="handleOAuth">github 授权登录</Button>
+      <Button type="primary" @click="handleOk">确 定</Button>
     </div>
   </Dialog>
 </template>
@@ -74,7 +66,9 @@ export default class Login extends Vue {
     };
     window.sessionStorage.preventHistory = JSON.stringify(preventHistory);
     // window.location.href = 'https://github.com/login/oauth/authorize?client_id=6de90ab270aea2bdb01c&redirect_uri=http://biaochenxuying.cn/login'
-    window.location.href = `${config.oauth_uri}?client_id=${config.client_id}&redirect_uri=${config.redirect_uri}`;
+    window.location.href = `${config.oauth_uri}?client_id=${
+      config.client_id
+    }&redirect_uri=${config.redirect_uri}`;
   }
 
   private handleOk(): void {

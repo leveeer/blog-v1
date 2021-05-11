@@ -1,119 +1,150 @@
 <template>
-  <div style="width: 100%">
-    <div class="article clearfix">
-      <div
-          v-show="!isLoading"
-          :style="{ width: isMobileOrPc ? '100%' : '75%' }"
-          class="article-left fl">
-        <div class="header">
-          <h1 class="title">{{ articleDetail.title }}</h1>
-          <div class="author">
-            <div class="avatar">
-              <img class="auth-logo"
-                   src="../assets/user_logo.jpg"
-                   alt="Einson"/>
-            </div>
-            <div class="info">
-              <span class="name">
-                <span>{{ articleDetail.author }}</span>
-              </span>
-              <div props-data-classes="user-follow-button-header"
-                   data-author-follow-button=""/>
-              <div class="meta">
-                <span class="publish-time">
-                  {{ articleDetail.createTime ? formatTime(articleDetail.createTime) : '' }}
-                </span>
-                <!--                <span class="wordage">-->
-                <!--                  字数 {{ articleDetail.numbers }}-->
-                <!--                </span>-->
-                <!--                <span class="views-count">-->
-                <!--                  阅读 {{ articleDetail.meta.views }}-->
-                <!--                </span>-->
-                <!--                <span class="comments-count">-->
-                <!--                  评论 {{ articleDetail.meta.comments }}-->
-                <!--                </span>-->
-                <!--                <span class="likes-count">-->
-                <!--                  喜欢 {{ articleDetail.meta.likes }}-->
-                <!--                </span>-->
-              </div>
-            </div>
-            <div class="tags "
-                 title="标签">
-              <el-tag size="mini"
-                      v-for="tag in articleDetail.tagList"
-                      :key="tag.uid"
-                      class="tag"
-                      type="success">{{ tag.content }}
-              </el-tag>
-            </div>
-            <span class="clearfix"/>
-          </div>
-        </div>
-        <div class="content">
-          <div id="content" class="article-detail"
-               v-html="articleDetail.content">
-          </div>
-        </div>
-        <div class="heart">
-          <el-button type="danger"
-                     size="large"
-                     icon="heart"
-                     :loading="isLoading"
-                     @click="likeArticle">
-            点赞
-          </el-button>
-        </div>
-        <div class="comment">
-          <el-input placeholder="文明社会，理性评论"
-                    type="textarea"
-                    v-model="content"></el-input>
-          <el-button style="margin-top: 15px"
-                     type="primary"
-                     :loading="btnLoading"
-                     @click="handleAddComment">发 送
-          </el-button>
-        </div>
-        <!--<CommentList v-if="!isLoading"
-                     :numbers="articleDetail.meta.comments"
-                     :list="articleDetail.openComment"
-                     :article_id="articleDetail.uid"
-                     @refreshArticle="refreshArticle"/>-->
-      </div>
+  <div>
+    <div style="width: 80%">
+      <div class="article clearfix">
+        <div v-show="!isLoading" class="article-left fl">
+          <div class="header">
+            <h1 class="title">{{ articleDetail.title }}</h1>
+            <el-card style="margin-top: 20px">
+              <div class="author">
+                <div class="avatar">
+                  <img
+                    class="auth-logo"
+                    src="../assets/user_logo.jpg"
+                    alt="Einson"
+                  />
+                </div>
+                <div class="info">
+                  <span class="name">
+                    <span>{{ articleDetail.author }}</span>
+                  </span>
 
-      <div class="directories-container">
-        <!--<div class="directories-list">
-          <h2 style="text-align: center">目录</h2>
-          <div :class="{'highlight-title':item.isActive}" v-for="(item,index) in toc" :key="index"
-               style="padding: 5px 12px;">
-            <a href="javascript:void(0)" @click="goAnchor(index)">
-              {{ item.title }}
-            </a>
+                  <div class="meta">
+                    <span class="publish-time">
+                      发布时间：{{
+                        articleDetail.createTime
+                          ? formatTime(articleDetail.createTime)
+                          : ""
+                      }}
+                    </span>
+                    <div>
+                      <span class="publish-time">
+                        修改时间：{{
+                          articleDetail.updateTime
+                            ? formatTime(articleDetail.updateTime)
+                            : ""
+                        }}
+                      </span>
+                    </div>
+
+                    <span
+                      ><i class="el-icon-star-off"></i>
+                      {{ articleDetail.collectCount }}
+                    </span>
+                    <el-divider direction="vertical"></el-divider>
+                    <span
+                      ><i class="el-icon-view"></i>
+                      {{ articleDetail.clickCount }}
+                    </span>
+                  </div>
+
+                  <div class="meta"></div>
+                </div>
+                <div class="tags " title="标签">
+                  <el-tag
+                    size="mini"
+                    v-for="tag in articleDetail.tagList"
+                    :key="tag.uid"
+                    class="tag"
+                    type="success"
+                    >{{ tag.content }}
+                  </el-tag>
+                </div>
+                <span class="clearfix" />
+              </div>
+            </el-card>
           </div>
-        </div>-->
-        <div class="directories-list">
-          <el-menu
-              default-active="0"
-              class="el-menu-vertical-demo"
-              background-color="#F0F6F6"
-              text-color="#3C3F41"
-              unique-opened="true"
-              collapse-transition="true"
-              active-text-color="black">
-            <muti-menu :navMenus="navMenus"></muti-menu>
-          </el-menu>
+          <div class="content">
+            <el-card style="margin-top: 20px">
+              <div
+                id="content"
+                class="article-detail"
+                v-html="articleDetail.content"
+              ></div>
+            </el-card>
+          </div>
+          <div class="heart">
+            <el-button
+              type="danger"
+              size="large"
+              icon="heart"
+              :loading="isLoading"
+              @click="likeArticle"
+            >
+              点赞
+            </el-button>
+          </div>
+          <div class="comment">
+            <el-input
+              placeholder="文明社会，理性评论"
+              type="textarea"
+              v-model="content"
+            ></el-input>
+            <el-button
+              style="margin-top: 15px"
+              type="primary"
+              :loading="btnLoading"
+              @click="handleAddComment"
+              >发 送
+            </el-button>
+          </div>
+          <!--<CommentList v-if="!isLoading"
+                       :numbers="articleDetail.meta.comments"
+                       :list="articleDetail.openComment"
+                       :article_id="articleDetail.uid"
+                       @refreshArticle="refreshArticle"/>-->
         </div>
       </div>
+    </div>
+    <div class="directories-container">
+      <vue-custom-scrollbar
+        class="scroll-area"
+        :settings="settings"
+        @select="select"
+      >
+        <h2 style="margin-left: 80px"><i class="el-icon-document"></i>目录</h2>
+        <el-menu
+          defult-actiev="1"
+          active-text-color="#409EFF"
+          class="el-menu-vertical-demo"
+          :unique-opened="true"
+          :collapse-transition="true"
+        >
+          <muti-menu :navMenus="navMenus"></muti-menu>
+        </el-menu>
+      </vue-custom-scrollbar>
     </div>
   </div>
 </template>
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
-import {getClientHeight, getScrollHeight, getScrollTop, isMobileOrPc} from "@/utils/utils";
+import { Component, Vue } from "vue-property-decorator";
+import {
+  getClientHeight,
+  getScrollHeight,
+  getScrollTop,
+  isMobileOrPc
+} from "@/utils/utils";
 import markdown from "@/utils/markdown";
 import LoadingCustom from "@/components/loading.vue";
 import CommentList from "@/components/commentList.vue";
-import {ArticleDetailIF, ArticleDetailParams, LikeParams} from "@/types/index";
+import {
+  ArticleDetailIF,
+  ArticleDetailParams,
+  LikeParams
+} from "@/types/index";
 import MutiMenu from "@/components/mutiMenu.vue";
+import vueCustomScrollbar from "vue-custom-scrollbar";
+import "vue-custom-scrollbar/dist/vueScrollbar.css";
 
 declare let document: Document | any;
 
@@ -121,15 +152,20 @@ declare let document: Document | any;
   components: {
     MutiMenu,
     LoadingCustom,
-    CommentList
+    CommentList,
+    vueCustomScrollbar
   }
 })
 export default class ArticleDetail extends Vue {
+  private settings = {
+    suppressScrollY: false,
+    suppressScrollX: false,
+    wheelPropagation: false
+  };
   private toc = [];
   private navMenus = [];
   private btnLoading: boolean = false;
   private isLoading: boolean = false;
-  private isMobileOrPc: boolean = isMobileOrPc();
   private params: ArticleDetailParams = {
     uid: "",
     type: 1
@@ -172,53 +208,51 @@ export default class ArticleDetail extends Vue {
       updatedAt: "",
       status: 0,
       sort: 0,
-      clickCount: 0,
+      clickCount: 0
     },
     parseCount: 1,
-    copyright: "",
+    copyright: ""
   };
   private cacheTime: number = 0; // 缓存时间
   private times: number = 0; // 评论次数
   private likeTimes: number = 0; // 点赞次数
 
+  /*  // 退出页面时，应该取消监听
+    destroyed() {
+      window.removeEventListener("scroll", this.handleScroll);
+    }
 
-  // 退出页面时，应该取消监听
-  destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
-  }
+    goAnchor(index) {
+      if (index == this.toc.length - 1) { //最后一个特殊处理
+        this.toc.forEach((element, index) => {
+          element.isActive = false;
+        })
+        this.toc[index].isActive = true
+      }
+      document.documentElement.scrollTop = this.toc[index].offsetTop - 60;
+    }
 
-  goAnchor(index) {
-    if (index == this.toc.length - 1) { //最后一个特殊处理
+    handleScroll(e) {
+      let scrollTop = document.documentElement.scrollTop + 120 //当前滚动距离
       this.toc.forEach((element, index) => {
-        element.isActive = false;
-      })
-      this.toc[index].isActive = true
-    }
-    document.documentElement.scrollTop = this.toc[index].offsetTop - 60;
-  }
-
-  handleScroll(e) {
-    let scrollTop = document.documentElement.scrollTop + 120 //当前滚动距离
-    this.toc.forEach((element, index) => {
-      if ((scrollTop) >= element.offsetTop) {//当前滚动距离大于某一目录项时。
-        for (let i = 0; i < index; i++) {
-          this.toc[i].isActive = false //同一时刻，只能有一个目录项的状态位为Active，即此时其他目录项的isActive = false
+        if ((scrollTop) >= element.offsetTop) {//当前滚动距离大于某一目录项时。
+          for (let i = 0; i < index; i++) {
+            this.toc[i].isActive = false //同一时刻，只能有一个目录项的状态位为Active，即此时其他目录项的isActive = false
+          }
+          element.isActive = true; //将对应的目录项状态位置为true
+        } else {
+          element.isActive = false;
         }
-        element.isActive = true; //将对应的目录项状态位置为true
-      } else {
-        element.isActive = false;
-      }
-    })
+      })
 
-    //如果最后一部分没有一整页的特殊处理
-    if (getScrollTop() + getClientHeight() == getScrollHeight()) {
-      for (let i = 0; i < this.toc.length; i++) {
-        this.toc[i].isActive = false
+      //如果最后一部分没有一整页的特殊处理
+      if (getScrollTop() + getClientHeight() == getScrollHeight()) {
+        for (let i = 0; i < this.toc.length; i++) {
+          this.toc[i].isActive = false
+        }
+        this.toc[this.toc.length - 1].isActive = true
       }
-      this.toc[this.toc.length - 1].isActive = true
-    }
-  }
-
+    }*/
 
   mounted(): void {
     this.params.uid = this.$route.query.id;
@@ -227,19 +261,23 @@ export default class ArticleDetail extends Vue {
       this.params.type = 3;
     }
     this.handleSearch();
-    window.addEventListener("scroll", this.handleScroll);
+    // window.addEventListener("scroll", this.handleScroll);
 
     // this.$nextTick(() => {
     //    this.initDirectories()
     // })
 
-    setTimeout(() => {
-      this.initDirectories()
-    }, 1000)
+    /*    setTimeout(() => {
+          this.initDirectories()
+        }, 1000)*/
   }
 
   refreshArticle(): void {
     this.handleSearch();
+  }
+
+  select() {
+    console.log("select");
   }
 
   private async handleAddComment(): Promise<void> {
@@ -308,14 +346,14 @@ export default class ArticleDetail extends Vue {
   beforeDestroy(): void {
     document.title = "Einson的博客网站";
     document
-        .getElementById("keywords")
-        .setAttribute("content", "Einson的博客网站");
+      .getElementById("keywords")
+      .setAttribute("content", "Einson的博客网站");
     document
-        .getElementById("description")
-        .setAttribute(
-            "content",
-            "分享开发等相关的技术文章，热点资源，全栈程序员的成长之路。"
-        );
+      .getElementById("description")
+      .setAttribute(
+        "content",
+        "分享开发等相关的技术文章，热点资源，全栈程序员的成长之路。"
+      );
   }
 
   // // The class component now treats beforeRouteEnter
@@ -342,7 +380,10 @@ export default class ArticleDetail extends Vue {
 
   async handleSearch(): Promise<void> {
     this.isLoading = true;
-    const data: any = await this.$https.post(this.$urls.getArticleDetail, this.params);
+    const data: any = await this.$https.post(
+      this.$urls.getArticleDetail,
+      this.params
+    );
     this.isLoading = false;
 
     this.articleDetail = data.content;
@@ -351,23 +392,22 @@ export default class ArticleDetail extends Vue {
     article.then((res: any) => {
       this.articleDetail.content = res.content;
       this.navMenus = res.toc;
-      console.log(this.navMenus)
+      console.log(this.navMenus);
     });
     document.title = data.content.title;
   }
 
-
-  initDirectories() {
-    let directories = document.getElementsByClassName("anchor3"); //找到属于文章内容的h1标签
-    for (let i = 0; i < directories.length; i++) {
-      directories[i].id = "anchor-" + i;//添加id
-      this.toc.push({
-        title: directories[i].innerText, //h1标签文本内容
-        offsetTop: directories[i].offsetTop, //记录当前h1标签的偏移量，方便后面计算滚动距离。
-        isActive: false //是否被选中
-      });
-    }
-  }
+  /*  initDirectories() {
+      let directories = document.getElementsByClassName("anchor3"); //找到属于文章内容的h1标签
+      for (let i = 0; i < directories.length; i++) {
+        directories[i].id = "anchor-" + i;//添加id
+        this.toc.push({
+          title: directories[i].innerText, //h1标签文本内容
+          offsetTop: directories[i].offsetTop, //记录当前h1标签的偏移量，方便后面计算滚动距离。
+          isActive: false //是否被选中
+        });
+      }
+    }*/
 
   async likeArticle(): Promise<void> {
     if (!this.articleDetail.uid) {
@@ -411,23 +451,20 @@ export default class ArticleDetail extends Vue {
       type: "success"
     });
   }
-
-
 }
 </script>
 <style lang="less" scoped>
-
 .directories-container {
   width: 240px;
+  height: 100vh;
   float: right;
-  transition: all 0.5s;
+  //transition: all 0.5s;
   margin-right: 50px;
-  display: block;
-  position: sticky;
-  top: 50px;
-  border-left: 2px solid #eee;
-  //visibility: hidden;
+  display: flex;
+  position: fixed;
+  top: 100px;
   text-align: left;
+  right: 230px;
 
   .highlight-title {
     border-left: 5px solid rgb(15, 116, 223);
@@ -435,7 +472,7 @@ export default class ArticleDetail extends Vue {
     z-index: -1;
 
     a {
-      color: rgb(15, 105, 223)
+      color: rgb(15, 105, 223);
     }
   }
 
@@ -458,7 +495,7 @@ export default class ArticleDetail extends Vue {
 
 .article {
   width: 100%;
-  background-color: #f5fffa;
+  background-color: #ffffff;
 
   .header {
     .title {
@@ -470,15 +507,15 @@ export default class ArticleDetail extends Vue {
 
     .author {
       position: relative;
-      margin: 30px 0 40px;
+      //margin: 30px 0 40px;
       padding-left: 50px;
 
       .avatar {
         position: absolute;
         left: 0;
         top: 0;
-        width: 48px;
-        height: 48px;
+        width: 50px;
+        height: 50px;
         vertical-align: middle;
         display: inline-block;
 
@@ -490,6 +527,7 @@ export default class ArticleDetail extends Vue {
       }
 
       .info {
+        text-align: left;
         float: left;
         vertical-align: middle;
         // display: inline-block;
@@ -503,11 +541,11 @@ export default class ArticleDetail extends Vue {
       .name {
         margin-right: 3px;
         font-size: 16px;
-        vertical-align: middle;
+        //vertical-align: middle;
       }
 
       .meta {
-        margin-top: 5px;
+        margin-top: 8px;
         font-size: 12px;
         color: #969696;
 
@@ -533,7 +571,8 @@ export default class ArticleDetail extends Vue {
     min-height: 300px;
     text-align: left;
     font-family: "PingFang", Monaco, monospace;
-    margin-left: 150px;
+    //margin-left: 150px;
+    margin-right: 0;
   }
 }
 
@@ -554,4 +593,3 @@ export default class ArticleDetail extends Vue {
   clear: both;
 }
 </style>
-

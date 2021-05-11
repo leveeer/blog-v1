@@ -1,22 +1,18 @@
 <template>
-  <Dialog title="评论"
-          width="60%"
-          :visible="dialogVisible"
-          @close="cancel">
+  <Dialog title="评论" width="60%" :visible="dialogVisible" @close="cancel">
     <Form>
       <FormItem>
-        <Input type="textarea"
-               v-model="content"
-               placeholder="文明社会，理性评论"
-               autocomplete="off"></Input>
+        <Input
+          type="textarea"
+          v-model="content"
+          placeholder="文明社会，理性评论"
+          autocomplete="off"
+        ></Input>
       </FormItem>
     </Form>
-    <div slot="footer"
-         class="dialog-footer">
-      <Button type="default"
-              @click="cancel">取消</Button>
-      <Button type="primary"
-              @click="handleOk">确 定</Button>
+    <div slot="footer" class="dialog-footer">
+      <Button type="default" @click="cancel">取消</Button>
+      <Button type="primary" @click="handleOk">确 定</Button>
     </div>
   </Dialog>
 </template>

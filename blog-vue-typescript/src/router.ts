@@ -23,44 +23,37 @@ export default new Router({
       // route level code-splitting
       // this generates a separate chunk (articles.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () =>
-        import("./views/articles.vue")
+      component: () => import("./views/articles.vue")
     },
     {
       path: "/archive",
       name: "archive",
-      component: () =>
-        import("./views/archive.vue")
+      component: () => import("./views/archive.vue")
     },
     {
       path: "/timeline",
       name: "timeline",
-      component: () =>
-        import("./views/timeline.vue")
+      component: () => import("./views/timeline.vue")
     },
     {
       path: "/project",
       name: "project",
-      component: () =>
-        import("./views/project.vue")
+      component: () => import("./views/project.vue")
     },
     {
       path: "/message",
       name: "message",
-      component: () =>
-        import("./views/message.vue")
+      component: () => import("./views/message.vue")
     },
     {
       path: "/about",
       name: "about",
-      component: () =>
-        import("./views/articleDetail.vue")
+      component: () => import("./views/articleDetail.vue")
     },
     {
       path: "/articleDetail",
       name: "articleDetail",
-      component: () =>
-        import("./views/articleDetail.vue")
+      component: () => import("./views/articleDetail.vue")
     }
     // {
     //   path: "*",
