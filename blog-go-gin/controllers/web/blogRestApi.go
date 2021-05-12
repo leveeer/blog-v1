@@ -38,9 +38,7 @@ func (c *BlogRestApi) GetArticleByUid(ctx *gin.Context) {
 	if err != nil {
 		fmt.Println("BindJSON failed, err:", err)
 	}
-	fmt.Println(blogVO)
-
-	blog := service.GetArticleByUid(blogVO.Uid)
+	blog := service.BlogService.GetArticleByUid(blogVO.Uid)
 	ctx.JSON(http.StatusOK, gin.H{
 		"code":  http.StatusOK,
 		"content":  blog,

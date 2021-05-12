@@ -50,6 +50,11 @@ export default {
     })
     /!*window.addEventListener("scroll", this.handleScroll);*!/
   },*/
+
+  activated(){
+    console.log("111111111111111111111111")
+    // window.addEventListener('scroll',this.handleScroll)
+  },
   methods: {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
@@ -108,6 +113,9 @@ export default {
   display: flex;
   align-items: center;
   padding-right: 20px !important;
+}
+
+/deep/.el-submenu{
 }
 
 /deep/.el-menu-item span {

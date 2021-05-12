@@ -5,51 +5,51 @@
         <div v-show="!isLoading" class="article-left fl">
           <div class="header">
             <h1 class="title">{{ articleDetail.title }}</h1>
-            <el-card style="margin-top: 20px">
+            <el-card style="margin-top: 20px;height: 100px">
+
               <div class="author">
                 <div class="avatar">
                   <img
                       class="auth-logo"
                       src="../assets/user_logo.jpg"
-                      alt="Einson"
+                      alt=""
                   />
                 </div>
-                <div class="info">
-                  <span class="name">
-                    <span>{{ articleDetail.author }}</span>
-                  </span>
-
-                  <div class="meta">
-                    <span class="publish-time">
-                      发布时间：{{
-                        articleDetail.createTime
-                            ? formatTime(articleDetail.createTime)
-                            : ""
-                      }}
-                    </span>
-                    <div>
-                      <span class="publish-time">
-                        修改时间：{{
-                          articleDetail.updateTime
-                              ? formatTime(articleDetail.updateTime)
-                              : ""
-                        }}
-                      </span>
+                <div class="info" style="width: 30%;display: flex;border:dashed 1px lightskyblue;">
+                  <div style="display: flex; margin: 0 -8px 8px;">
+                    <div style="flex: 1 1 80%; padding: 0 8px;">
+                      <div style="height: 60px; width: 100%;">
+                        <span class="name" style="margin-left: 0">
+                            <span>{{ articleDetail.author }}</span>
+                        </span>
+                        <div class="meta" style="margin-top: 5px">
+                          <span class="publish-time">
+                            发布时间：{{ articleDetail.createTime ? formatTime(articleDetail.createTime) : "" }}
+                          </span>
+                          <div>
+                            <span class="publish-time">
+                              修改时间：{{ articleDetail.updateTime ? formatTime(articleDetail.updateTime) : "" }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-
-                    <el-divider direction="vertical"></el-divider>
-
-                    <span
-                    ><i class="el-icon-star-off"></i>
-                      {{ articleDetail.collectCount }}
-                    </span>
-                    <el-divider direction="vertical"></el-divider>
-                    <span
-                    ><i class="el-icon-view"></i>
-                      {{ articleDetail.clickCount }}
-                    </span>
+                    <div style="flex: 1 1 30%; padding: 0 0;">
+                      <div
+                          style="margin-left: 10px;margin-top: 30px; height: 32px; width: 100%">
+                        <div class="meta" style="margin-top: 0">
+                          <span><i class="el-icon-star-off"></i>
+                            {{ articleDetail.collectCount }}
+                          </span>
+                          <div>
+                          <span><i class="el-icon-view"></i>
+                            {{ articleDetail.clickCount }}
+                          </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-
                   <div class="meta"></div>
                 </div>
                 <div class="tags " title="标签">
@@ -252,20 +252,10 @@ export default class ArticleDetail extends Vue {
 
   mounted(): void {
     this.params.uid = this.$route.query.id;
-    // this.params.id = "5c8cfe5d26bb39b22d3a7aec";
     if (this.$route.path === "/about") {
       this.params.type = 3;
     }
     this.handleSearch();
-    // window.addEventListener("scroll", this.handleScroll);
-
-    // this.$nextTick(() => {
-    //    this.initDirectories()
-    // })
-
-    /*    setTimeout(() => {
-          this.initDirectories()
-        }, 1000)*/
   }
 
   refreshArticle(): void {
@@ -341,38 +331,9 @@ export default class ArticleDetail extends Vue {
 
   beforeDestroy(): void {
     document.title = "Einson的博客网站";
-    document
-        .getElementById("keywords")
-        .setAttribute("content", "Einson的博客网站");
-    document
-        .getElementById("description")
-        .setAttribute(
-            "content",
-            "分享开发等相关的技术文章，热点资源，全栈程序员的成长之路。"
-        );
+    document.getElementById("keywords").setAttribute("content", "Einson的博客网站");
+    document.getElementById("description").setAttribute("content", "分享开发等相关的技术文章，热点资源，全栈程序员的成长之路。");
   }
-
-  // // The class component now treats beforeRouteEnter
-  // // and beforeRouteLeave as Vue Router hooks
-  // beforeRouteEnter (to, from, next) {
-  //   console.log('beforeRouteEnter')
-  //   next() // needs to be called to confirm the navigation
-  // }
-
-  // beforeRouteLeave (to, from, next) {
-  //   console.log('beforeRouteLeave')
-  //   document.title = "夜尽天明的博客网站";
-  //   document
-  //     .getElementById("keywords")
-  //     .setAttribute("content", "夜尽天明 的博客网站");
-  //   document
-  //     .getElementById("description")
-  //     .setAttribute(
-  //       "content",
-  //       "分享大前端开发等相关的技术文章，热点资源，全栈程序员的成长之路。"
-  //     );
-  //   next() // needs to be called to confirm the navigation
-  // }
 
   async handleSearch(): Promise<void> {
     this.isLoading = true;
@@ -450,6 +411,34 @@ export default class ArticleDetail extends Vue {
 }
 </script>
 <style lang="less" scoped>
+
+.container {
+  /* Used to position the stacked cards */
+  position: relative;
+}
+
+.container__card {
+  /* Absolute position */
+  left: 0;
+  position: absolute;
+  top: 0;
+
+  /* Take full size */
+  height: 100px;
+  width: 80px;
+
+  /* Displayed under the container */
+  z-index: 2;
+
+  /* Background and border colors */
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+
+  /* Rotate it. Change the number of degrees for the following cards */
+  transform: rotate(5deg);
+}
+
 .directories-container {
   width: 240px;
   height: 100vh;
@@ -497,7 +486,7 @@ export default class ArticleDetail extends Vue {
     .title {
       margin: 20px 0 0;
       text-align: center;
-      font-size: 34px;
+      font-size: 28px;
       font-weight: bold;
     }
 
@@ -510,10 +499,11 @@ export default class ArticleDetail extends Vue {
         position: absolute;
         left: 0;
         top: 0;
-        width: 50px;
-        height: 50px;
+        width: 60px;
+        height: 60px;
         vertical-align: middle;
         display: inline-block;
+        margin-top: 0px;
 
         img {
           width: 100%;
@@ -527,7 +517,8 @@ export default class ArticleDetail extends Vue {
         float: left;
         vertical-align: middle;
         display: inline-block;
-        margin-left: 8px;
+        margin-left: 25px;
+        margin-top: -5px;
 
         a {
           color: #333;
@@ -536,13 +527,13 @@ export default class ArticleDetail extends Vue {
 
       .name {
         margin-right: 3px;
-        font-size: 16px;
+        font-size: 18px;
         //vertical-align: middle;
       }
 
       .meta {
         margin-top: 8px;
-        font-size: 14px;
+        font-size: 12px;
         color: #969696;
 
         span {
