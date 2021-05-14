@@ -22,7 +22,8 @@ func InitMysql(config *models.Config) {
 		config.Mysql.Password,
 		config.Mysql.Host,
 		config.Mysql.Port,
-		config.Mysql.DbName)
+		config.Mysql.DbName,
+	)
 
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
@@ -47,5 +48,3 @@ func InitMysql(config *models.Config) {
 	//设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(time.Hour)
 }
-
-

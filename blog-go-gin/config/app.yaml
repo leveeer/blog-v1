@@ -1,6 +1,6 @@
 # 常规配置
 appname: blog-go-gin
-httpport: 3000
+httpport: 8088
 runmode: dev
 autorender: false
 copyrequestbody: true
@@ -15,4 +15,4 @@ mysql:
   password: root
   host: 47.119.168.227
   port: 3306
-  dbName: mogu_blog_go
+  dbName: blog

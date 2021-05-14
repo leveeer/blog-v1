@@ -6,15 +6,14 @@ import (
 )
 
 type Tag struct {
-	Uid        string    `gorm:"primaryKey" json:"uid"`
-	Content    string    `gorm:"type:text" json:"content"`
-	Status     int8      `gorm:"default:1" json:"status"`
-	ClickCount int       `json:"clickCount"`
-	CreatedAt  time.Time `gorm:"column:create_time" json:"createTime"`
-	UpdatedAt  time.Time `gorm:"column:update_time" json:"updateTime"`
-	Sort       int       `json:"sort"`
+	Id          int       `gorm:"primaryKey" json:"id"`
+	TagName     string    `json:"tag_name"`
+	Status      int8      `gorm:"default:1" json:"status"`
+	ClickCount  int       `json:"click_count"`
+	CreatedTime time.Time ` json:"create_time"`
+	UpdatedTime time.Time `json:"update_time"`
 }
 
 func (Tag) TableName() string {
-	return "t_tag"
+	return "tb_tag"
 }
