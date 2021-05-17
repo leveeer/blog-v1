@@ -38,8 +38,8 @@
       </div>
     </div>
     <!-- 主页文章 -->
-    <v-row class="home-container" style="border: #00a1d6 2px solid">
-      <v-col md="9" cols="12" style="border: #00a1d6 2px solid">
+    <v-row class="home-container">
+      <v-col md="9" cols="12">
         <v-card
           class="animated zoomIn article-card"
           style="border-radius: 12px 8px 8px 12px"
@@ -112,10 +112,14 @@
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
-                <img class="author-avatar" :src="blogInfo.avatar" />
+                <img class="author-avatar" :src="blogInfo.user_info.avatar" />
               </v-avatar>
-              <div style="font-size: 1.375rem">{{ blogInfo.nickname }}</div>
-              <div style="font-size: 0.875rem;">{{ blogInfo.intro }}</div>
+              <div style="font-size: 1.375rem">
+                {{ blogInfo.user_info.nickname }}
+              </div>
+              <div style="font-size: 0.875rem;">
+                {{ blogInfo.user_info.intro }}
+              </div>
             </div>
             <!-- 博客信息 -->
             <div class="blog-info-wrapper">
@@ -123,7 +127,7 @@
                 <router-link to="/archives">
                   <div style="font-size: 0.875rem">文章</div>
                   <div style="font-size: 1.25rem">
-                    {{ blogInfo.articleCount }}
+                    {{ blogInfo.article_count }}
                   </div>
                 </router-link>
               </div>
@@ -131,14 +135,14 @@
                 <router-link to="/categories">
                   <div style="font-size: 0.875rem">分类</div>
                   <div style="font-size: 1.25rem">
-                    {{ blogInfo.categoryCount }}
+                    {{ blogInfo.category_count }}
                   </div>
                 </router-link>
               </div>
               <div class="blog-info-data">
                 <router-link to="/tags">
                   <div style="font-size: 0.875rem">标签</div>
-                  <div style="font-size: 1.25rem">{{ blogInfo.tagCount }}</div>
+                  <div style="font-size: 1.25rem">{{ blogInfo.tag_count }}</div>
                 </router-link>
               </div>
             </div>
@@ -151,16 +155,16 @@
               <a
                 class="iconfont iconqq"
                 target="_blank"
-                href="http://wpa.qq.com/msgrd?v=3&uin=1192176811&site=qq&menu=yes"
+                href="http://wpa.qq.com/msgrd?v=3&uin=1519695805&site=qq&menu=yes"
               />
               <a
                 target="_blank"
-                href="https://github.com/X1192176811"
+                href="https://github.com/Einson-jxau"
                 class="ml-5 mr-5 iconfont icongithub"
               />
               <a
                 target="_blank"
-                href="https://gitee.com/feng_meiyu"
+                href="https://gitee.com/Einsonjxau"
                 class="iconfont icongitee-fill-round"
               />
             </div>
@@ -255,8 +259,7 @@ export default {
       });
     },
     runTime() {
-      const timeold =
-        new Date().getTime() - new Date("December 12,2019").getTime();
+      const timeold = new Date().getTime() - new Date("May 12,2021").getTime();
       const msPerDay = 24 * 60 * 60 * 1000;
       const daysold = Math.floor(timeold / msPerDay);
       let str = "";
@@ -282,7 +285,6 @@ export default {
           }
         })
         .then(({ data }) => {
-          console.log(data);
           if (data.data.length) {
             // 去除markdown标签
             data.data.forEach(item => {
@@ -297,6 +299,7 @@ export default {
             $state.loaded();
           } else {
             $state.complete();
+            // this.$toast({ type: "warnning", message: "已经没有更多了哦！" });
           }
         });
     }
@@ -335,7 +338,7 @@ export default {
   left: 0;
   right: 0;
   height: 100vh;
-  background: #49b1f5 url("https://www.static.talkxj.com/wallhaven-g89p2.png") no-repeat fixed center center;
+  background: #49b1f5 url("http://qt36u2hdb.hn-bkt.clouddn.com/wallhaven-rddgwm.jpg") no-repeat fixed center center;
   text-align: center;
   color: #fff !important;
   animation: header-effect 1s;
