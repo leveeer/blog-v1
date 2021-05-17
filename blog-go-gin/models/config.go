@@ -12,6 +12,7 @@ type Config struct {
 	RunMode   string `yaml:"runmode"`
 	SessionOn string `yaml:"sessionon"`
 	Mysql     Mysql  `yaml:"mysql"`
+	Redis     Redis  `yaml:"redis"`
 }
 
 type Mysql struct {
@@ -21,6 +22,12 @@ type Mysql struct {
 	Host     string `yaml:"host"`
 	Port     uint32 `yaml:"port"`
 	DbName   string `yaml:"dbName"`
+}
+
+type Redis struct {
+	RedisConn string `yaml:"redisconn"`
+	RedisPwd  string `yaml:"redispwd"`
+	Db        int  `yaml:"db"`
 }
 
 func (c *Config) GetConf() *Config {

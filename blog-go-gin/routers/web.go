@@ -12,6 +12,7 @@ import (
 var (
 	ArticleRestApi *web.ArticleRestApi
 	TagRestApi *web.TagRestApi
+	BlogInfoRestApi *web.BlogInfoRestApi
 )
 
 func InitWebRouter(config *models.Config) *gin.Engine {
@@ -35,6 +36,7 @@ func InitWebRouter(config *models.Config) *gin.Engine {
 
 
 	r.GET("/getArticleList", ArticleRestApi.GetArticleList)
+	r.GET("/", BlogInfoRestApi.GetBlogInfo)
 	r.POST("/getArticleDetail", ArticleRestApi.GetArticleByUid)
 
 	r.GET("/getTagList",TagRestApi.GetTagList)

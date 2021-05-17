@@ -15,7 +15,7 @@ type articleService struct {
 
 func (b *articleService) GetArticleList(page page.IPage) []models.Article {
 	var articles []models.Article
-	dao.Db.Scopes(page.Paginate(&page)).Find(&articles)
+	dao.Db.Debug().Scopes(page.Paginate(&page)).Find(&articles)
 	return articles
 }
 

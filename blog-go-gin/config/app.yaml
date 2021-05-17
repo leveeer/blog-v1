@@ -16,3 +16,9 @@ mysql:
   host: 47.119.168.227
   port: 3306
   dbName: blog
+
+#redis配置
+redis:
+  redisconn: 47.119.168.227:6379
+  redispwd:
+  db: 0
