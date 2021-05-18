@@ -191,7 +191,7 @@
               </div>
               <div style="padding:4px 0 0">
                 总访问量:<span class="float-right">
-                  {{ blogInfo.viewsCount }}
+                  {{ blogInfo.views_count }}
                 </span>
               </div>
             </div>
@@ -272,6 +272,7 @@ export default {
     },
     getBlogInfo() {
       this.axios.get("/api/").then(({ data }) => {
+        console.log(data);
         this.blogInfo = data.data;
         this.$store.commit("checkBlogInfo", data.data);
       });
