@@ -1,6 +1,7 @@
 package web
 
 import (
+	"blog-go-gin/common"
 	"blog-go-gin/controllers/base"
 	"blog-go-gin/models/page"
 	"blog-go-gin/service"
@@ -8,19 +9,19 @@ import (
 	"net/http"
 	"strconv"
 )
+var ArticleRestApi = &articleRestApi{}
 
-type ArticleRestApi struct {
+type articleRestApi struct {
 	base.Controller
 }
 
-
-func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
+func (c *articleRestApi) GetArticleList(ctx *gin.Context) {
 	var ipage page.IPage
 	ipage.Current, _ = strconv.Atoi(ctx.Query("current"))
 	articles := service.ArticleService.GetArticleList(ipage)
-	ctx.JSON(http.StatusOK, base.BaseController.Result(http.StatusOK, articles, "查询成功"))
+	c.Result(ctx, http.StatusOK, common.SuccessOK, articles, "查询成功")
 }
 
-func (c *ArticleRestApi) GetArticleByUid(ctx *gin.Context) {
+func (c *articleRestApi) GetArticleByUid(ctx *gin.Context) {
 
 }

@@ -1,9 +1,9 @@
 package models
 
 import (
-	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
+	"log"
 )
 
 type Config struct {
@@ -33,11 +33,11 @@ type Redis struct {
 func (c *Config) GetConf() *Config {
 	yamlFile, err := ioutil.ReadFile("config/app.yaml")
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 	err = yaml.Unmarshal(yamlFile, c)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 	}
 	return c
 }

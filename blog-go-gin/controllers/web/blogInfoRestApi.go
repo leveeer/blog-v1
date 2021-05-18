@@ -1,17 +1,20 @@
 package web
 
 import (
+	"blog-go-gin/common"
 	"blog-go-gin/controllers/base"
 	"blog-go-gin/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type BlogInfoRestApi struct {
+var BlogInfoRestApi = &blogInfoRestApi{}
+
+type blogInfoRestApi struct {
 	base.Controller
 }
 
-func (c *BlogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
+func (c *blogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
 	blogInfo := service.BlogInfoService.GetBlogInfo()
-	ctx.JSON(http.StatusOK, base.BaseController.Result(http.StatusOK, blogInfo, "查询成功"))
+	c.Result(ctx, http.StatusOK, common.SuccessOK, blogInfo, "查询成功")
 }

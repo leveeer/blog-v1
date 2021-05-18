@@ -3,20 +3,22 @@ package web
 import (
 	"blog-go-gin/models/page"
 	"blog-go-gin/service"
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
-type TagRestApi struct {
+var TagRestApi = &tagRestApi{}
+
+type tagRestApi struct {
 
 }
 
-func (r *TagRestApi) GetTagList(ctx *gin.Context) {
+func (r *tagRestApi) GetTagList(ctx *gin.Context) {
 	var pageObj page.IPage
 	err := ctx.ShouldBindQuery(&pageObj)
 	if err != nil {
-		fmt.Println("BindQuery failed, err:", err)
+		log.Println("BindQuery failed, err:", err)
 	}
 
 	tagList := service.GetTagList(pageObj)

@@ -43,6 +43,22 @@ func (*redisUtil) SetEx(key string, value string, expiration int64, unit time.Du
 	}
 }
 
+func (*redisUtil) SAdd(key string, member interface{}) {
+	redisClient.SAdd(ctx, key, member)
+}
+
+func (*redisUtil) SMembers(key string) []string {
+	setList, err := redisClient.SMembers(ctx, key).Result()
+	if err != nil {
+		return []string{}
+	}
+	return setList
+}
+
+func (*redisUtil) SRems(key string, members ...interface{}) {
+	redisClient.SRem(ctx, key, members)
+}
+
 func (*redisUtil) Delete(key string) {
 	redisClient.Del(ctx, key)
 }

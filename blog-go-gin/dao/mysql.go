@@ -36,7 +36,7 @@ func InitMysql(config *models.Config) {
 	var err error
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: newLogger})
 	if err != nil {
-		fmt.Println("gorm open mysql failed, err:", err)
+		log.Println("gorm open mysql failed, err:", err)
 		return
 	}
 

@@ -5,6 +5,8 @@ import (
 	"blog-go-gin/dao"
 	"blog-go-gin/models"
 	"blog-go-gin/models/vo"
+	"log"
+	"strconv"
 	"sync"
 )
 
@@ -17,7 +19,7 @@ type blogInfoService struct {
 func (b *blogInfoService) GetBlogInfo() vo.BlogHomeInfoVo {
 	//查询博主信息
 	var userInfo models.UserInfo
-	b.wg.Add(4)
+	b.wg.Add(6)
 	go func() {
 		dao.Db.Debug().Table("tb_user_info").Where("id = ?", common.BloggerId).First(&userInfo)
 		b.wg.Done()
@@ -41,14 +43,29 @@ func (b *blogInfoService) GetBlogInfo() vo.BlogHomeInfoVo {
 		dao.Db.Debug().Table("tb_tag").Count(&tagCount)
 		b.wg.Done()
 	}()
-	//TODO
 	//查询公告
-	notice := common.RedisUtil.Get(common.NOTICE)
-	if notice == "" {
-		notice = "博客Go语言版即将上线，敬请期待！"
-		common.RedisUtil.Set(common.NOTICE, notice)
-	}
+	var notice string
+	go func() {
+		notice = common.RedisUtil.Get(common.NOTICE)
+		if notice == "" {
+			notice = "博客Go语言版即将上线，敬请期待！"
+			common.RedisUtil.Set(common.NOTICE, notice)
+		}
+		b.wg.Done()
+	}()
+
 	//查询访问量
+	var viewsCount int
+	var err error
+	go func() {
+		viewsCountStr := common.RedisUtil.Get(common.BlogViewsCount)
+		viewsCount, err = strconv.Atoi(viewsCountStr)
+		if err != nil {
+			log.Println("strconv.Atoi err:", err)
+		}
+		b.wg.Done()
+	}()
+
 	b.wg.Wait()
 	//数据封装
 	return vo.BlogHomeInfoVo{
@@ -57,6 +74,7 @@ func (b *blogInfoService) GetBlogInfo() vo.BlogHomeInfoVo {
 		CategoryCount: categoryCount,
 		TagCount:      tagCount,
 		Notice:        notice,
+		ViewsCount:    viewsCount,
 	}
 
 }

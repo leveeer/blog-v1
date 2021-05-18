@@ -7,21 +7,19 @@ import (
 	"sync"
 )
 
-var BaseController = &Controller{}
-
 /*
 基类
- */
+*/
 type Controller struct {
 	Wg sync.WaitGroup
 }
 
-func (c *Controller) Result(code int, data interface{}, message string) gin.H  {
-	return gin.H{
+func (c *Controller) Result(ctx *gin.Context, httpCode, code int, data interface{}, message string) {
+	ctx.JSON(httpCode, gin.H{
 		"code":    code,
 		"data":    data,
 		"message": message,
-	}
+	})
 }
 
 func RespSuccess(data interface{}) gin.H {
@@ -58,5 +56,3 @@ func RespFailWithDesc(code common.ErrorCode, msg string) gin.H {
 func (c *Controller) ThrowError(code string, message string) {
 
 }
-
-
