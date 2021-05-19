@@ -112,7 +112,7 @@
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
-                <img class="author-avatar" :src="blogInfo.user_info.avatar"  alt=""/>
+                <img class="author-avatar" :src="blogInfo.user_info.avatar" alt="" />
               </v-avatar>
               <div style="font-size: 1.375rem">
                 {{ blogInfo.user_info.nickname }}
@@ -208,8 +208,7 @@
 
 <script>
 import EasyTyper from "easy-typer-js";
-
-const { getArticlesOnHome } = require("../../api/home");
+import { getBlogInfo, getArticlesOnHome } from "../../api/home";
 
 export default {
   created() {
@@ -273,7 +272,7 @@ export default {
       this.time = str;
     },
     getBlogInfo() {
-      this.$https.get("/blog/blogInfo").then(({ data }) => {
+      getBlogInfo().then(({ data }) => {
         console.log(data);
         this.blogInfo = data.data;
         this.$store.commit("checkBlogInfo", data.data);
@@ -281,11 +280,11 @@ export default {
     },
     infiniteHandler($state) {
       let md = require("markdown-it")();
-      getArticlesOnHome( {
-          params: {
-            current: this.current
-          }
-        })
+      getArticlesOnHome({
+        params: {
+          current: this.current
+        }
+      })
         .then(({ data }) => {
           if (data.data.length) {
             // 去除markdown标签
