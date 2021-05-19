@@ -2,8 +2,8 @@ package jobs
 
 import (
 	"blog-go-gin/common"
+	"blog-go-gin/logging"
 	"github.com/robfig/cron"
-	"log"
 	"time"
 )
 
@@ -19,7 +19,7 @@ func ClearIpSet() {
 func RegisterCron() {
 	go func() {
 		c := cron.New()
-		log.Println("cron register success ...")
+		logging.Info("cron register success...")
 		spec := "0 0 0 1/1 * ?"
 		_ = c.AddFunc(spec, ClearIpSet)
 		c.Start()

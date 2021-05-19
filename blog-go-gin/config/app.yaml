@@ -21,4 +21,4 @@ mysql:
 redis:
   redisconn: 47.119.168.227:6379
   redispwd:
-  db: 0
+  db: 1
