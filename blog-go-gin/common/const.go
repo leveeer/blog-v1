@@ -21,6 +21,16 @@ const (
 	IpSet             = "ip_set"              //ip集合
 )
 
+//code status
 const (
 	SuccessOK = 1000
+)
+
+//urls
+const (
+	BlogBaseUrl = "/blog"
+	BlogInfoUrl = "/blogInfo"
+	ArticleList = "/articles"
+	ArticleById = "/articleById"
+	TagList     = "/tags"
 )

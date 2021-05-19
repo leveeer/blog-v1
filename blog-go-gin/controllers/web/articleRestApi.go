@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strconv"
 )
+
 var ArticleRestApi = &articleRestApi{}
 
 type articleRestApi struct {
@@ -22,6 +23,6 @@ func (c *articleRestApi) GetArticleList(ctx *gin.Context) {
 	c.Result(ctx, http.StatusOK, common.SuccessOK, articles, "查询成功")
 }
 
-func (c *articleRestApi) GetArticleByUid(ctx *gin.Context) {
+func (c *articleRestApi) GetArticleById(ctx *gin.Context) {
 
 }

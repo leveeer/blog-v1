@@ -1,14 +1,15 @@
 package routers
 
 import (
+	"blog-go-gin/common"
 	"blog-go-gin/controllers/web"
 	"github.com/gin-gonic/gin"
 )
 
 func blogRouters(r *gin.Engine) {
-	blog := r.Group("/blog")
-	blog.GET("/blogInfo", web.BlogInfoRestApi.GetBlogInfo)
-	blog.GET("/getArticleList", web.ArticleRestApi.GetArticleList)
-	blog.POST("/getArticleDetail", web.ArticleRestApi.GetArticleByUid)
-	blog.GET("/getTagList", web.TagRestApi.GetTagList)
+	blog := r.Group(common.BlogBaseUrl)
+	blog.GET(common.BlogInfoUrl, web.BlogInfoRestApi.GetBlogInfo)
+	blog.GET(common.ArticleList, web.ArticleRestApi.GetArticleList)
+	blog.POST(common.ArticleById, web.ArticleRestApi.GetArticleById)
+	blog.GET(common.TagList, web.TagRestApi.GetTagList)
 }
