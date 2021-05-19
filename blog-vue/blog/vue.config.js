@@ -1,3 +1,4 @@
+const sourceMap = process.env.NODE_ENV === "development";
 module.exports = {
   transpileDependencies: ["vuetify"],
   // 基本路径
@@ -5,7 +6,8 @@ module.exports = {
   // 输出文件目录
   outputDir: "dist",
   // eslint-loader 是否在保存的时候检查
-  lintOnSave: false,
+  lintOnSave: true,
+
   devServer: {
     proxy: {
       // 设置代理
@@ -20,8 +22,12 @@ module.exports = {
       }
     },
     disableHostCheck: true,
-    before: app => {}
+    before: app => {
+    }
   },
+
+  // 生产环境是否生成 sourceMap 文件
+  productionSourceMap: sourceMap,
 
   // 第三方插件配置
   pluginOptions: {

@@ -25,7 +25,7 @@
           />
           <a
             target="_blank"
-            href="https://gitee.com/feng_meiyu"
+            href="https://gitee.com/drunkery_tavern"
             class="iconfont icongitee-fill-round"
           />
         </div>
@@ -66,7 +66,7 @@
             </div>
             <div class="article-info">
               <!-- 是否置顶 -->
-              <span v-if="item.is_top == 1">
+              <span v-if="item.is_top === 1">
                 <span style="color:#ff7242">
                   <i class="iconfont iconzhiding" /> 置顶
                 </span>
@@ -112,7 +112,7 @@
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
-                <img class="author-avatar" :src="blogInfo.user_info.avatar" />
+                <img class="author-avatar" :src="blogInfo.user_info.avatar"  alt=""/>
               </v-avatar>
               <div style="font-size: 1.375rem">
                 {{ blogInfo.user_info.nickname }}
@@ -209,6 +209,8 @@
 <script>
 import EasyTyper from "easy-typer-js";
 
+const { getArticlesOnHome } = require("../../api/home");
+
 export default {
   created() {
     this.init();
@@ -271,7 +273,7 @@ export default {
       this.time = str;
     },
     getBlogInfo() {
-      this.axios.get("/api/").then(({ data }) => {
+      this.$https.get("/blog/blogInfo").then(({ data }) => {
         console.log(data);
         this.blogInfo = data.data;
         this.$store.commit("checkBlogInfo", data.data);
@@ -279,8 +281,7 @@ export default {
     },
     infiniteHandler($state) {
       let md = require("markdown-it")();
-      this.axios
-        .get("/api/getArticleList", {
+      getArticlesOnHome( {
           params: {
             current: this.current
           }

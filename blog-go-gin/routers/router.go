@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"blog-go-gin/controllers/web"
 	"blog-go-gin/middleware"
 	"blog-go-gin/models"
 	"github.com/gin-contrib/cors"
@@ -36,12 +35,6 @@ func InitWebRouter() *gin.Engine {
 		})
 		gin.SetMode(gin.ReleaseMode)
 	}
-
-	r.GET("/getArticleList", web.ArticleRestApi.GetArticleList)
-	r.GET("/", web.BlogInfoRestApi.GetBlogInfo)
-	r.POST("/getArticleDetail", web.ArticleRestApi.GetArticleByUid)
-
-	r.GET("/getTagList", web.TagRestApi.GetTagList)
-
+	blogRouters(r)
 	return r
 }
