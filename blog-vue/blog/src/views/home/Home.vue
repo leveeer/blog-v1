@@ -16,11 +16,11 @@
           <a
             class="iconfont iconqq"
             target="_blank"
-            href="https://wpa.qq.com/msgrd?v=3&uin=1192176811&site=qq&menu=yes"
+            href="https://wpa.qq.com/msgrd?v=3&uin=1519695805&site=qq&menu=yes"
           />
           <a
             target="_blank"
-            href="https://github.com/X1192176811"
+            href="https://github.com/drunkery-tavern"
             class="ml-5 mr-5 iconfont icongithub"
           />
           <a
@@ -159,12 +159,12 @@
               />
               <a
                 target="_blank"
-                href="https://github.com/Einson-jxau"
+                href="https://github.com/drunkery-tavern"
                 class="ml-5 mr-5 iconfont icongithub"
               />
               <a
                 target="_blank"
-                href="https://gitee.com/Einsonjxau"
+                href="https://gitee.com/drunkery_tavern"
                 class="iconfont icongitee-fill-round"
               />
             </div>
