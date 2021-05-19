@@ -59,6 +59,10 @@ func (b *blogInfoService) GetBlogInfo() vo.BlogHomeInfoVo {
 	var err error
 	go func() {
 		viewsCountStr := common.RedisUtil.Get(common.BlogViewsCount)
+		if viewsCountStr == "" {
+			common.RedisUtil.Set(common.BlogViewsCount, strconv.Itoa(0))
+			viewsCountStr = "0"
+		}
 		viewsCount, err = strconv.Atoi(viewsCountStr)
 		if err != nil {
 			log.Println("strconv.Atoi err:", err)
