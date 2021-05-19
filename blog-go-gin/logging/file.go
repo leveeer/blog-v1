@@ -8,10 +8,10 @@ import (
 )
 
 var (
-	LogSavePath = "runtime/logs/"
-	LogSaveName = "log"
-	LogFileExt  = "log"
-	TimeFormat  = "20060102"
+	LogSavePath       = "runtime/logs/" //日志文件保存的位置
+	LogFileNamePrefix = "log"           //日志文件名前缀
+	LogFileSuffix     = "log"           //日志文件拓展名
+	TimeFormat        = "20060102"
 )
 
 func getLogFilePath() string {
@@ -20,7 +20,7 @@ func getLogFilePath() string {
 
 func getLogFileFullPath() string {
 	prefixPath := getLogFilePath()
-	suffixPath := fmt.Sprintf("%s%s.%s", LogSaveName, time.Now().Format(TimeFormat), LogFileExt)
+	suffixPath := fmt.Sprintf("%s%s.%s", LogFileNamePrefix, time.Now().Format(TimeFormat), LogFileSuffix)
 	return fmt.Sprintf("%s%s", prefixPath, suffixPath)
 }
 
@@ -33,12 +33,12 @@ func openLogFile(filePath string) *os.File {
 		log.Fatalf("Permission :%v", err)
 	}
 
-	handle, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Fatalf("Fail to OpenFile :%v", err)
 	}
 
-	return handle
+	return file
 }
 
 func mkDir() {
