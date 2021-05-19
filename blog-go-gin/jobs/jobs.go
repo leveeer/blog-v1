@@ -19,7 +19,7 @@ func ClearIpSet() {
 func RegisterCron() {
 	go func() {
 		c := cron.New()
-		logging.Info("cron register success...")
+		logging.Logger.Debug("cron register success...")
 		spec := "0 0 0 1/1 * ?"
 		_ = c.AddFunc(spec, ClearIpSet)
 		c.Start()

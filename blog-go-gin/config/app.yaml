@@ -7,6 +7,7 @@ copyrequestbody: true
 EnableDocs: true
 sqlconn:
 sessionon: true
+#loglevel: Debug   # PanicLevel FatalLevel  ErrorLevel  WarnLevel  InfoLevel  DebugLevel  TraceLevel
 
 #mysql配置
 mysql:

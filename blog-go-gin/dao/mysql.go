@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"blog-go-gin/logging"
 	"blog-go-gin/models"
 	"fmt"
 	"gorm.io/driver/mysql"
@@ -15,7 +16,8 @@ var (
 	Db *gorm.DB
 )
 
-func InitMysql(config *models.Config) {
+func InitMysql() {
+	config := models.GetConf()
 	//dsn := "user:pass@tcp(127.0.0.1:3306)/dbname?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.Mysql.User,
@@ -36,7 +38,7 @@ func InitMysql(config *models.Config) {
 	var err error
 	Db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{Logger: newLogger})
 	if err != nil {
-		log.Println("gorm open mysql failed, err:", err)
+		logging.Logger.Errorf("gorm open mysql failed, err:%s", err)
 		return
 	}
 

@@ -1,6 +1,7 @@
 package common
 
 import (
+	"blog-go-gin/logging"
 	"blog-go-gin/models"
 	"context"
 	"github.com/go-redis/redis/v8"
@@ -15,18 +16,22 @@ var ctx = context.Background()
 
 type redisUtil struct{}
 
-func InitRedis(config *models.Config) (err error) {
+func InitRedis() {
+	config := models.GetConf()
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:     config.Redis.RedisConn,
 		Password: config.Redis.RedisPwd,
-		DB:       config.Redis.Db, // use default DB
+		DB:       config.Redis.Db,
 	})
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	_, err = redisClient.Ping(ctx).Result()
-	return err
+	_, err := redisClient.Ping(ctx).Result()
+	if err != nil {
+		logging.Logger.Errorf("connect to redis failed, err: %s", err)
+		return
+	}
 }
 
 func (*redisUtil) Get(key string) string {

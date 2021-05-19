@@ -3,9 +3,9 @@ package service
 import (
 	"blog-go-gin/common"
 	"blog-go-gin/dao"
+	"blog-go-gin/logging"
 	"blog-go-gin/models"
 	"blog-go-gin/models/vo"
-	"log"
 	"strconv"
 	"sync"
 )
@@ -53,7 +53,6 @@ func (b *blogInfoService) GetBlogInfo() vo.BlogHomeInfoVo {
 		}
 		b.wg.Done()
 	}()
-
 	//查询访问量
 	var viewsCount int
 	var err error
@@ -65,7 +64,7 @@ func (b *blogInfoService) GetBlogInfo() vo.BlogHomeInfoVo {
 		}
 		viewsCount, err = strconv.Atoi(viewsCountStr)
 		if err != nil {
-			log.Println("strconv.Atoi err:", err)
+			logging.Logger.Errorf("strconv Atoi err: %s", err)
 		}
 		b.wg.Done()
 	}()

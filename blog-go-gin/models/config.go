@@ -1,18 +1,23 @@
 package models
 
 import (
+	"blog-go-gin/logging"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"log"
+	"sync"
 )
+
+var OnceDo = sync.Once{}
+var config = &Config{}
 
 type Config struct {
 	AppName   string `yaml:"appname"`
 	HttpPort  uint32 `yaml:"httpport"`
 	RunMode   string `yaml:"runmode"`
 	SessionOn string `yaml:"sessionon"`
-	Mysql     Mysql  `yaml:"mysql"`
-	Redis     Redis  `yaml:"redis"`
+	//LogLevel  string `yaml:"loglevel"`
+	Mysql Mysql `yaml:"mysql"`
+	Redis Redis `yaml:"redis"`
 }
 
 type Mysql struct {
@@ -27,17 +32,27 @@ type Mysql struct {
 type Redis struct {
 	RedisConn string `yaml:"redisconn"`
 	RedisPwd  string `yaml:"redispwd"`
-	Db        int  `yaml:"db"`
+	Db        int    `yaml:"db"`
 }
 
-func (c *Config) GetConf() *Config {
+func (c *Config) loadConf() {
 	yamlFile, err := ioutil.ReadFile("config/app.yaml")
 	if err != nil {
-		log.Println(err.Error())
+		logging.Logger.Fatal(err.Error())
 	}
 	err = yaml.Unmarshal(yamlFile, c)
 	if err != nil {
-		log.Println(err.Error())
+		logging.Logger.Fatal(err.Error())
 	}
-	return c
+	config = c
+}
+
+func GetConf() *Config {
+	return config
+}
+
+func init() {
+	OnceDo.Do(func() {
+		config.loadConf()
+	})
 }
