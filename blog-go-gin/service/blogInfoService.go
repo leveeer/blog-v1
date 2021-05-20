@@ -33,7 +33,7 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 		return nil, err
 	}
 	//查询标签数量
-	tagCount, err := models.GetCategoryCount()
+	tagCount, err := models.GetTagCount()
 	if err != nil {
 		return nil, err
 	}
