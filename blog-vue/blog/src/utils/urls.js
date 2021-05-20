@@ -1,6 +1,6 @@
 export const urls = {
   articles: "/blog/articles",
-  blogInfo: "/blog/blogInfo"
+  blog_info: "/blog/blog_info",
 };
 
 export default urls;

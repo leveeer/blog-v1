@@ -7,5 +7,5 @@ export function getArticlesOnHome(params) {
 }
 
 export function getBlogInfo() {
-  return service.get(urls.blogInfo)
+  return service.get(urls.blog_info)
 }
