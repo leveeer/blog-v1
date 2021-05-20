@@ -8,13 +8,14 @@ import (
 	"net/http"
 )
 
-var BlogInfoRestApi = &blogInfoRestApi{}
-
-type blogInfoRestApi struct {
+type BlogInfoRestApi struct {
 	base.Controller
 }
 
-func (c *blogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
-	blogInfo := service.BlogInfoService.GetBlogInfo()
-	c.Result(ctx, http.StatusOK, common.SuccessOK, blogInfo, "查询成功")
+func (c *BlogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
+	blogHomeInfoVo, err := service.BlogInfoService.GetBlogInfo()
+	if err != nil {
+		c.RespFailWithDesc(ctx, http.StatusOK, common.GetBlogHomeInfoFail)
+	}
+	c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, blogHomeInfoVo)
 }

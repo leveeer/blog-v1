@@ -2,7 +2,6 @@ package base
 
 import (
 	"blog-go-gin/common"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"sync"
 )
@@ -14,43 +13,20 @@ type Controller struct {
 	Wg sync.WaitGroup
 }
 
-func (c *Controller) Result(ctx *gin.Context, httpCode, code int, data interface{}, message string) {
+func (c *Controller) RespSuccess(ctx *gin.Context, httpCode, code int, data interface{}) {
 	ctx.JSON(httpCode, gin.H{
+		"success": true,
 		"code":    code,
 		"data":    data,
-		"message": message,
 	})
 }
 
-func RespSuccess(data interface{}) gin.H {
-	return gin.H{
-		"success": true,
-		"data":    data,
-	}
-}
-
-func RespFailWithCode(code common.ErrorCode) gin.H {
-	return gin.H{
+func (c *Controller) RespFailWithDesc(ctx *gin.Context, httpCode int, code common.ErrorCode) {
+	ctx.JSON(httpCode, gin.H{
 		"success": false,
 		"code":    code,
-		"msg":     common.GetMsg(code),
-	}
-}
-
-func RespFailWithMsg(code int, msg string) gin.H {
-	return gin.H{
-		"success": false,
-		"code":    code,
-		"msg":     msg,
-	}
-}
-
-func RespFailWithDesc(code common.ErrorCode, msg string) gin.H {
-	return gin.H{
-		"success": false,
-		"code":    code,
-		"msg":     fmt.Sprintf("%s[%s]", common.GetMsg(code), msg),
-	}
+		"message": common.GetMsg(code),
+	})
 }
 
 func (c *Controller) ThrowError(code string, message string) {

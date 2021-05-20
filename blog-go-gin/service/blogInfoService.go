@@ -2,7 +2,6 @@ package service
 
 import (
 	"blog-go-gin/common"
-	"blog-go-gin/dao"
 	"blog-go-gin/logging"
 	"blog-go-gin/models"
 	"blog-go-gin/models/vo"
@@ -16,68 +15,54 @@ type blogInfoService struct {
 	wg sync.WaitGroup
 }
 
-func (b *blogInfoService) GetBlogInfo() vo.BlogHomeInfoVo {
+func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 	//查询博主信息
-	var userInfo models.UserInfo
-	b.wg.Add(6)
-	go func() {
-		dao.Db.Debug().Table("tb_user_info").Where("id = ?", common.BloggerId).First(&userInfo)
-		b.wg.Done()
-	}()
+	userInfo, err := models.GetUserInfoByID(common.BloggerId)
+	if err != nil {
+		return nil, err
+	}
 	//查询文章数量
-	var article models.Article
-	var articleCount int64
-	go func() {
-		dao.Db.Debug().Table("tb_article").Where("is_delete = ? AND is_publish = ?", common.False, common.True).Find(&article).Count(&articleCount)
-		b.wg.Done()
-	}()
+	articles, err := models.GetArticles("is_delete = ? AND is_publish = ?", common.False, common.True)
+	if err != nil {
+		return nil, err
+	}
+	articleCount := int64(len(articles))
 	//查询分类数量
-	var categoryCount int64
-	go func() {
-		dao.Db.Debug().Table("tb_category").Count(&categoryCount)
-		b.wg.Done()
-	}()
+	categoryCount, err := models.GetCategoryCount()
+	if err != nil {
+		return nil, err
+	}
 	//查询标签数量
-	var tagCount int64
-	go func() {
-		dao.Db.Debug().Table("tb_tag").Count(&tagCount)
-		b.wg.Done()
-	}()
+	tagCount, err := models.GetCategoryCount()
+	if err != nil {
+		return nil, err
+	}
 	//查询公告
 	var notice string
-	go func() {
-		notice = common.RedisUtil.Get(common.NOTICE)
-		if notice == "" {
-			notice = "博客Go语言版即将上线，敬请期待！"
-			common.RedisUtil.Set(common.NOTICE, notice)
-		}
-		b.wg.Done()
-	}()
+	notice = common.RedisUtil.Get(common.NOTICE)
+	if notice == "" {
+		notice = "博客Go语言版即将上线，敬请期待！"
+		common.RedisUtil.Set(common.NOTICE, notice)
+	}
 	//查询访问量
-	var viewsCount int
-	var err error
-	go func() {
-		viewsCountStr := common.RedisUtil.Get(common.BlogViewsCount)
-		if viewsCountStr == "" {
-			common.RedisUtil.Set(common.BlogViewsCount, strconv.Itoa(0))
-			viewsCountStr = "0"
-		}
-		viewsCount, err = strconv.Atoi(viewsCountStr)
-		if err != nil {
-			logging.Logger.Errorf("strconv Atoi err: %s", err)
-		}
-		b.wg.Done()
-	}()
+	viewsCountStr := common.RedisUtil.Get(common.BlogViewsCount)
+	if viewsCountStr == "" {
+		common.RedisUtil.Set(common.BlogViewsCount, strconv.Itoa(0))
+		viewsCountStr = "0"
+	}
+	viewsCount, err := strconv.Atoi(viewsCountStr)
+	if err != nil {
+		logging.Logger.Errorf("strconv Atoi err: %s", err)
+	}
 
-	b.wg.Wait()
 	//数据封装
-	return vo.BlogHomeInfoVo{
+	return &vo.BlogHomeInfoVo{
 		UserInfo:      userInfo,
 		ArticleCount:  articleCount,
 		CategoryCount: categoryCount,
 		TagCount:      tagCount,
 		Notice:        notice,
 		ViewsCount:    viewsCount,
-	}
+	}, nil
 
 }

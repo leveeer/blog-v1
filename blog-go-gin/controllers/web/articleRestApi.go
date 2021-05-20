@@ -10,19 +10,20 @@ import (
 	"strconv"
 )
 
-var ArticleRestApi = &articleRestApi{}
-
-type articleRestApi struct {
+type ArticleRestApi struct {
 	base.Controller
 }
 
-func (c *articleRestApi) GetArticleList(ctx *gin.Context) {
+func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 	var ipage page.IPage
 	ipage.Current, _ = strconv.Atoi(ctx.Query("current"))
-	articles := service.ArticleService.GetArticleList(ipage)
-	c.Result(ctx, http.StatusOK, common.SuccessOK, articles, "查询成功")
+	articles, err := service.ArticleService.GetArticleList(ipage)
+	if err != nil {
+		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticlesFail)
+	}
+	c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, &articles)
 }
 
-func (c *articleRestApi) GetArticleById(ctx *gin.Context) {
+func (c *ArticleRestApi) GetArticleById(ctx *gin.Context) {
 
 }

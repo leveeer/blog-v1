@@ -6,10 +6,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	ArticleApi  = &web.ArticleRestApi{}
+	BlogInfoApi = &web.BlogInfoRestApi{}
+	TagApi      = &web.TagRestApi{}
+)
+
 func blogRouters(r *gin.Engine) {
 	blog := r.Group(common.BlogBaseUrl)
-	blog.GET(common.BlogInfoUrl, web.BlogInfoRestApi.GetBlogInfo)
-	blog.GET(common.ArticleList, web.ArticleRestApi.GetArticleList)
-	blog.POST(common.ArticleById, web.ArticleRestApi.GetArticleById)
-	blog.GET(common.TagList, web.TagRestApi.GetTagList)
+	blog.GET(common.BlogInfoUrl, BlogInfoApi.GetBlogInfo)
+	blog.GET(common.ArticleList, ArticleApi.GetArticleList)
+	blog.POST(common.ArticleById, ArticleApi.GetArticleById)
+	blog.GET(common.TagList, TagApi.GetTagList)
 }

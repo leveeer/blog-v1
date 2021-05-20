@@ -29,7 +29,7 @@ const (
 //urls
 const (
 	BlogBaseUrl = "/blog"
-	BlogInfoUrl = "/blogInfo"
+	BlogInfoUrl = "/blog_info"
 	ArticleList = "/articles"
 	ArticleById = "/articleById"
 	TagList     = "/tags"

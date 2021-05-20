@@ -1,6 +1,7 @@
 package web
 
 import (
+	"blog-go-gin/controllers/base"
 	"blog-go-gin/models/page"
 	"blog-go-gin/service"
 	"github.com/gin-gonic/gin"
@@ -8,13 +9,11 @@ import (
 	"net/http"
 )
 
-var TagRestApi = &tagRestApi{}
-
-type tagRestApi struct {
-
+type TagRestApi struct {
+	base.Controller
 }
 
-func (r *tagRestApi) GetTagList(ctx *gin.Context) {
+func (r *TagRestApi) GetTagList(ctx *gin.Context) {
 	var pageObj page.IPage
 	err := ctx.ShouldBindQuery(&pageObj)
 	if err != nil {

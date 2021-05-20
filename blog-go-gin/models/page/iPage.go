@@ -1,11 +1,8 @@
-
-
 package page
 
 import "gorm.io/gorm"
 
 type IPage struct {
-
 	Total            int64       `json:"total"`
 	Size             int         `json:"size"`
 	Current          int         `json:"current"`
@@ -15,8 +12,8 @@ type IPage struct {
 }
 
 //分页封装
-func (IPage) Paginate(page *IPage) func(db *gorm.DB) *gorm.DB {
-	return func (db *gorm.DB) *gorm.DB {
+func Paginate(page *IPage) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
 		if page.Current == 0 {
 			page.Current = 1
 		}
@@ -30,4 +27,3 @@ func (IPage) Paginate(page *IPage) func(db *gorm.DB) *gorm.DB {
 		return db.Offset(offset).Limit(page.Size)
 	}
 }
-

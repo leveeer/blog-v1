@@ -1,8 +1,8 @@
 package common
 
 import (
+	conf "blog-go-gin/config"
 	"blog-go-gin/logging"
-	"blog-go-gin/models"
 	"context"
 	"github.com/go-redis/redis/v8"
 	"time"
@@ -17,7 +17,7 @@ var ctx = context.Background()
 type redisUtil struct{}
 
 func InitRedis() {
-	config := models.GetConf()
+	config := conf.GetConf()
 	redisClient = redis.NewClient(&redis.Options{
 		Addr:     config.Redis.RedisConn,
 		Password: config.Redis.RedisPwd,

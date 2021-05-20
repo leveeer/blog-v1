@@ -1,7 +1,6 @@
 package service
 
 import (
-	"blog-go-gin/dao"
 	"blog-go-gin/models"
 	"blog-go-gin/models/page"
 	"sync"
@@ -13,10 +12,12 @@ type articleService struct {
 	wg sync.WaitGroup
 }
 
-func (b *articleService) GetArticleList(page page.IPage) []models.Article {
-	var articles []models.Article
-	dao.Db.Debug().Scopes(page.Paginate(&page)).Find(&articles)
-	return articles
+func (b *articleService) GetArticleList(page page.IPage) ([]*models.Article, error) {
+	articles, err := models.GetArticlesByPage(page)
+	if err != nil {
+		return nil, err
+	}
+	return articles, err
 }
 
 func (b *articleService) GetArticleByUid(uid string) models.Article {

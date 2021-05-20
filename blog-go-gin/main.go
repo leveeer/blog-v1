@@ -2,9 +2,9 @@ package main
 
 import (
 	"blog-go-gin/common"
+	"blog-go-gin/config"
 	"blog-go-gin/dao"
 	"blog-go-gin/jobs"
-	"blog-go-gin/models"
 	"blog-go-gin/routers"
 	"github.com/gin-gonic/gin"
 	"github.com/mattn/go-colorable"
@@ -20,5 +20,5 @@ func main() {
 	router = routers.InitWebRouter()
 	//注册定时任务
 	jobs.RegisterCron()
-	_ = router.Run(":" + strconv.Itoa(int(models.GetConf().HttpPort)))
+	_ = router.Run(":" + strconv.Itoa(int(config.GetConf().HttpPort)))
 }

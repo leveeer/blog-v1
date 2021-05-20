@@ -1,4 +1,4 @@
-package models
+package config
 
 import (
 	"blog-go-gin/logging"
@@ -36,7 +36,7 @@ type Redis struct {
 }
 
 func (c *Config) loadConf() {
-	yamlFile, err := ioutil.ReadFile("config/app.yaml")
+	yamlFile, err := ioutil.ReadFile("./config/app.yaml")
 	if err != nil {
 		logging.Logger.Fatal(err.Error())
 	}

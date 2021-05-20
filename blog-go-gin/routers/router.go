@@ -1,8 +1,8 @@
 package routers
 
 import (
+	conf "blog-go-gin/config"
 	"blog-go-gin/middleware"
-	"blog-go-gin/models"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -12,7 +12,7 @@ import (
 )
 
 func InitWebRouter() *gin.Engine {
-	config := models.GetConf()
+	config := conf.GetConf()
 	r := gin.New()
 	// 创建基于cookie的存储引擎，secret 参数是用于加密的密钥
 	store := cookie.NewStore([]byte("secret"))
