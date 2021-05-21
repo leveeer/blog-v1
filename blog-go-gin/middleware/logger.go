@@ -13,7 +13,6 @@ import (
 )
 
 //日志中间件
-
 type loggerFunc func(format string, args ...interface{})
 
 //获取调用方
@@ -68,7 +67,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 		var logger loggerFunc
 		if errorMessage == "" {
 			logger = logging.Entry.WithFields(logrus.Fields{
-				"cost":       latency,
+				"cost_time":  latency,
 				"peer_name":  GetPeerNameByPath(c.Request.URL.Path),
 				"req_method": method,
 				"req_uri":    c.Request.URL.Path,

@@ -34,12 +34,12 @@ func InitRedis() {
 	}
 }
 
-func (*redisUtil) Get(key string) string {
+func (*redisUtil) Get(key string) (string, error) {
 	val, err := redisClient.Get(ctx, key).Result()
 	if err != nil {
-		return ""
+		return "", err
 	}
-	return val
+	return val, nil
 }
 func (*redisUtil) SetEx(key string, value string, expiration int64, unit time.Duration) {
 	err := redisClient.SetEX(ctx, key, value, time.Duration(expiration)*unit).Err()
@@ -88,11 +88,12 @@ func (*redisUtil) MultiDelete(key []string) {
 	redisClient.Del(ctx, key...)
 }
 
-func (*redisUtil) Set(key string, value string) {
+func (*redisUtil) Set(key string, value string) error {
 	err := redisClient.Set(ctx, key, value, 0).Err()
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
 func (*redisUtil) IncrBy(key string, increment int64) int64 {

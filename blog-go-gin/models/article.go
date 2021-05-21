@@ -66,6 +66,15 @@ func GetArticles(condition string, args ...interface{}) ([]*Article, error) {
 	return res, nil
 }
 
+func GetArticlesCountByCondition(condition string, args ...interface{}) (int64, error) {
+	var m Article
+	var count int64
+	if err := dao.Db.Debug().Where(condition, args...).Find(&m).Count(&count).Error; err != nil {
+		return int64(0), err
+	}
+	return count, nil
+}
+
 func GetArticlesByPage(ipage page.IPage) ([]*Article, error) {
 	res := make([]*Article, 0)
 	if err := dao.Db.Debug().Scopes(page.Paginate(&ipage)).Find(&res).Error; err != nil {
