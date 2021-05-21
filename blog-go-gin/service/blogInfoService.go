@@ -5,8 +5,10 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models"
 	"blog-go-gin/models/vo"
+	"errors"
 	"strconv"
 	"sync"
+	"time"
 )
 
 var BlogInfoService = &blogInfoService{}
@@ -142,9 +144,9 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 		select {
 		// 错误快返回
 		case err := <-errChan:
+			logging.Logger.Error(err)
 			return nil, err
 		case <-done:
-			logging.Logger.Debug("done")
 			return &vo.BlogHomeInfoVo{
 				UserInfo:      result["userInfo"].(*models.UserInfo),
 				ArticleCount:  result["articleCount"].(int64),
@@ -153,8 +155,10 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 				Notice:        result["notice"].(string),
 				ViewsCount:    result["viewsCount"].(int),
 			}, nil
-			//超时处理
-			//case <-time.After(500 * time.Millisecond):
+		//超时处理
+		case <-time.After(500 * time.Millisecond):
+			logging.Logger.Error(errors.New(common.GetMsg(common.ApiCallTimeout)))
+			return nil, errors.New(common.GetMsg(common.ApiCallTimeout))
 		}
 	}
 }

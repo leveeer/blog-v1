@@ -80,6 +80,7 @@ const (
 	InvalidGift
 	GetArticlesFail
 	GetBlogHomeInfoFail
+	ApiCallTimeout
 )
 
 // unknown group
@@ -149,6 +150,7 @@ var Error = map[ErrorCode]error{
 	InvalidGift:             errors.New("未知礼物类型"),
 	GetArticlesFail:         errors.New("获取文章列表失败"),
 	GetBlogHomeInfoFail:     errors.New("获取博客首页信息失败"),
+	ApiCallTimeout:          errors.New("接口调用超时"),
 }
 
 func GetMsg(code ErrorCode) string {

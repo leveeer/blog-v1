@@ -20,6 +20,7 @@ func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 	articles, err := service.ArticleService.GetArticleList(ipage)
 	if err != nil {
 		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticlesFail)
+		return
 	}
 	c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, &articles)
 }

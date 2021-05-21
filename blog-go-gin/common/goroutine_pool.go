@@ -47,5 +47,4 @@ func (g *GoroutinePool) AddGoroutine(handle func()) {
 		handle()
 		g.Done()
 	}()
-
 }
