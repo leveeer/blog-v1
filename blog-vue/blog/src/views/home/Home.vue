@@ -87,11 +87,11 @@
                 style="display:inline-block"
                 :to="'/tags/' + tag.id"
                 class="mr-1"
-                v-for="tag of item.tagDTOList"
+                v-for="tag of item.tags"
                 :key="tag.id"
               >
                 <v-icon size="14">mdi-tag-multiple</v-icon>
-                {{ tag.tagName }}
+                {{ tag.tag_name }}
               </router-link>
             </div>
             <!-- 文章内容 -->
@@ -286,6 +286,7 @@ export default {
         }
       })
         .then(({ data }) => {
+          console.log(data);
           if (data.data.length) {
             // 去除markdown标签
             data.data.forEach(item => {
