@@ -9,3 +9,7 @@ export function getArticlesOnHome(params) {
 export function getBlogInfo() {
   return service.get(urls.blog_info)
 }
+
+export function getArticleById(routePath){
+  return service.get(urls.article + routePath)
+}

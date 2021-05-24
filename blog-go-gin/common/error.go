@@ -81,6 +81,7 @@ const (
 	GetArticlesFail
 	GetBlogHomeInfoFail
 	ApiCallTimeout
+	GetArticleByIdFail
 )
 
 // unknown group
@@ -151,6 +152,7 @@ var Error = map[ErrorCode]error{
 	GetArticlesFail:         errors.New("获取文章列表失败"),
 	GetBlogHomeInfoFail:     errors.New("获取博客首页信息失败"),
 	ApiCallTimeout:          errors.New("接口调用超时"),
+	GetArticleByIdFail:          errors.New("获取文章失败"),
 }
 
 func GetMsg(code ErrorCode) string {

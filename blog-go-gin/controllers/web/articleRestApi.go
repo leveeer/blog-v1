@@ -26,5 +26,11 @@ func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 }
 
 func (c *ArticleRestApi) GetArticleById(ctx *gin.Context) {
-
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	article, err := service.ArticleService.GetArticleById(id)
+	if err != nil {
+		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticleByIdFail)
+		return
+	}
+	c.RespSuccess(ctx,http.StatusOK, common.SuccessOK, &article)
 }

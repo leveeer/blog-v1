@@ -31,6 +31,6 @@ const (
 	BlogBaseUrl = "/blog"
 	BlogInfoUrl = "/blog_info"
 	ArticleList = "/articles"
-	ArticleById = "/articleById"
+	ArticleById = "/articles/:id"
 	TagList     = "/tags"
 )

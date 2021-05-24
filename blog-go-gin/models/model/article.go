@@ -54,7 +54,7 @@ func UpdateArticle(m *Article) error {
 
 func GetArticleByID(id int) (*Article, error) {
 	var m Article
-	if err := dao.Db.Table("tb_article").First(&m, id).Error; err != nil {
+	if err := dao.Db.Debug().Table("tb_article").First(&m, id).Error; err != nil {
 		return nil, err
 	}
 	return &m, nil

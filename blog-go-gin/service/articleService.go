@@ -3,6 +3,7 @@ package service
 import (
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
+	"blog-go-gin/models/vo"
 	"sync"
 )
 
@@ -27,6 +28,14 @@ func (b *articleService) GetArticleList(page page.IPage) ([]*model.Article, erro
 	return articles, err
 }
 
-func (b *articleService) GetArticleByUid(uid string) model.Article {
-	return model.Article{}
+func (b *articleService) GetArticleById(id int) (*vo.ArticleVo, error) {
+
+	article, err := model.GetArticleByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return &vo.ArticleVo{
+		Article: *article,
+	}, nil
 }

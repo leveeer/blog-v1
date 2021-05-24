@@ -208,7 +208,7 @@
 
 <script>
 import EasyTyper from "easy-typer-js";
-import { getBlogInfo, getArticlesOnHome } from "../../api/home";
+import { getBlogInfo, getArticlesOnHome } from "../../api/api";
 
 export default {
   created() {
