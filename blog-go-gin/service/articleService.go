@@ -30,12 +30,24 @@ func (b *articleService) GetArticleList(page page.IPage) ([]*model.Article, erro
 
 func (b *articleService) GetArticleById(id int) (*vo.ArticleVo, error) {
 
+	//获取当前文章
 	article, err := model.GetArticleByID(id)
 	if err != nil {
 		return nil, err
 	}
-
+	//获取前一篇文章
+	lastArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? AND is_publish = ? AND id < ?", "id DESC")
+	if err != nil {
+		return nil, err
+	}
+	//获取后一篇文章
+	nextArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? AND is_publish = ? AND id > ?", "id ASC")
+	if err != nil {
+		return nil, err
+	}
 	return &vo.ArticleVo{
-		Article: *article,
+		Article:     *article,
+		LastArticle: *lastArticle,
+		NextArticle: *nextArticle,
 	}, nil
 }

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"blog-go-gin/common"
 	"blog-go-gin/dao"
 	"blog-go-gin/models/page"
 	"time"
@@ -94,4 +95,13 @@ func GetArticlesOnHome(iPage page.IPage) ([]*Article, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+func GetLastOrNextArticle(id int, condition string, orderValue string) (*Article, error) {
+	var m Article
+	if err := dao.Db.Debug().Table("tb_article").Where(condition, common.False, common.True, id).
+		Order(orderValue).Limit(1).Find(&m).Error; err != nil {
+		return nil, err
+	}
+	return &m, nil
 }
