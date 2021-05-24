@@ -1,4 +1,4 @@
-package models
+package model
 
 import (
 	"blog-go-gin/dao"
@@ -63,4 +63,14 @@ func GetTagCount() (count int64, err error) {
 		return 0, err
 	}
 	return tagCount, nil
+}
+
+func GetTagNameByArticleId(articleId int) ([]*Tag, error) {
+	res := make([]*Tag, 0)
+	if err := dao.Db.Debug().Table("tb_tag").Select("tb_tag.*").
+		Joins("left join tb_article_tags on tb_article_tags.tag_id = tb_tag.id").
+		Where("tb_article_tags.article_id = ?", articleId).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
 }

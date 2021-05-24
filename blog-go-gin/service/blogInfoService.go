@@ -3,7 +3,7 @@ package service
 import (
 	"blog-go-gin/common"
 	"blog-go-gin/logging"
-	"blog-go-gin/models"
+	"blog-go-gin/models/model"
 	"blog-go-gin/models/vo"
 	"errors"
 	"strconv"
@@ -74,7 +74,7 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 	errChan := make(chan error)
 	pool := common.NewCoroutinePool(6)
 	pool.AddGoroutine(func() {
-		userInfo, err := models.GetUserInfoByID(common.BloggerId)
+		userInfo, err := model.GetUserInfoByID(common.BloggerId)
 		if err != nil {
 			errChan <- err
 		}
@@ -82,7 +82,7 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 	})
 	pool.AddGoroutine(func() {
 		//查询分类数量
-		categoryCount, err := models.GetCategoryCount()
+		categoryCount, err := model.GetCategoryCount()
 		if err != nil {
 			errChan <- err
 		}
@@ -92,7 +92,7 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 	pool.AddGoroutine(func() {
 		//查询文章数量
 		condition := "is_delete = ? AND is_publish = ?"
-		articleCount, err := models.GetArticlesCountByCondition(condition, common.False, common.True)
+		articleCount, err := model.GetArticlesCountByCondition(condition, common.False, common.True)
 		if err != nil {
 			errChan <- err
 		}
@@ -101,7 +101,7 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 
 	pool.AddGoroutine(func() {
 		//查询标签数量
-		tagCount, err := models.GetTagCount()
+		tagCount, err := model.GetTagCount()
 		if err != nil {
 			errChan <- err
 		}
@@ -148,7 +148,7 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 			return nil, err
 		case <-done:
 			return &vo.BlogHomeInfoVo{
-				UserInfo:      result["userInfo"].(*models.UserInfo),
+				UserInfo:      result["userInfo"].(*model.UserInfo),
 				ArticleCount:  result["articleCount"].(int64),
 				CategoryCount: result["categoryCount"].(int64),
 				TagCount:      result["tagCount"].(int64),

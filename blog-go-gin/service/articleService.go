@@ -1,7 +1,7 @@
 package service
 
 import (
-	"blog-go-gin/models"
+	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
 	"sync"
 )
@@ -12,14 +12,21 @@ type articleService struct {
 	wg sync.WaitGroup
 }
 
-func (b *articleService) GetArticleList(page page.IPage) ([]*models.Article, error) {
-	articles, err := models.GetArticlesByPage(page)
+func (b *articleService) GetArticleList(page page.IPage) ([]*model.Article, error) {
+	articles, err := model.GetArticlesOnHome(page)
+	for _, article := range articles {
+		tags, err := model.GetTagNameByArticleId(article.ID)
+		if err != nil {
+			return nil, err
+		}
+		article.Tags = append(article.Tags, tags...)
+	}
 	if err != nil {
 		return nil, err
 	}
 	return articles, err
 }
 
-func (b *articleService) GetArticleByUid(uid string) models.Article {
-	return models.Article{}
+func (b *articleService) GetArticleByUid(uid string) model.Article {
+	return model.Article{}
 }
