@@ -94,7 +94,7 @@
               许可协议。转载请注明文章出处。
             </div>
           </div>
-          <!--          &lt;!&ndash; 转发 &ndash;&gt;
+          <!-- 转发 -->
           <div class="article-operation">
             <div class="tag-container">
               <router-link
@@ -107,9 +107,9 @@
             </div>
             <share style="margin-left:auto" :config="config" />
           </div>
-          &lt;!&ndash; 点赞打赏等 &ndash;&gt;
+          <!-- 点赞打赏等 -->
           <div class="article-reward">
-            &lt;!&ndash; 点赞按钮 &ndash;&gt;
+            <!-- 点赞按钮 -->
             <a :class="isLike" @click="like">
               <v-icon size="14" color="#fff">mdi-thumb-up</v-icon>
               点赞
@@ -118,9 +118,9 @@
                 }}</span>
             </a>
             <a class="reward-btn">
-              &lt;!&ndash; 打赏按钮 &ndash;&gt;
+              <!-- 打赏按钮 -->
               <i class="iconfont iconerweima" /> 打赏
-              &lt;!&ndash; 二维码 &ndash;&gt;
+              <!-- 二维码 -->
               <div class="animated fadeInDown reward-main">
                 <ul class="reward-all">
                   <li class="reward-item">
@@ -142,45 +142,45 @@
             </a>
           </div>
           <div class="pagination-post">
-            &lt;!&ndash; 上一篇 &ndash;&gt;
+            <!-- 上一篇 -->
             <div
-              :class="isFull(article.last_article.id)"
-              v-if="article.lastArticle.id"
+              :class="isFull(lastArticle.id)"
+              v-if="lastArticle.id"
             >
-              <router-link :to="'/articles/' + article.last_article.id">
+              <router-link :to="'/articles/' + lastArticle.id">
                 <img
                   class="post-cover"
-                  :src="article.last_article.article_cover"
+                  :src="lastArticle.article_cover"
                 />
                 <div class="post-info">
                   <div class="label">上一篇</div>
                   <div class="post-title">
-                    {{ article.last_article.article_title }}
+                    {{ lastArticle.article_title }}
                   </div>
                 </div>
               </router-link>
             </div>
-            &lt;!&ndash; 下一篇 &ndash;&gt;
+            <!-- 下一篇 -->
             <div
-              :class="isFull(article.next_article.id)"
-              v-if="article.next_article.id"
+              :class="isFull(nextArticle.id)"
+              v-if="nextArticle.id"
             >
-              <router-link :to="'/articles/' + article.next_article.id">
+              <router-link :to="'/articles/' + nextArticle.id">
                 <img
                   class="post-cover"
-                  :src="article.next_article.article_cover"
+                  :src="nextArticle.article_cover"
                 />
                 <div class="post-info" style="text-align: right">
                   <div class="label">下一篇</div>
                   <div class="post-title">
-                    {{ article.next_article.article_title }}
+                    {{ nextArticle.article_title }}
                   </div>
                 </div>
               </router-link>
             </div>
           </div>
-          &lt;!&ndash; 推荐文章 &ndash;&gt;
-          <div
+          <!-- 推荐文章 -->
+          <!--<div
             class="recommend-container"
             v-if="articleRecommendList.length"
           >
@@ -285,16 +285,9 @@ export default {
         sites: ["qzone", "wechat", "weibo", "qq"]
       },
       imgList: [],
-      article: {
-        // nextArticle: {
-        //   id: 0,
-        //   article_cover: ""
-        // },
-        // lastArticle: {
-        //   id: 0,
-        //   article_cover: ""
-        // },
-      },
+      article: {},
+      nextArticle: {},
+      lastArticle: {},
       articleRecommendList: [],
       articleLatestList: [],
       commentList: [],
@@ -311,6 +304,8 @@ export default {
       //查询文章
       getArticleById(this.$route.path).then(({ data }) => {
         document.title = data.data.article.article_title;
+        this.nextArticle = data.data.next_article;
+        this.lastArticle = data.data.last_article;
         //将markdown转换为Html
         this.markdownToHtml(data.data.article);
         this.$nextTick(() => {
