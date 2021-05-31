@@ -29,7 +29,6 @@ func (b *articleService) GetArticleList(page page.IPage) ([]*model.Article, erro
 }
 
 func (b *articleService) GetArticleById(id int) (*vo.ArticleVo, error) {
-
 	//获取当前文章
 	article, err := model.GetArticleByID(id)
 	if err != nil {
@@ -46,8 +45,9 @@ func (b *articleService) GetArticleById(id int) (*vo.ArticleVo, error) {
 		return nil, err
 	}
 	return &vo.ArticleVo{
-		Article:     *article,
-		LastArticle: *lastArticle,
-		NextArticle: *nextArticle,
+		Article:              *article,
+		LastArticle:          *lastArticle,
+		NextArticle:          *nextArticle,
+		RecommendArticleList: nil,
 	}, nil
 }

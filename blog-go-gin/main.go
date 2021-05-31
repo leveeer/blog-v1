@@ -6,9 +6,9 @@ import (
 	"blog-go-gin/dao"
 	"blog-go-gin/jobs"
 	"blog-go-gin/routers"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mattn/go-colorable"
-	"strconv"
 )
 
 func main() {
@@ -20,5 +20,5 @@ func main() {
 	router = routers.InitWebRouter()
 	//注册定时任务
 	jobs.RegisterCron()
-	_ = router.Run(":" + strconv.Itoa(int(config.GetConf().HttpPort)))
+	_ = router.Run(fmt.Sprintf(":%d", config.GetConf().HttpPort))
 }
