@@ -19,9 +19,16 @@ echo -e "${YELLOW_COLOR}---更改权限---${RES}"
 chmod -R 777 blog
 echo -e "${BLUE_COLOR}更改权限完成${RES}\n"
 
-echo -e "${YELLOW_COLOR}---step4:杀掉进程并且运行---${RES}"
-i1=`ps -ef|grep -E "blog"|grep -v grep|awk '{print $2}'`
-echo -e "${BLUE_COLOR}杀掉进程$i1${RES}\n"
-kill -9 $i1 && nohup ./blog >/dev/null 2>&1 &
-i2=`ps -ef|grep -E "blog"|grep -v grep|awk '{print $2}'`
+echo -e "${YELLOW_COLOR}---杀掉进程并且运行---${RES}"
+i1=`ps -ef | grep "blog" | grep -v grep | awk '{print $2}'`
+
+if ps -p $i1 > /dev/null
+then
+   echo "$i1 is running"
+   # Do something knowing the pid exists, i.e. the process with $PID is running
+   echo -e "${BLUE_COLOR}杀掉进程$i1${RES}\n"
+   kill -9 $i1 && nohup ./blog >/dev/null 2>&1 &
+fi
+
+i2=`ps -ef|grep "blog"|grep -v grep|awk '{print $2}'`
 echo -e "${GREEN_COLOR}****部署成功,部署的进程ID为:$i2${RES}****"
