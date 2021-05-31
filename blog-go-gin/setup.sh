@@ -16,19 +16,19 @@ go build -o ./blog
 echo -e "${BLUE_COLOR}编译完成${RES}\n"
 
 echo -e "${YELLOW_COLOR}---更改权限---${RES}"
-chmod -R 777 blog
+chmod -R 777 ./blog
 echo -e "${BLUE_COLOR}更改权限完成${RES}\n"
 
 echo -e "${YELLOW_COLOR}---杀掉进程并且运行---${RES}"
-i1=`ps -ef | grep "blog" | grep -v grep | awk '{print $2}'`
+pid=$(ps -ef | grep "blog" | grep -v grep | awk '{print $2}')
 
-if ps -p $i1 > /dev/null
+if ps -p $pid > /dev/null
 then
-   echo "$i1 is running"
+   echo "$pid is running"
    # Do something knowing the pid exists, i.e. the process with $PID is running
-   echo -e "${BLUE_COLOR}杀掉进程$i1${RES}\n"
-   kill -9 $i1 && nohup ./blog >/dev/null 2>&1 &
+   echo -e "${BLUE_COLOR}杀掉进程$pid${RES}\n"
+   kill -9 $pid && nohup ./blog >/dev/null 2>&1 &
 fi
 
-i2=`ps -ef|grep "blog"|grep -v grep|awk '{print $2}'`
-echo -e "${GREEN_COLOR}****部署成功,部署的进程ID为:$i2${RES}****"
+current_pid=$(ps -ef|grep "blog"|grep -v grep|awk '{print $2}')
+echo -e "${GREEN_COLOR}****部署成功,部署的进程ID为:$current_pid${RES}****"
