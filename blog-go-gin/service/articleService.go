@@ -7,13 +7,11 @@ import (
 	"sync"
 )
 
-var ArticleService = &articleService{}
-
-type articleService struct {
+type ArticleService struct {
 	wg sync.WaitGroup
 }
 
-func (b *articleService) GetArticleList(page page.IPage) ([]*model.Article, error) {
+func (b *ArticleService) GetArticleList(page page.IPage) ([]*model.Article, error) {
 	articles, err := model.GetArticlesOnHome(page)
 	for _, article := range articles {
 		tags, err := model.GetTagNameByArticleId(article.ID)
@@ -28,26 +26,26 @@ func (b *articleService) GetArticleList(page page.IPage) ([]*model.Article, erro
 	return articles, err
 }
 
-func (b *articleService) GetArticleById(id int) (*vo.ArticleVo, error) {
+func (b *ArticleService) GetArticleById(id int) (*vo.ArticleVo, error) {
 	//获取当前文章
 	article, err := model.GetArticleByID(id)
 	if err != nil {
 		return nil, err
 	}
 	//获取前一篇文章
-	lastArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? AND is_publish = ? AND id < ?", "id DESC")
+	lastArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? and is_publish = ? and id < ?", "id DESC")
 	if err != nil {
 		return nil, err
 	}
 	//获取后一篇文章
-	nextArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? AND is_publish = ? AND id > ?", "id ASC")
+	nextArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? and is_publish = ? and id > ?", "id ASC")
 	if err != nil {
 		return nil, err
 	}
 	return &vo.ArticleVo{
-		Article:              *article,
-		LastArticle:          *lastArticle,
-		NextArticle:          *nextArticle,
+		Article:              article,
+		LastArticle:          lastArticle,
+		NextArticle:          nextArticle,
 		RecommendArticleList: nil,
 	}, nil
 }

@@ -6,9 +6,13 @@ import (
 	"sync"
 )
 
-/*
-基类
-*/
+// Base /*
+type Base interface {
+	RespSuccess(ctx *gin.Context, httpCode, code int, data interface{})
+	RespFailWithDesc(ctx *gin.Context, httpCode int, code common.ErrorCode)
+	ThrowError(code string, message string)
+}
+
 type Controller struct {
 	Wg sync.WaitGroup
 }

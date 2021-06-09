@@ -1,0 +1,40 @@
+syntax = "proto3";
+option go_package = "../go_proto;proto";
+package proto;
+
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanos = 2;
+}
+
+message Article{
+  int32 id = 1;
+  int32 userId = 2;
+  int32 categoryID = 3;
+  string articleCover = 4;
+  string articleTitle = 5;
+  string articleContent = 6;
+//  Timestamp createTime = 7;
+//  Timestamp updateTime = 8;
+  bool isTop = 9;
+  bool isPublish = 10;
+  bool isDelete = 11;
+  bool isOriginal = 12;
+  int64 clickCount = 13;
+  int64 collectCount = 14;
+//  repeated Tag tags = 15;
+  string categoryName = 16;
+}
+
+message ArticleList{
+  repeated Article article = 1;
+}
+
+message Tag{
+  int32 id = 1;
+  string tagName = 2;
+//  Timestamp createTime = 3;
+//  Timestamp updateTime = 4;
+  bool status = 5;
+  int64 clickCount = 6;
+}

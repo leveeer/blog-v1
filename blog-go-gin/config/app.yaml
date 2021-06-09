@@ -13,7 +13,7 @@ sessionon: true
 mysql:
   type: mysql
   user: root
-  password: root
+  password: q*egyiKm%4dx
   host: 47.119.168.227
   port: 3306
   dbName: blog

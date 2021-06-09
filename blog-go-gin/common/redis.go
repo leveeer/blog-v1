@@ -32,10 +32,13 @@ func InitRedis() {
 		logging.Logger.Errorf("connect to redis failed, err: %s", err)
 		return
 	}
+	logging.Logger.Info(redisClient)
+	logging.Logger.Info(RedisUtil)
 }
 
 func (*redisUtil) Get(key string) (string, error) {
 	val, err := redisClient.Get(ctx, key).Result()
+	logging.Logger.Errorf("redisUtil get err:%v", err)
 	if err != nil {
 		return "", err
 	}

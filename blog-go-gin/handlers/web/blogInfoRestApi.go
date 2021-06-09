@@ -2,10 +2,14 @@ package web
 
 import (
 	"blog-go-gin/common"
-	"blog-go-gin/controllers/base"
+	"blog-go-gin/handlers/base"
 	"blog-go-gin/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+)
+
+var (
+	BlogInfoService = &service.BlogInfoService{}
 )
 
 type BlogInfoRestApi struct {
@@ -13,7 +17,7 @@ type BlogInfoRestApi struct {
 }
 
 func (c *BlogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
-	blogHomeInfoVo, err := service.BlogInfoService.GetBlogInfo()
+	blogHomeInfoVo, err := BlogInfoService.GetBlogInfo()
 	if err != nil {
 		c.RespFailWithDesc(ctx, http.StatusOK, common.GetBlogHomeInfoFail)
 		return

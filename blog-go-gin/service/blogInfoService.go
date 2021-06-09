@@ -6,14 +6,13 @@ import (
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/vo"
 	"errors"
+	"github.com/go-redis/redis/v8"
+	"github.com/tal-tech/go-zero/core/mr"
 	"strconv"
 	"sync"
-	"time"
 )
 
-var BlogInfoService = &blogInfoService{}
-
-type blogInfoService struct {
+type BlogInfoService struct {
 	wg sync.WaitGroup
 }
 
@@ -67,7 +66,7 @@ type blogInfoService struct {
 	}, nil
 }*/
 
-func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
+/*func (b *BlogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 	result := make(map[string]interface{}, 6)
 	done := make(chan struct{})
 	// 新增阻塞chan
@@ -161,4 +160,92 @@ func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 			return nil, errors.New(common.GetMsg(common.ApiCallTimeout))
 		}
 	}
+}*/
+
+func (b *BlogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
+
+	var userInfo *model.UserInfo
+	var categoryCount int64
+	var articleCount int64
+	var tagCount int64
+	var notice string
+	var viewsCount int
+
+	err := mr.Finish(
+		func() (err error) {
+			userInfo, err = model.GetUserInfoByID(common.BloggerId)
+			if err != nil {
+				return nil
+			}
+			return nil
+		},
+		func() (err error) {
+			categoryCount, err = model.GetCategoryCount()
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+
+		func() (err error) {
+			condition := "is_delete = ? and is_publish = ?"
+			articleCount, err = model.GetArticlesCountByCondition(condition, common.False, common.True)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		func() (err error) {
+			tagCount, err = model.GetTagCount()
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+		func() (err error) {
+			notice, err = common.RedisUtil.Get(common.NOTICE)
+			if err != nil && errors.Is(err, redis.Nil) {
+				notice = "博客Go语言版即将上线，敬请期待！"
+				if err = common.RedisUtil.Set(common.NOTICE, notice); err != nil {
+					logging.Logger.Error(err)
+					return err
+				}
+				return nil
+			} else if err != nil && !errors.Is(err, redis.Nil) {
+				logging.Logger.Error(err)
+				return err
+			}
+			return nil
+		},
+
+		func() (err error) {
+			viewsCountStr, err := common.RedisUtil.Get(common.BlogViewsCount)
+			if err != nil {
+				return err
+			}
+			if viewsCountStr == "" {
+				if err := common.RedisUtil.Set(common.BlogViewsCount, strconv.Itoa(0)); err != nil {
+					return err
+				}
+				viewsCountStr = "0"
+			}
+			viewsCount, err = strconv.Atoi(viewsCountStr)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &vo.BlogHomeInfoVo{
+		UserInfo:      userInfo,
+		ArticleCount:  articleCount,
+		CategoryCount: categoryCount,
+		TagCount:      tagCount,
+		Notice:        notice,
+		ViewsCount:    viewsCount,
+	}, nil
 }

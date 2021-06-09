@@ -2,7 +2,7 @@ package routers
 
 import (
 	"blog-go-gin/common"
-	"blog-go-gin/controllers/web"
+	"blog-go-gin/handlers/web"
 	"github.com/gin-gonic/gin"
 )
 
