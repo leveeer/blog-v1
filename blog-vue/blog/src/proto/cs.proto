@@ -1,0 +1,21 @@
+syntax = "proto3";
+option go_package = "../go_proto;proto";
+package proto;
+
+// enum，message 统一使用驼峰式(首字母大写） 例：MessageName
+// message属性名 统一使用驼峰式(首字母小写） 例：propName
+
+enum CsId{
+  CsBeginIndex = 0;
+  CsGetArticles = 1;
+  CsGetArticleById = 2;
+  CsGetBlogHomeInfo = 3;
+}
+
+
+message RequestPkg{
+  CsId cmdId = 1; // 协议ID
+  uint32 currentPage = 2;
+  uint32 articleId = 3;
+}
+

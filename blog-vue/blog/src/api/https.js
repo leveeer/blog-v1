@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === "development") {
   // 生产环境下
   service = axios.create({
     baseURL: "/api",
-    timeout: 5000
+    timeout: 5000,
   });
 }
 

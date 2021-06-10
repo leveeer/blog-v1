@@ -1,0 +1,22 @@
+syntax = "proto3";
+option go_package = "../go_proto;proto";
+package proto;
+import "data.proto";
+
+enum Response {
+  ResponseBeginIndex = 0;
+}
+
+enum ResultCode {
+  Success = 0; //协议请求成功，其余失败
+  Fail = 1;
+}
+
+message ResponsePkg {
+  Response cmdId = 1; // 协议ID
+  ResultCode code = 2; //返回码
+  string errMsg = 10; //消息
+  int64 serverTime = 11; //服务器时间
+  repeated Article articleList = 12;
+  BlogHomeInfo blogHomeInfo = 13;
+}

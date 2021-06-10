@@ -274,6 +274,7 @@ export default {
     getBlogInfo() {
       getBlogInfo().then(({ data }) => {
         console.log(data);
+        
         this.blogInfo = data.data;
         this.$store.commit("checkBlogInfo", data.data);
       });

@@ -1,0 +1,52 @@
+syntax = "proto3";
+option go_package = "../go_proto;proto";
+package proto;
+
+message Article{
+  int32 id = 1;
+  int32 userId = 2;
+  int32 categoryID = 3;
+  string articleCover = 4;
+  string articleTitle = 5;
+  string articleContent = 6;
+  int64 createTime = 7;
+  int64 updateTime = 8;
+  bool isTop = 9;
+  bool isPublish = 10;
+  bool isDelete = 11;
+  bool isOriginal = 12;
+  int64 clickCount = 13;
+  int64 collectCount = 14;
+  repeated Tag tags = 15;
+  string categoryName = 16;
+}
+
+message Tag{
+  int32 id = 1;
+  string tagName = 2;
+  int64 createTime = 3;
+  int64 updateTime = 4;
+  bool status = 5;
+  int64 clickCount = 6;
+}
+
+message BlogHomeInfo{
+  UserInfo userInfo = 1;
+  int64 articleCount = 2;
+  int64 categoryCount = 3;
+  int64 tagCount = 4;
+  string notice = 5;
+  int64 viewCount = 6;
+}
+
+message UserInfo{
+  int32 id = 1;
+  string email = 2;
+  string nickName = 3;
+  string avatar = 4;
+  string intro = 5;
+  string website = 6;
+  int64 createTime = 7;
+  int64 updateTime = 8;
+  bool isDisable = 9;
+}
