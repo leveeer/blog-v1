@@ -209,6 +209,8 @@
 <script>
 import EasyTyper from "easy-typer-js";
 import { getBlogInfo, getArticlesOnHome } from "../../api/api";
+import "google-protobuf";
+var sc_pb = require('../../proto/sc_pb.js');
 
 export default {
   created() {
@@ -274,7 +276,9 @@ export default {
     getBlogInfo() {
       getBlogInfo().then(({ data }) => {
         console.log(data);
-        
+        const responsePkg = sc_pb.ResponsePkg.deserializeBinary(data);
+        console.log(responsePkg);
+        console.log(responsePkg.toObject());
         this.blogInfo = data.data;
         this.$store.commit("checkBlogInfo", data.data);
       });

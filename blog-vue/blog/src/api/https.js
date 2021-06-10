@@ -6,7 +6,12 @@ let service;
 if (process.env.NODE_ENV === "development") {
   service = axios.create({
     baseURL: "/api", // api 的 base_url
-    timeout: 5000 // 请求超时时间
+    timeout: 5000, // 请求超时时间
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/octet-stream'
+    },
+    responseType: 'arraybuffer'
   });
 } else {
   // 生产环境下
@@ -29,9 +34,8 @@ service.interceptors.request.use(
 // response 拦截器 axios 的一些配置
 service.interceptors.response.use(
   function(response) {
-    switch (response.data.code) {
-      case 50000:
-        Vue.prototype.$toast({ type: "error", message: "系统异常" });
+    if (response.data.code === 50000) {
+      Vue.prototype.$toast({ type: "error", message: "系统异常" });
     }
     return response;
   },

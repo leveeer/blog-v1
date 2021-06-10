@@ -1,21 +1,21 @@
-import axios from 'axios'
-import protoRoot from '@/proto/proto'
-import protobuf from 'protobufjs'
+import axios from "axios";
+import protoRoot from "@/proto/proto";
+import protobuf from "protobufjs";
 
 const httpService = axios.create({
   timeout: 45000,
-  method: 'post',
+  method: 'get',
   headers: {
     'X-Requested-With': 'XMLHttpRequest',
-    'Content-Type': 'application/octet-stream'
+    'Content-Type': 'application/x-protobuf'
   },
   responseType: 'arraybuffer'
 })
 
 // 请求体message
-const RequestPkg = protoRoot.lookup('proto.RequestPkg')
+const RequestPkg = protoRoot.lookup('proto.RequestPkg');
 // 响应体的message
-const ResponsePkg = protoRoot.lookup('proto.ResponsePkg')
+const ResponsePkg = protoRoot.lookup('proto.ResponsePkg');
 
 const apiVersion = '1.0.0'
 const token = 'my_token'
@@ -39,6 +39,7 @@ function transformResponseFactory(responseType) {
   return function transformResponse(rawResponse) {
     // 判断response是否是arrayBuffer
     if (rawResponse == null || !isArrayBuffer(rawResponse)) {
+      console.log("不是arrayBuffer");
       return rawResponse
     }
     try {
@@ -84,11 +85,8 @@ function request(csId, requestBody, responseType) {
   }).then(({data, status}) => {
     // 对请求做处理
     if (status !== 200) {
-      const err = new Error('服务器异常')
-      throw err
+      throw new Error('服务器异常')
     }
-    tdata = transformResponseFactory(data)
-    console.log(tdata)
   },(err) => {
     throw err
   })
