@@ -11,13 +11,14 @@ type Base interface {
 	RespSuccess(ctx *gin.Context, httpCode, code int, data interface{})
 	RespFailWithDesc(ctx *gin.Context, httpCode int, code common.ErrorCode)
 	ThrowError(code string, message string)
+	WriteWithProtoBuf(ctx *gin.Context, httpCode int, data interface{})
 }
 
-type Controller struct {
+type Handler struct {
 	Wg sync.WaitGroup
 }
 
-func (c *Controller) RespSuccess(ctx *gin.Context, httpCode, code int, data interface{}) {
+func (c *Handler) RespSuccess(ctx *gin.Context, httpCode, code int, data interface{}) {
 	ctx.JSON(httpCode, gin.H{
 		"success": true,
 		"code":    code,
@@ -25,7 +26,7 @@ func (c *Controller) RespSuccess(ctx *gin.Context, httpCode, code int, data inte
 	})
 }
 
-func (c *Controller) RespFailWithDesc(ctx *gin.Context, httpCode int, code common.ErrorCode) {
+func (c *Handler) RespFailWithDesc(ctx *gin.Context, httpCode int, code common.ErrorCode) {
 	ctx.JSON(httpCode, gin.H{
 		"success": false,
 		"code":    code,
@@ -33,6 +34,10 @@ func (c *Controller) RespFailWithDesc(ctx *gin.Context, httpCode int, code commo
 	})
 }
 
-func (c *Controller) ThrowError(code string, message string) {
+func (c *Handler) ThrowError(code string, message string) {
 
+}
+
+func (c *Handler) WriteWithProtoBuf(ctx *gin.Context, httpCode int, data interface{}) {
+	ctx.ProtoBuf(httpCode, data)
 }

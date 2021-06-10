@@ -2,14 +2,13 @@ package model
 
 import (
 	"blog-go-gin/dao"
-	"time"
 )
 
 type Category struct {
-	ID           int       `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
-	CategoryName string    `gorm:"column:category_name;not null" json:"category_name"`
-	CreateTime   time.Time `gorm:"column:create_time" json:"create_time"`
-	UpdateTime   time.Time `gorm:"column:update_time" json:"update_time"`
+	ID           int    `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
+	CategoryName string `gorm:"column:category_name;not null" json:"category_name"`
+	CreateTime   int64  `gorm:"column:create_time" json:"create_time"`
+	UpdateTime   int64  `gorm:"column:update_time" json:"update_time"`
 }
 
 // TableName sets the insert table name for this struct type

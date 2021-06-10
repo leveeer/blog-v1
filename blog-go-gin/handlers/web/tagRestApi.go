@@ -6,7 +6,7 @@ import (
 )
 
 type TagRestApi struct {
-	base.Controller
+	base.Handler
 }
 
 func (r *TagRestApi) GetTagList(ctx *gin.Context) {

@@ -1,18 +1,18 @@
 package model
+
 import (
 	"blog-go-gin/dao"
-	"time"
 )
 
 type Comment struct {
-	ArticleID      int       `gorm:"column:article_id;not null" json:"article_id"`
-	CommentContent string    `gorm:"column:comment_content;not null" json:"comment_content"`
-	CreateTime     time.Time `gorm:"column:create_time;not null" json:"create_time"`
-	ID             int       `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
-	IsDelete       int8      `gorm:"column:is_delete;not null" json:"is_delete"`
-	ParentID       int       `gorm:"column:parent_id;not null" json:"parent_id"`
-	ReplyID        int       `gorm:"column:reply_id;not null" json:"reply_id"`
-	UserID         int       `gorm:"column:user_id;not null" json:"user_id"`
+	ArticleID      int    `gorm:"column:article_id;not null" json:"article_id"`
+	CommentContent string `gorm:"column:comment_content;not null" json:"comment_content"`
+	CreateTime     int64  `gorm:"column:create_time;not null" json:"create_time"`
+	ID             int    `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
+	IsDelete       int8   `gorm:"column:is_delete;not null" json:"is_delete"`
+	ParentID       int    `gorm:"column:parent_id;not null" json:"parent_id"`
+	ReplyID        int    `gorm:"column:reply_id;not null" json:"reply_id"`
+	UserID         int    `gorm:"column:user_id;not null" json:"user_id"`
 }
 
 // TableName sets the insert table name for this struct type

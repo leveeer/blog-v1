@@ -2,9 +2,9 @@ package service
 
 import (
 	"blog-go-gin/common"
+	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
-	"blog-go-gin/models/vo"
 	"errors"
 	"github.com/go-redis/redis/v8"
 	"github.com/tal-tech/go-zero/core/mr"
@@ -162,7 +162,7 @@ type BlogInfoService struct {
 	}
 }*/
 
-func (b *BlogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
+func (b *BlogInfoService) GetBlogInfo() (*pb.BlogHomeInfo, error) {
 
 	var userInfo *model.UserInfo
 	var categoryCount int64
@@ -240,12 +240,23 @@ func (b *BlogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 		return nil, err
 	}
 
-	return &vo.BlogHomeInfoVo{
-		UserInfo:      userInfo,
+	user := &pb.UserInfo{
+		Id:         int32(userInfo.ID),
+		Email:      userInfo.Email,
+		NickName:   userInfo.Nickname,
+		Avatar:     userInfo.Nickname,
+		Intro:      userInfo.Intro,
+		Website:    userInfo.WebSite,
+		CreateTime: userInfo.CreateTime,
+		UpdateTime: userInfo.UpdateTime,
+		IsDisable:  userInfo.IsDisable == 1,
+	}
+	return &pb.BlogHomeInfo{
+		UserInfo:      user,
 		ArticleCount:  articleCount,
 		CategoryCount: categoryCount,
 		TagCount:      tagCount,
 		Notice:        notice,
-		ViewsCount:    viewsCount,
+		ViewCount:     int64(viewsCount),
 	}, nil
 }

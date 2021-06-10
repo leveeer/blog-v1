@@ -15,7 +15,7 @@ var (
 )
 
 type ArticleRestApi struct {
-	base.Controller
+	base.Handler
 }
 
 func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {

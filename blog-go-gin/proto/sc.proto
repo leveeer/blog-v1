@@ -18,4 +18,5 @@ message ResponsePkg {
   string errMsg = 10; //消息
   int64 serverTime = 11; //服务器时间
   repeated Article articleList = 12;
+  BlogHomeInfo blogHomeInfo = 13;
 }

@@ -3,16 +3,15 @@ package model
 import (
 	"blog-go-gin/dao"
 	_ "gorm.io/gorm"
-	"time"
 )
 
 type Tag struct {
-	ID         int       `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
-	TagName    string    `gorm:"column:tag_name;not null" json:"tag_name"`
-	CreateTime time.Time `gorm:"column:create_time" json:"create_time"`
-	UpdateTime time.Time `gorm:"column:update_time" json:"update_time"`
-	Status     int8      `gorm:"column:status;not null" json:"status"`
-	ClickCount int       `gorm:"column:click_count;not null" json:"click_count"`
+	ID         int    `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
+	TagName    string `gorm:"column:tag_name;not null" json:"tag_name"`
+	CreateTime int64  `gorm:"column:create_time" json:"create_time"`
+	UpdateTime int64  `gorm:"column:update_time" json:"update_time"`
+	Status     int8   `gorm:"column:status;not null" json:"status"`
+	ClickCount int    `gorm:"column:click_count;not null" json:"click_count"`
 }
 
 // TableName sets the insert table name for this struct type

@@ -4,26 +4,25 @@ import (
 	"blog-go-gin/common"
 	"blog-go-gin/dao"
 	"blog-go-gin/models/page"
-	"time"
 )
 
 type Article struct {
-	ID             int       `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
-	UserID         int       `gorm:"column:user_id;not null" json:"user_id"`
-	CategoryID     int       `gorm:"column:category_id;not null" json:"category_id"`
-	ArticleCover   string    `gorm:"column:article_cover;not null" json:"article_cover"`
-	ArticleTitle   string    `gorm:"column:article_title;not null" json:"article_title"`
-	ArticleContent string    `gorm:"column:article_content;not null" json:"article_content"`
-	CreateTime     time.Time `gorm:"column:create_time;not null" json:"create_time"`
-	UpdateTime     time.Time `gorm:"column:update_time;not null" json:"update_time"`
-	IsTop          int8      `gorm:"column:is_top;not null" json:"is_top"`
-	IsPublish      int8      `gorm:"column:is_publish;not null" json:"is_publish"`
-	IsDelete       int8      `gorm:"column:is_delete;not null" json:"is_delete"`
-	IsOriginal     int8      `gorm:"column:is_original;not null" json:"is_original"`
-	ClickCount     int       `gorm:"column:click_count;not null" json:"click_count"`
-	CollectCount   int       `gorm:"column:collect_count;not null" json:"collect_count"`
-	Tags           []*Tag    `gorm:"-" json:"tags"`
-	CategoryName   string    `json:"category_name"`
+	ID             int    `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
+	UserID         int    `gorm:"column:user_id;not null" json:"user_id"`
+	CategoryID     int    `gorm:"column:category_id;not null" json:"category_id"`
+	ArticleCover   string `gorm:"column:article_cover;not null" json:"article_cover"`
+	ArticleTitle   string `gorm:"column:article_title;not null" json:"article_title"`
+	ArticleContent string `gorm:"column:article_content;not null" json:"article_content"`
+	CreateTime     int64  `gorm:"column:create_time;not null" json:"create_time"`
+	UpdateTime     int64  `gorm:"column:update_time;not null" json:"update_time"`
+	IsTop          int8   `gorm:"column:is_top;not null" json:"is_top"`
+	IsPublish      int8   `gorm:"column:is_publish;not null" json:"is_publish"`
+	IsDelete       int8   `gorm:"column:is_delete;not null" json:"is_delete"`
+	IsOriginal     int8   `gorm:"column:is_original;not null" json:"is_original"`
+	ClickCount     int    `gorm:"column:click_count;not null" json:"click_count"`
+	CollectCount   int    `gorm:"column:collect_count;not null" json:"collect_count"`
+	Tags           []*Tag `gorm:"-" json:"tags"`
+	CategoryName   string `json:"category_name"`
 }
 
 // TableName sets the insert table name for this struct type

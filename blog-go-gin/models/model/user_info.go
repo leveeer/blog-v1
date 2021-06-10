@@ -2,19 +2,18 @@ package model
 
 import (
 	"blog-go-gin/dao"
-	"time"
 )
 
 type UserInfo struct {
-	ID         int       `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
-	Email      string    `gorm:"column:email;not null" json:"email"`
-	Nickname   string    `gorm:"column:nickname;not null" json:"nickname"`
-	Avatar     string    `gorm:"column:avatar;not null" json:"avatar"`
-	Intro      string    `gorm:"column:intro;not null" json:"intro"`
-	WebSite    string    `gorm:"column:web_site;not null" json:"web_site"`
-	CreateTime time.Time `gorm:"column:create_time;not null" json:"create_time"`
-	UpdateTime time.Time `gorm:"column:update_time;not null" json:"update_time"`
-	IsDisable  int8      `gorm:"column:is_disable;not null" json:"is_disable"`
+	ID         int    `gorm:"column:id;primaryKey;unique;not null;autoIncrement" json:"id"`
+	Email      string `gorm:"column:email;not null" json:"email"`
+	Nickname   string `gorm:"column:nickname;not null" json:"nickname"`
+	Avatar     string `gorm:"column:avatar;not null" json:"avatar"`
+	Intro      string `gorm:"column:intro;not null" json:"intro"`
+	WebSite    string `gorm:"column:web_site;not null" json:"web_site"`
+	CreateTime int64  `gorm:"column:create_time;not null" json:"create_time"`
+	UpdateTime int64  `gorm:"column:update_time;not null" json:"update_time"`
+	IsDisable  int8   `gorm:"column:is_disable;not null" json:"is_disable"`
 }
 
 // TableName sets the insert table name for this struct type
