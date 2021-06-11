@@ -10,6 +10,7 @@ enum Response {
 enum ResultCode {
   Success = 0; //协议请求成功，其余失败
   Fail = 1;
+  SuccessOK = 10000;
 }
 
 message ResponsePkg {

@@ -8,6 +8,7 @@ require (
 	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.7.1
 	github.com/go-redis/redis/v8 v8.8.3
+	github.com/golang/protobuf v1.4.2
 	github.com/mattn/go-colorable v0.1.8
 	github.com/robfig/cron v1.2.0
 	github.com/sirupsen/logrus v1.8.1

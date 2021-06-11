@@ -3,7 +3,7 @@ import urls from "../utils/urls";
 
 
 export function getArticlesOnHome(params) {
-  return service.get(urls.articles, params);
+  return service.post(urls.articles, params);
 }
 
 export function getBlogInfo() {

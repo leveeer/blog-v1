@@ -26,8 +26,8 @@ func (c *BlogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
 	}
 	data := &pb.ResponsePkg{
 		CmdId:        pb.Response_ResponseBeginIndex,
-		Code:         pb.ResultCode_Success,
-		ServerTime:   time.Time.Unix(time.Now()),
+		Code:         pb.ResultCode_SuccessOK,
+		ServerTime:   time.Now().Unix(),
 		BlogHomeInfo: blogHomeInfo,
 	}
 	c.WriteWithProtoBuf(ctx, http.StatusOK, data)

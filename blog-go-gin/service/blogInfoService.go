@@ -244,7 +244,7 @@ func (b *BlogInfoService) GetBlogInfo() (*pb.BlogHomeInfo, error) {
 		Id:         int32(userInfo.ID),
 		Email:      userInfo.Email,
 		NickName:   userInfo.Nickname,
-		Avatar:     userInfo.Nickname,
+		Avatar:     userInfo.Avatar,
 		Intro:      userInfo.Intro,
 		Website:    userInfo.WebSite,
 		CreateTime: userInfo.CreateTime,
