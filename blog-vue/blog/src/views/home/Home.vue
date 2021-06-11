@@ -112,13 +112,13 @@
             <div class="author-wrapper">
               <!-- 博主头像 -->
               <v-avatar size="110">
-                <img class="author-avatar" :src="blogInfo.user_info.avatar" alt="" />
+                <img class="author-avatar" :src="blogInfo.userInfo.avatar" alt="" />
               </v-avatar>
               <div style="font-size: 1.375rem">
-                {{ blogInfo.user_info.nickname }}
+                {{ blogInfo.userInfo.nickName }}
               </div>
               <div style="font-size: 0.875rem;">
-                {{ blogInfo.user_info.intro }}
+                {{ blogInfo.userInfo.intro }}
               </div>
             </div>
             <!-- 博客信息 -->
@@ -127,7 +127,7 @@
                 <router-link to="/archives">
                   <div style="font-size: 0.875rem">文章</div>
                   <div style="font-size: 1.25rem">
-                    {{ blogInfo.article_count }}
+                    {{ blogInfo.articleCount }}
                   </div>
                 </router-link>
               </div>
@@ -135,14 +135,14 @@
                 <router-link to="/categories">
                   <div style="font-size: 0.875rem">分类</div>
                   <div style="font-size: 1.25rem">
-                    {{ blogInfo.category_count }}
+                    {{ blogInfo.categoryCount }}
                   </div>
                 </router-link>
               </div>
               <div class="blog-info-data">
                 <router-link to="/tags">
                   <div style="font-size: 0.875rem">标签</div>
-                  <div style="font-size: 1.25rem">{{ blogInfo.tag_count }}</div>
+                  <div style="font-size: 1.25rem">{{ blogInfo.tagCount }}</div>
                 </router-link>
               </div>
             </div>
@@ -191,7 +191,7 @@
               </div>
               <div style="padding:4px 0 0">
                 总访问量:<span class="float-right">
-                  {{ blogInfo.views_count }}
+                  {{ blogInfo.viewCount }}
                 </span>
               </div>
             </div>
@@ -209,8 +209,6 @@
 <script>
 import EasyTyper from "easy-typer-js";
 import { getBlogInfo, getArticlesOnHome } from "../../api/api";
-import "google-protobuf";
-var sc_pb = require('../../proto/sc_pb.js');
 
 export default {
   created() {
@@ -274,20 +272,18 @@ export default {
       this.time = str;
     },
     getBlogInfo() {
-      getBlogInfo().then(({ data }) => {
+      getBlogInfo().then((data) => {
         console.log(data);
-        const responsePkg = sc_pb.ResponsePkg.deserializeBinary(data);
-        console.log(responsePkg);
-        console.log(responsePkg.toObject());
-        this.blogInfo = data.data;
-        this.$store.commit("checkBlogInfo", data.data);
+        this.blogInfo = data.blogHomeInfo;
+        this.$store.commit("checkBlogInfo", data);
       });
     },
     infiniteHandler($state) {
       let md = require("markdown-it")();
       getArticlesOnHome({
         params: {
-          current: this.current
+          cmdId: 1,
+          currentPage:1,
         }
       })
         .then(({ data }) => {

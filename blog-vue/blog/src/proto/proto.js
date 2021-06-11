@@ -207,7 +207,8 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
       ResultCode: {
         values: {
           Success: 0,
-          Fail: 1
+          Fail: 1,
+          SuccessOK: 10000
         }
       },
       ResponsePkg: {
