@@ -50,3 +50,10 @@ message UserInfo{
   int64 updateTime = 8;
   bool isDisable = 9;
 }
+
+message ArticleInfo{
+  Article article = 1;
+  Article lastArticle = 2;
+  Article nextArticle = 3;
+  repeated Article recommendArticleList = 4;
+}

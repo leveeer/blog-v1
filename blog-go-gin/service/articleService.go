@@ -4,7 +4,6 @@ import (
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
-	"blog-go-gin/models/vo"
 	"sync"
 )
 
@@ -58,26 +57,92 @@ func (b *ArticleService) GetArticleList(page page.IPage) ([]*pb.Article, error) 
 	return articleSlice, err
 }
 
-func (b *ArticleService) GetArticleById(id int) (*vo.ArticleVo, error) {
+func (b *ArticleService) GetArticleById(id int) (*pb.ArticleInfo, error) {
 	//获取当前文章
 	article, err := model.GetArticleByID(id)
 	if err != nil {
 		return nil, err
 	}
+	currentArticle := &pb.Article{
+		Id:             int32(article.ID),
+		UserId:         int32(article.UserID),
+		CategoryID:     int32(article.CategoryID),
+		ArticleCover:   article.ArticleCover,
+		ArticleTitle:   article.ArticleTitle,
+		ArticleContent: article.ArticleContent,
+		CreateTime:     article.CreateTime,
+		UpdateTime:     article.UpdateTime,
+		IsTop:          article.IsTop == 1,
+		IsPublish:      article.IsPublish == 1,
+		IsDelete:       article.IsDelete == 1,
+		IsOriginal:     article.IsOriginal == 1,
+		ClickCount:     int64(article.ClickCount),
+		CollectCount:   int64(article.CollectCount),
+		CategoryName:   article.CategoryName,
+	}
 	//获取前一篇文章
-	lastArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? and is_publish = ? and id < ?", "id DESC")
+	article, err = model.GetLastOrNextArticle(id, "is_delete = ? and is_publish = ? and id < ?", "id DESC")
 	if err != nil {
 		return nil, err
+	}
+	lastArticle := &pb.Article{
+		Id:             int32(article.ID),
+		UserId:         int32(article.UserID),
+		CategoryID:     int32(article.CategoryID),
+		ArticleCover:   article.ArticleCover,
+		ArticleTitle:   article.ArticleTitle,
+		ArticleContent: article.ArticleContent,
+		CreateTime:     article.CreateTime,
+		UpdateTime:     article.UpdateTime,
+		IsTop:          article.IsTop == 1,
+		IsPublish:      article.IsPublish == 1,
+		IsDelete:       article.IsDelete == 1,
+		IsOriginal:     article.IsOriginal == 1,
+		ClickCount:     int64(article.ClickCount),
+		CollectCount:   int64(article.CollectCount),
+		CategoryName:   article.CategoryName,
 	}
 	//获取后一篇文章
-	nextArticle, err := model.GetLastOrNextArticle(id, "is_delete = ? and is_publish = ? and id > ?", "id ASC")
+	article, err = model.GetLastOrNextArticle(id, "is_delete = ? and is_publish = ? and id > ?", "id ASC")
 	if err != nil {
 		return nil, err
 	}
-	return &vo.ArticleVo{
-		Article:              article,
+	nextArticle := &pb.Article{
+		Id:             int32(article.ID),
+		UserId:         int32(article.UserID),
+		CategoryID:     int32(article.CategoryID),
+		ArticleCover:   article.ArticleCover,
+		ArticleTitle:   article.ArticleTitle,
+		ArticleContent: article.ArticleContent,
+		CreateTime:     article.CreateTime,
+		UpdateTime:     article.UpdateTime,
+		IsTop:          article.IsTop == 1,
+		IsPublish:      article.IsPublish == 1,
+		IsDelete:       article.IsDelete == 1,
+		IsOriginal:     article.IsOriginal == 1,
+		ClickCount:     int64(article.ClickCount),
+		CollectCount:   int64(article.CollectCount),
+		CategoryName:   article.CategoryName,
+	}
+
+	recommendArticles, err := model.GetRecommendArticles(id)
+	if err != nil {
+		return nil, err
+	}
+	var recommendArticleSlice []*pb.Article
+	for _, article := range recommendArticles {
+		recommendArticle := &pb.Article{
+			Id:           int32(article.ID),
+			ArticleCover: article.ArticleCover,
+			ArticleTitle: article.ArticleTitle,
+			CreateTime:   article.CreateTime,
+		}
+		recommendArticleSlice = append(recommendArticleSlice, recommendArticle)
+	}
+	return &pb.ArticleInfo{
+		Article:              currentArticle,
 		LastArticle:          lastArticle,
 		NextArticle:          nextArticle,
-		RecommendArticleList: nil,
+		RecommendArticleList: recommendArticleSlice,
 	}, nil
 }

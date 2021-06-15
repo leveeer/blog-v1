@@ -199,6 +199,27 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      ArticleInfo: {
+        fields: {
+          article: {
+            type: "Article",
+            id: 1
+          },
+          lastArticle: {
+            type: "Article",
+            id: 2
+          },
+          nextArticle: {
+            type: "Article",
+            id: 3
+          },
+          recommendArticleList: {
+            rule: "repeated",
+            type: "Article",
+            id: 4
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -237,6 +258,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           blogHomeInfo: {
             type: "BlogHomeInfo",
             id: 13
+          },
+          articleInfo: {
+            type: "ArticleInfo",
+            id: 14
           }
         }
       }

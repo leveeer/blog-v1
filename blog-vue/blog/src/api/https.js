@@ -25,18 +25,18 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const requestMap = {
-  CsBeginIndex : "CsBeginIndex",
-  CsGetArticles : "CsGetArticles",
-  CsGetArticleById:"CsGetArticleById ",
-  CsGetBlogHomeInfo:"CsGetBlogHomeInfo",
+  CsBeginIndex: "CsBeginIndex",
+  CsGetArticles: "CsGetArticles",
+  CsGetArticleById: "CsGetArticleById ",
+  CsGetBlogHomeInfo: "CsGetBlogHomeInfo"
 };
 
 const protoObj = {
+  CsId: protoRoot.lookup("proto.CsId"),
   // 请求体message
-  RequestPkg : protoRoot.lookup("proto.RequestPkg"),
-  CsId:protoRoot.lookup("proto.CsId"),
+  RequestPkg: protoRoot.lookupType("proto.RequestPkg"),
   // 响应体的message
-  ResponsePkg:protoRoot.lookupType("proto.ResponsePkg")
+  ResponsePkg: protoRoot.lookupType("proto.ResponsePkg")
 };
 
 function getReqValue(reqString) {
@@ -51,11 +51,24 @@ function getReqString(reqID) {
 // request 拦截器 axios 的一些配置
 service.interceptors.request.use(
   config => {
-    var params = protoObj.RequestPkg.create(config.params);
-    console.log(params);
-    var encode = protoObj.RequestPkg.encode(params).finish();
+    let data;
+    switch (config.method) {
+      case "post":
+        data = protoObj.RequestPkg.create(config.data);
+        break;
+      case "get":
+        data = protoObj.RequestPkg.create(config.params);
+        break;
+      default:
+        console.log("unKnown method type");
+        break;
+    }
+    console.log(data);
+    const encode = protoObj.RequestPkg.encode(data).finish();
     console.log(encode);
-    console.log(protoObj.CsId);
+    config.data = protobuf.util.newBuffer(encode);
+    // config.data = new Uint8Array(encode);
+    // console.log(protoObj.CsId);
     // console.log(getReqValue(requestMap.CsGetArticles));
     // console.log(getReqString(1));
     return config;
@@ -81,7 +94,7 @@ service.interceptors.response.use(
         objects: false,  // populates empty objects (map fields) even if defaults=false
         oneofs: true    // includes virtual oneof fields set to the present field's name
       });
-      console.log(resp);
+      // console.log(resp);
       if (resp.code === 1) {
         Vue.prototype.$toast({ type: "error", message: "系统异常" });
       }

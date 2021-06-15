@@ -33,6 +33,7 @@ func InitMysql() {
 			SlowThreshold: time.Second,  // 慢 SQL 阈值
 			LogLevel:      logger.Error, // Log level
 			Colorful:      true,         // 彩色打印
+			//IgnoreRecordNotFoundError: true,
 		},
 	)
 	var err error

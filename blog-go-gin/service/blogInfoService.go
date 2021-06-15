@@ -220,14 +220,14 @@ func (b *BlogInfoService) GetBlogInfo() (*pb.BlogHomeInfo, error) {
 
 		func() (err error) {
 			viewsCountStr, err := common.RedisUtil.Get(common.BlogViewsCount)
-			if err != nil {
-				return err
-			}
-			if viewsCountStr == "" {
+			if err != nil && errors.Is(err, redis.Nil){
 				if err := common.RedisUtil.Set(common.BlogViewsCount, strconv.Itoa(0)); err != nil {
 					return err
 				}
 				viewsCountStr = "0"
+			}else if err != nil && !errors.Is(err, redis.Nil) {
+				logging.Logger.Error(err)
+				return err
 			}
 			viewsCount, err = strconv.Atoi(viewsCountStr)
 			if err != nil {

@@ -20,4 +20,5 @@ message ResponsePkg {
   int64 serverTime = 11; //服务器时间
   repeated Article articleList = 12;
   BlogHomeInfo blogHomeInfo = 13;
+  ArticleInfo articleInfo = 14;
 }

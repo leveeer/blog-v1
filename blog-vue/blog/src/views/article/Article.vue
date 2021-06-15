@@ -1,35 +1,35 @@
 <template>
   <div>
     <!-- 封面图 -->
-    <div class="banner" :style="articleCover">
+    <div class="banner" :style="article.articleCover">
       <div class="article-info-container">
         <!-- 文章标题 -->
-        <div class="article-title">{{ article.article_title }}</div>
+        <div class="article-title">{{ article.articleTitle }}</div>
         <div class="article-info">
           <div class="first-line">
             <!-- 发表时间 -->
             <span>
               <i class="iconfont iconrili" />
-              发表于 {{ article.create_time | date }}
+              发表于 {{ article.createTime | date }}
             </span>
             <span class="separator">|</span>
             <!-- 发表时间 -->
             <span>
               <i class="iconfont icongengxinshijian" />
               更新于
-              <template v-if="article.update_time">
-                {{ article.update_time | date }}
+              <template v-if="article.updateTime">
+                {{ article.updateTime | date }}
               </template>
               <template v-else>
-                {{ article.create_time | date }}
+                {{ article.createTime | date }}
               </template>
             </span>
             <span class="separator">|</span>
             <!-- 文章分类 -->
             <span class="article-category">
               <i class="iconfont iconfenlei1" />
-              <router-link :to="'/categories/' + article.category_id">
-                {{ article.category_name }}
+              <router-link :to="'/categories/' + article.categoryID">
+                {{ article.categoryName }}
               </router-link>
             </span>
           </div>
@@ -50,7 +50,7 @@
             <span class="separator">|</span>
             <!-- 阅读量 -->
             <span>
-              <i class="iconfont iconliulan" /> 阅读量: {{ article.click_count }}
+              <i class="iconfont iconliulan" /> 阅读量: {{ article.clickCount }}
             </span>
             <span class="separator">|</span>
             <!-- 评论量 -->
@@ -70,7 +70,7 @@
           <article
             id="write"
             class="article-content markdown-body"
-            v-html="article.article_content"
+            v-html="article.articleContent"
             ref="article"
           />
           <!-- 版权声明 -->
@@ -102,7 +102,7 @@
                 :key="item.id"
                 :to="'/tags/' + item.id"
               >
-                {{ item.tag_name }}
+                {{ item.tagName }}
               </router-link>
             </div>
             <share style="margin-left:auto" :config="config" />
@@ -113,8 +113,8 @@
             <a :class="isLike" @click="like">
               <v-icon size="14" color="#fff">mdi-thumb-up</v-icon>
               点赞
-              <span v-show="article.collect_count > 0">{{
-                  article.collect_count
+              <span v-show="article.collectCount > 0">{{
+                  article.collectCount
                 }}</span>
             </a>
             <a class="reward-btn">
@@ -150,12 +150,12 @@
               <router-link :to="'/articles/' + lastArticle.id">
                 <img
                   class="post-cover"
-                  :src="lastArticle.article_cover"
+                  :src="lastArticle.articleCover"
                 />
                 <div class="post-info">
                   <div class="label">上一篇</div>
                   <div class="post-title">
-                    {{ lastArticle.article_title }}
+                    {{ lastArticle.articleTitle }}
                   </div>
                 </div>
               </router-link>
@@ -168,19 +168,19 @@
               <router-link :to="'/articles/' + nextArticle.id">
                 <img
                   class="post-cover"
-                  :src="nextArticle.article_cover"
+                  :src="nextArticle.articleCover"
                 />
                 <div class="post-info" style="text-align: right">
                   <div class="label">下一篇</div>
                   <div class="post-title">
-                    {{ nextArticle.article_title }}
+                    {{ nextArticle.articleTitle }}
                   </div>
                 </div>
               </router-link>
             </div>
           </div>
           <!-- 推荐文章 -->
-          <!--<div
+          <div
             class="recommend-container"
             v-if="articleRecommendList.length"
           >
@@ -195,18 +195,18 @@
                 :key="item.id"
               >
                 <router-link :to="'/articles/' + item.id">
-                  <img class="recommend-cover" :src="item.article_cover" />
+                  <img class="recommend-cover" :src="item.articleCover" />
                   <div class="recommend-info">
                     <div class="recommend-date">
                       <i class="iconfont iconrili" />
-                      {{ item.create_time | date }}
+                      {{ item.createTime | date }}
                     </div>
-                    <div>{{ item.article_title }}</div>
+                    <div>{{ item.articleTitle }}</div>
                   </div>
                 </router-link>
               </div>
             </div>
-          </div>-->
+          </div>
           <!-- 分割线 -->
           <hr />
           <!-- 评论 -->
@@ -241,15 +241,15 @@
                 :key="item.id"
               >
                 <router-link :to="'/articles/' + item.id" class="content-cover">
-                  <img :src="item.article_cover" />
+                  <img :src="item.articleCover" />
                 </router-link>
                 <div class="content">
                   <div class="content-title">
                     <router-link :to="'/articles/' + item.id">
-                      {{ item.article_title }}
+                      {{ item.articleTitle }}
                     </router-link>
                   </div>
-                  <div class="content-time">{{ item.create_time | date }}</div>
+                  <div class="content-time">{{ item.createTime | date }}</div>
                 </div>
               </div>
             </div>
@@ -302,16 +302,19 @@ export default {
     getArticle() {
       const that = this;
       //查询文章
-      getArticleById(this.$route.path).then(({ data }) => {
-        document.title = data.data.article.article_title;
-        this.nextArticle = data.data.next_article;
-        this.lastArticle = data.data.last_article;
+      getArticleById(this.$route.path).then(( data ) => {
+        console.log(data);
+        document.title = data.articleInfo.article.articleTitle;
+        this.lastArticle = data.articleInfo.lastArticle;
+        this.nextArticle = data.articleInfo.nextArticle;
+        this.articleRecommendList = data.articleInfo.recommendArticleList;
+        // this.articleLatestList = data.articleInfo.articleLatestList;
         //将markdown转换为Html
-        this.markdownToHtml(data.data.article);
+        this.markdownToHtml(data.articleInfo.article);
         this.$nextTick(() => {
           console.log(this.article);
           // 统计文章字数
-          this.wordNum = this.deleteHTMLTag(this.article.article_content).length;
+          this.wordNum = this.deleteHTMLTag(this.article.articleContent).length;
           // 计算阅读时间
           this.readTime = Math.round(this.wordNum / 400) + "分钟";
           // 添加代码复制功能
@@ -438,7 +441,7 @@ export default {
         }
       });
       // 将markdown替换为html标签
-      article.article_content = md.render(article.article_content);
+      article.articleContent = md.render(article.articleContent);
       this.article = article;
     },
     previewImg(img) {
@@ -458,7 +461,7 @@ export default {
     articleCover() {
       return (
         "background: url(" +
-        this.article.article_cover +
+        this.article.articleCover +
         ") center center / cover no-repeat"
       );
     },

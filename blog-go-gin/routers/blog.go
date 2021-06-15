@@ -17,5 +17,5 @@ func blogRouters(r *gin.Engine) {
 	blog.GET(common.BlogInfoUrl, BlogInfoApi.GetBlogInfo)
 	blog.POST(common.ArticleList, ArticleApi.GetArticleList)
 	blog.GET(common.ArticleById, ArticleApi.GetArticleById)
-	blog.GET(common.TagList, TagApi.GetTagList)
+	blog.POST(common.TagList, TagApi.GetTagList)
 }
