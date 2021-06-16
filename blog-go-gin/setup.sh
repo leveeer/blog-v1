@@ -11,26 +11,23 @@ file_dir="./bin/blog_go"
 #日志文件
 log="blog_go.log"
 
-goBuild() {
+setBuildEnv() {
   go env -w GOPROXY=https://goproxy.io,direct
   go env -w CGO_ENABLED=0
   go env -w GOOS=linux
   go env -w GOARCH=amd64
-  buildResult=$(go build -o $process 2>&1)
-  if [ -z "$buildResult" ]; then
-    buildResult="success"
-  fi
 }
 
 echo -e "${blue}build project... ${res}\n"
-goBuild
-if [ "$buildResult" = "success" ]; then
-  chmod +x ${file_dir}
-  echo -e "${blue}build successfully ${res}\n"
-else
-  echo -e "${red}build error $buildResult${res}"
-  exit
+setBuildEnv
+go mod tidy 2>&1
+go build -o $process 2>&1
+if [ $? -ne 0 ]; then
+  echo -e "${red}build fail ${res}\n"
+  exit 1
 fi
+echo -e "${blue}build successfully ${res}\n"
+chmod +x ${file_dir}
 
 # 获取进程ID
 PID=$(ps -ef | grep $process | grep -v grep | awk '{print $2}')

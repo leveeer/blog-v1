@@ -11,7 +11,7 @@ type IPage struct {
 	Records          interface{} `json:"records"`
 }
 
-//分页封装
+// Paginate 分页封装
 func Paginate(page *IPage) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		if page.Current == 0 {
