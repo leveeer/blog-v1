@@ -25,14 +25,15 @@ type deepCopy struct {
 	tagName  string
 	maxDepth int
 	//visited  map[visit]struct{}
-
 	err error
 }
 
 // Copy 设置dst, src数据源
 func Copy(dst, src interface{}) *deepCopy {
 	if dst == nil || src == nil {
-		return &deepCopy{err: errors.New("Unsupported type:nil")}
+		return &deepCopy{
+			err: errors.New("Unsupported type:nil"),
+		}
 	}
 
 	d := deepCopy{
@@ -138,7 +139,6 @@ func (d *deepCopy) cpyMap(dst, src reflect.Value, depth int) error {
 	}
 
 	if dst.IsNil() {
-
 		newMap := reflect.MakeMap(src.Type())
 		dst.Set(newMap)
 	}
