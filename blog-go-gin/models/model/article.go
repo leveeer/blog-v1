@@ -77,9 +77,11 @@ func GetArticlesCountByCondition(condition string, args ...interface{}) (int64, 
 	return count, nil
 }
 
-func GetArticlesByPage(iPage page.IPage) ([]*Article, error) {
+func GetArticlesByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*Article, error) {
 	res := make([]*Article, 0)
-	if err := dao.Db.Debug().Table("tb_article").Scopes(page.Paginate(&iPage)).Find(&res).Error; err != nil {
+	if err := dao.Db.Debug().Table("tb_article").Select("tb_article.*,tb_category.category_name").
+		Where(condition, args...).Joins("left join tb_category on tb_category.id = tb_article.category_id").
+		Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil
@@ -111,6 +113,24 @@ func GetRecommendArticles(id int) ([]*Article, error) {
 	subQuery2 := dao.Db.Debug().Distinct("article_id").Table("(?) as t", subQuery).Where("article_id <> ?", id).Joins("left join tb_article_tags as t1 on t.tag_id = t1.tag_id")
 	if err := dao.Db.Debug().Table("(?) as t2", subQuery2).Select("id,article_title,article_cover,create_time").
 		Joins("left join tb_article as a on t2.article_id = a.id").Order("is_top DESC, id DESC").Limit(6).
+		Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetLatestArticles() ([]*Article, error) {
+	res := make([]*Article, 0)
+	if err := dao.Db.Debug().Table("tb_article").Select("id,article_title,article_cover,create_time").Where("is_delete = ? and is_publish = ?", false, true).Order("id DESC").Limit(5).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetArchives(iPage *page.IPage) ([]*Article, error) {
+	res := make([]*Article, 0)
+	if err := dao.Db.Debug().Table("tb_article").Select("id,article_title,create_time").Scopes(page.Paginate(iPage)).
+		Where("is_delete = ? and is_publish = ?", false, true).Order("create_time DESC").
 		Find(&res).Error; err != nil {
 		return nil, err
 	}

@@ -7,7 +7,7 @@
     <!-- 归档列表 -->
     <v-card class="blog-container">
       <timeline>
-        <timeline-title> 目前共计{{ count }}篇文章，继续加油 </timeline-title>
+        <timeline-title> 目前共计{{ count }}篇文章，继续加油</timeline-title>
         <timeline-item v-for="item of archiveList" :key="item.id">
           <!-- 日期 -->
           <span class="time">{{ item.createTime | date }}</span>
@@ -32,59 +32,61 @@
 </template>
 
 <script>
-import { Timeline, TimelineItem, TimelineTitle } from "vue-cute-timeline";
-export default {
-  created() {
-    this.listArchives();
-  },
-  components: {
-    Timeline,
-    TimelineItem,
-    TimelineTitle
-  },
-  data: function() {
-    return {
-      current: 1,
-      count: 0,
-      archiveList: []
-    };
-  },
-  methods: {
-    listArchives() {
-      this.axios
-        .get("/api/articles/archives", {
-          params: { current: this.current }
+  import { Timeline, TimelineItem, TimelineTitle } from "vue-cute-timeline";
+  import { getArchiveList } from "../../api/api";
+
+  export default {
+    created() {
+      this.listArchives();
+    },
+    components: {
+      Timeline,
+      TimelineItem,
+      TimelineTitle
+    },
+    data: function() {
+      return {
+        current: 1,
+        count: 0,
+        archiveList: []
+      };
+    },
+    methods: {
+      listArchives() {
+        getArchiveList({
+          cmdId: 2,
+          currentPage: this.current,
         })
-        .then(({ data }) => {
-          this.archiveList = data.data.recordList;
-          this.count = data.data.count;
-        });
-    }
-  },
-  watch: {
-    current(value) {
-      this.axios
-        .get("/api/articles/archives", {
-          params: { current: value }
+          .then((data) => {
+            console.log(data)
+            this.archiveList = data.archiveInfo.archiveList;
+            this.count = data.archiveInfo.count;
+          });
+      }
+    },
+    watch: {
+      current(value) {
+        getArchiveList({
+          cmdId: 2,
+          current: value
         })
-        .then(({ data }) => {
-          this.archiveList = data.data.recordList;
-          this.count = data.data.count;
-        });
+          .then((data) => {
+            this.archiveList = data.archiveInfo.archiveList;
+            this.count = data.archiveInfo.count;
+          });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.archive-banner {
-  background: url(https://www.static.talkxj.com/wallroom-1920x1080-bg-338d7bc.jpg)
-    center center / cover no-repeat;
-  background-color: #49b1f5;
-}
-.time {
-  font-size: 0.75rem;
-  color: #555;
-  margin-right: 1rem;
-}
+  .archive-banner {
+    background: #49b1f5 url(https://www.static.talkxj.com/wallroom-1920x1080-bg-338d7bc.jpg) no-repeat center center;
+  }
+
+  .time {
+    font-size: 0.75rem;
+    color: #555;
+    margin-right: 1rem;
+  }
 </style>

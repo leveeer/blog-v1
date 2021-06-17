@@ -6,6 +6,7 @@ import (
 	"blog-go-gin/dao"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
+	"blog-go-gin/models/model"
 	"testing"
 	"time"
 )
@@ -41,7 +42,7 @@ func TestCopyField(t *testing.T) {
 			},
 		},
 	}
-	a2 := &pb.Article{}
+	a2 := &model.Article{}
 
 	err := common.Copy(&a2, a1).Do()
 	if err != nil {

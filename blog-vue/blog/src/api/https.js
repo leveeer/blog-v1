@@ -52,25 +52,19 @@ function getReqString(reqID) {
 service.interceptors.request.use(
   config => {
     let data;
+    let encode;
     switch (config.method) {
       case "post":
         data = protoObj.RequestPkg.create(config.data);
+        encode = protoObj.RequestPkg.encode(data).finish();
+        config.data = protobuf.util.newBuffer(encode);
         break;
       case "get":
-        data = protoObj.RequestPkg.create(config.params);
         break;
       default:
         console.log("unKnown method type");
         break;
     }
-    console.log(data);
-    const encode = protoObj.RequestPkg.encode(data).finish();
-    console.log(encode);
-    config.data = protobuf.util.newBuffer(encode);
-    // config.data = new Uint8Array(encode);
-    // console.log(protoObj.CsId);
-    // console.log(getReqValue(requestMap.CsGetArticles));
-    // console.log(getReqString(1));
     return config;
   },
   error => {

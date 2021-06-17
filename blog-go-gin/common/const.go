@@ -28,9 +28,12 @@ const (
 
 //urls
 const (
-	BlogBaseUrl = "/blog"
-	BlogInfoUrl = "/blog_info"
-	ArticleList = "/articles"
-	ArticleById = "/articles/:id"
-	TagList     = "/tags"
+	BlogBaseUrl         = "/blog"
+	BlogInfoUrl         = "/blog_info"
+	ArticleList         = "/articles"
+	ArticleById         = "/articles/:id"
+	TagList             = "/tags"
+	Archive             = "/archives"
+	Categories          = "/categories"
+	ArticleByCategoryID = "/categories/:categoryId"
 )

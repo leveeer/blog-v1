@@ -1,4 +1,4 @@
-package web
+package blogApi
 
 import (
 	"blog-go-gin/common"

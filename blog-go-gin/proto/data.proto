@@ -56,4 +56,22 @@ message ArticleInfo{
   Article lastArticle = 2;
   Article nextArticle = 3;
   repeated Article recommendArticleList = 4;
+  repeated Article articleLatestList = 5;
+}
+
+message Archives{
+  repeated ArchiveArticleInfo archiveList = 1;
+  int32 count = 2;
+}
+
+message ArchiveArticleInfo{
+  int32 id = 1;
+  string articleTitle = 2;
+  int64 createTime = 3;
+}
+
+message Category{
+  int32 id = 1;
+  string categoryName = 2;
+  int32 articleCount = 3;
 }

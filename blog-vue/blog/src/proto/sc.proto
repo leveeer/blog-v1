@@ -16,9 +16,12 @@ enum ResultCode {
 message ResponsePkg {
   Response cmdId = 1; // 协议ID
   ResultCode code = 2; //返回码
+  repeated Category categories = 3;
   string errMsg = 10; //消息
   int64 serverTime = 11; //服务器时间
   repeated Article articleList = 12;
   BlogHomeInfo blogHomeInfo = 13;
   ArticleInfo articleInfo = 14;
+  Archives archiveInfo = 15;
+
 }

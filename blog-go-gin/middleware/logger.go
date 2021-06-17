@@ -15,7 +15,7 @@ import (
 //日志中间件
 type loggerFunc func(format string, args ...interface{})
 
-//获取调用方
+// GetPeerNameByPath 获取调用方
 func GetPeerNameByPath(path string) string {
 	switch path {
 	case "/":

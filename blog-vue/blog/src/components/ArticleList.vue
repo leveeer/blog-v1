@@ -33,10 +33,11 @@
                 {{ item.createTime | date }}
                 <!-- 文章分类 -->
                 <router-link
-                  :to="'/categories/' + item.categoryId"
+                  :to="'/categories/' + item.categoryID"
                   class="float-right"
                 >
-                  <v-icon>mdi-bookmark</v-icon>{{ item.categoryName }}
+                  <v-icon>mdi-bookmark</v-icon>
+                  {{ item.categoryName }}
                 </router-link>
               </div>
             </div>
@@ -47,7 +48,7 @@
               <router-link
                 :to="'/tags/' + tag.id"
                 class="tag-btn"
-                v-for="tag of item.tagDTOList"
+                v-for="tag of item.tags"
                 :key="tag.id"
               >
                 {{ tag.tagName }}
@@ -65,126 +66,142 @@
 </template>
 
 <script>
-export default {
-  created() {
-    const path = this.$route.path;
-    if (path.indexOf("/categories") !== -1) {
-      this.title = "分类";
-      this.categoryOrTag = "category-banner";
-    } else {
-      this.title = "标签";
-      this.categoryOrTag = "tag-banner";
-    }
-  },
-  data: function() {
-    return {
-      current: 1,
-      articleList: [],
-      name: "",
-      title: "",
-      categoryOrTag: ""
-    };
-  },
-  methods: {
-    infiniteHandler($state) {
+  import { getCategoryOrTagArticleList } from "../api/api";
+
+  export default {
+    created() {
       const path = this.$route.path;
-      this.axios
-        .get("/api" + path, {
-          params: {
-            current: this.current
+      if (path.indexOf("/categories") !== -1) {
+        this.title = "分类";
+        this.categoryOrTag = "category-banner";
+      } else {
+        this.title = "标签";
+        this.categoryOrTag = "tag-banner";
+      }
+    },
+    data: function() {
+      return {
+        current: 1,
+        articleList: [],
+        name: "",
+        title: "",
+        categoryOrTag: ""
+      };
+    },
+    methods: {
+      infiniteHandler($state) {
+        const path = this.$route.path;
+        getCategoryOrTagArticleList(path, {
+          params:{
+            cmdId: 3,
+            currentPage: this.current
           }
         })
-        .then(({ data }) => {
-          if (data.data.articlePreviewDTOList.length) {
-            this.current++;
-            this.name = data.data.name;
-            document.title = this.title + " - " + this.name;
-            this.articleList.push(...data.data.articlePreviewDTOList);
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        });
+          .then((data) => {
+            console.log(data)
+            if (data.articleList) {
+              this.current++;
+              this.name = data.articleList[0].categoryName;
+              console.log(data.articleList[0].categoryName)
+              document.title = this.title + " - " + this.name;
+              this.articleList.push(...data.articleList);
+              $state.loaded();
+            } else {
+              $state.complete();
+            }
+          });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.tag-banner {
-  background: #49b1f5
-    url(https://cdn.jsdelivr.net/gh/axh2018/axh2018.github.io/medias/banner/6.jpg)
-    no-repeat center center;
-}
-.category-banner {
-  background: #49b1f5
-    url(https://cdn.jsdelivr.net/gh/axh2018/axh2018.github.io/medias/banner/6.jpg)
-    no-repeat center center;
-}
-@media (min-width: 760px) {
-  .article-list-wrapper {
-    max-width: 1106px;
-    margin: 370px auto 1rem auto;
+  .tag-banner {
+    background: #49b1f5 url(https://cdn.jsdelivr.net/gh/axh2018/axh2018.github.io/medias/banner/6.jpg) no-repeat center center;
   }
-  .article-item-card:hover {
+
+  .category-banner {
+    background: #49b1f5 url(https://cdn.jsdelivr.net/gh/axh2018/axh2018.github.io/medias/banner/6.jpg) no-repeat center center;
+  }
+
+  @media (min-width: 760px) {
+    .article-list-wrapper {
+      max-width: 1106px;
+      margin: 370px auto 1rem auto;
+    }
+
+    .article-item-card:hover {
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px 12px rgba(7, 17, 27, 0.15);
+    }
+
+    .article-item-card:not(:hover) {
+      transition: all 0.3s;
+    }
+
+    .article-item-card:hover .on-hover {
+      transition: all 0.6s;
+      transform: scale(1.1);
+    }
+
+    .article-item-card:not(:hover) .on-hover {
+      transition: all 0.6s;
+    }
+
+    .article-item-info {
+      line-height: 1.7;
+      padding: 15px 15px 12px 18px;
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 759px) {
+    .article-list-wrapper {
+      margin-top: 230px;
+      padding: 0 12px;
+    }
+
+    .article-item-info {
+      line-height: 1.7;
+      padding: 15px 15px 12px 18px;
+    }
+  }
+
+  .article-item-card {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 8px 6px rgba(7, 17, 27, 0.06);
+  }
+
+  .article-item-card a {
     transition: all 0.3s;
-    box-shadow: 0 4px 12px 12px rgba(7, 17, 27, 0.15);
   }
-  .article-item-card:not(:hover) {
-    transition: all 0.3s;
+
+  .article-item-cover {
+    height: 220px;
+    overflow: hidden;
   }
-  .article-item-card:hover .on-hover {
-    transition: all 0.6s;
-    transform: scale(1.1);
+
+  .article-item-card a:hover {
+    color: #8e8cd8;
   }
-  .article-item-card:not(:hover) .on-hover {
-    transition: all 0.6s;
+
+  .tag-wrapper {
+    padding: 10px 15px 10px 18px;
   }
-  .article-item-info {
-    line-height: 1.7;
-    padding: 15px 15px 12px 18px;
-    font-size: 15px;
+
+  .tag-wrapper a {
+    color: #fff !important;
   }
-}
-@media (max-width: 759px) {
-  .article-list-wrapper {
-    margin-top: 230px;
-    padding: 0 12px;
+
+  .tag-btn {
+    display: inline-block;
+    font-size: 0.725rem;
+    line-height: 22px;
+    height: 22px;
+    border-radius: 10px;
+    padding: 0 12px !important;
+    background: linear-gradient(to right, #bf4643 0%, #6c9d8f 100%);
+    opacity: 0.6;
+    margin-right: 0.5rem;
   }
-  .article-item-info {
-    line-height: 1.7;
-    padding: 15px 15px 12px 18px;
-  }
-}
-.article-item-card {
-  border-radius: 8px !important;
-  box-shadow: 0 4px 8px 6px rgba(7, 17, 27, 0.06);
-}
-.article-item-card a {
-  transition: all 0.3s;
-}
-.article-item-cover {
-  height: 220px;
-  overflow: hidden;
-}
-.article-item-card a:hover {
-  color: #8e8cd8;
-}
-.tag-wrapper {
-  padding: 10px 15px 10px 18px;
-}
-.tag-wrapper a {
-  color: #fff !important;
-}
-.tag-btn {
-  display: inline-block;
-  font-size: 0.725rem;
-  line-height: 22px;
-  height: 22px;
-  border-radius: 10px;
-  padding: 0 12px !important;
-  background: linear-gradient(to right, #bf4643 0%, #6c9d8f 100%);
-  opacity: 0.6;
-  margin-right: 0.5rem;
-}
 </style>

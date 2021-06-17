@@ -61,3 +61,12 @@ func GetCategoryCount() (count int64, err error) {
 	}
 	return categoryCount, nil
 }
+
+func GetCategoryList() ([]*Category, error) {
+	res := make([]*Category, 0)
+	if err := dao.Db.Debug().Table("tb_category").Select("id,category_name,COUNT(1) as ").
+		Joins("tb_article a ON tb_category.id = a.category_id").Group("category_id").Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}

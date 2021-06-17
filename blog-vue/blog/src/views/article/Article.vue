@@ -308,11 +308,10 @@ export default {
         this.lastArticle = data.articleInfo.lastArticle;
         this.nextArticle = data.articleInfo.nextArticle;
         this.articleRecommendList = data.articleInfo.recommendArticleList;
-        // this.articleLatestList = data.articleInfo.articleLatestList;
+        this.articleLatestList = data.articleInfo.articleLatestList;
         //将markdown转换为Html
         this.markdownToHtml(data.articleInfo.article);
         this.$nextTick(() => {
-          console.log(this.article);
           // 统计文章字数
           this.wordNum = this.deleteHTMLTag(this.article.articleContent).length;
           // 计算阅读时间
@@ -365,11 +364,6 @@ export default {
           this.commentList = res.data.recordList;
           this.count = data.data.count;
         });
-    },
-    listNewestArticles() {
-      this.axios.get("/api/articles/newest").then(({ res }) => {
-        this.articleLatestList = res.data;
-      });
     },
     like() {
       // 判断登录

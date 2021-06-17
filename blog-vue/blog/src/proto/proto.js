@@ -217,6 +217,56 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "Article",
             id: 4
+          },
+          articleLatestList: {
+            rule: "repeated",
+            type: "Article",
+            id: 5
+          }
+        }
+      },
+      Archives: {
+        fields: {
+          archiveList: {
+            rule: "repeated",
+            type: "ArchiveArticleInfo",
+            id: 1
+          },
+          count: {
+            type: "int32",
+            id: 2
+          }
+        }
+      },
+      ArchiveArticleInfo: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          articleTitle: {
+            type: "string",
+            id: 2
+          },
+          createTime: {
+            type: "int64",
+            id: 3
+          }
+        }
+      },
+      Category: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          categoryName: {
+            type: "string",
+            id: 2
+          },
+          articleCount: {
+            type: "int32",
+            id: 3
           }
         }
       },
@@ -242,6 +292,11 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             type: "ResultCode",
             id: 2
           },
+          categories: {
+            rule: "repeated",
+            type: "Category",
+            id: 3
+          },
           errMsg: {
             type: "string",
             id: 10
@@ -262,6 +317,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           articleInfo: {
             type: "ArticleInfo",
             id: 14
+          },
+          archiveInfo: {
+            type: "Archives",
+            id: 15
           }
         }
       }

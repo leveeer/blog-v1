@@ -15,7 +15,7 @@
         >
           <router-link :to="'/categories/' + item.id">
             {{ item.categoryName }}
-            <span class="category-count">({{ item.articleCount }})</span>
+            <span class="category-count">({{ item.articleCount ? item.articleCount : 0 }})</span>
           </router-link>
         </li>
       </ul>
@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { getCategories } from "../../api/api";
+
 export default {
   created() {
     this.listCategories();
@@ -36,9 +38,10 @@ export default {
   },
   methods: {
     listCategories() {
-      this.axios.get("/api/categories").then(({ data }) => {
-        this.categoryList = data.data.recordList;
-        this.count = data.data.count;
+      getCategories().then(( data ) => {
+        console.log(data)
+        this.categoryList = data.categories;
+        this.count = data.categories.length;
       });
     }
   }
@@ -47,9 +50,7 @@ export default {
 
 <style scoped>
 .category-banner {
-  background: url(https://www.static.talkxj.com/wallhaven-13mk9v.jpg) center
-    center / cover no-repeat;
-  background-color: #49b1f5;
+  background: #49b1f5 url(https://www.static.talkxj.com/wallhaven-13mk9v.jpg) no-repeat center center;
 }
 .category-title {
   text-align: center;

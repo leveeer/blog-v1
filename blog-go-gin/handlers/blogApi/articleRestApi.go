@@ -1,4 +1,4 @@
-package web
+package blogApi
 
 import (
 	"blog-go-gin/common"
@@ -25,9 +25,6 @@ type ArticleRestApi struct {
 
 func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 	body, err := ioutil.ReadAll(ctx.Request.Body)
-	logging.Logger.Debug(len(body))
-	logging.Logger.Debug(body)
-
 	if err != nil {
 		logging.Logger.Error(err)
 	}
@@ -66,6 +63,35 @@ func (c *ArticleRestApi) GetArticleById(ctx *gin.Context) {
 		Code:        pb.ResultCode_SuccessOK,
 		ServerTime:  time.Now().Unix(),
 		ArticleInfo: articleInfo,
+	}
+	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+}
+
+func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+	}
+	logging.Logger.Debug(request)
+
+	iPage := &page.IPage{
+		Current: int(request.CurrentPage),
+	}
+	archiveInfo, err := ArticleService.GetArchiveList(iPage)
+	if err != nil {
+		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticleArchivesFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:       pb.Response_ResponseBeginIndex,
+		Code:        pb.ResultCode_SuccessOK,
+		ServerTime:  time.Now().Unix(),
+		ArchiveInfo: archiveInfo,
 	}
 	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
 }
