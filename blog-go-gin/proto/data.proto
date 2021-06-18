@@ -75,3 +75,8 @@ message Category{
   string categoryName = 2;
   int32 articleCount = 3;
 }
+
+message ArticlesByCategoryOrTag{
+  repeated Article articleList = 1;
+  string name = 2;
+}

@@ -22,6 +22,10 @@ export function getCategories() {
   return service.get(urls.categories);
 }
 
+export function getTags() {
+  return service.get(urls.tags);
+}
+
 export function getCategoryOrTagArticleList(path, params) {
   return service.get("/blog" + path, params);
 }

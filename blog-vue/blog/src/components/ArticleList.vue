@@ -98,13 +98,12 @@
           }
         })
           .then((data) => {
-            console.log(data)
-            if (data.articleList) {
+            console.log(data);
+            this.name = data.articlesByCategoryOrTag.name;
+            if (data.articlesByCategoryOrTag.articleList) {
               this.current++;
-              this.name = data.articleList[0].categoryName;
-              console.log(data.articleList[0].categoryName)
               document.title = this.title + " - " + this.name;
-              this.articleList.push(...data.articleList);
+              this.articleList.push(...data.articlesByCategoryOrTag.articleList);
               $state.loaded();
             } else {
               $state.complete();

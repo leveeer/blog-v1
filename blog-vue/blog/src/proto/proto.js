@@ -270,6 +270,19 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      ArticlesByCategoryOrTag: {
+        fields: {
+          articleList: {
+            rule: "repeated",
+            type: "Article",
+            id: 1
+          },
+          name: {
+            type: "string",
+            id: 2
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -296,6 +309,15 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "Category",
             id: 3
+          },
+          articlesByCategoryOrTag: {
+            type: "ArticlesByCategoryOrTag",
+            id: 4
+          },
+          tags: {
+            rule: "repeated",
+            type: "Tag",
+            id: 5
           },
           errMsg: {
             type: "string",

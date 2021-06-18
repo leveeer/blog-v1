@@ -3,6 +3,7 @@ package service
 import (
 	"blog-go-gin/common"
 	pb "blog-go-gin/go_proto"
+	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
 	"sync"
@@ -194,7 +195,7 @@ func (b *ArticleService) GetArchiveList(ipage *page.IPage) (*pb.Archives, error)
 	}, nil
 }
 
-func (b *ArticleService) GetArticleByCategoryID(categoryId int, iPage *page.IPage) ([]*pb.Article, error) {
+func (b *ArticleService) GetArticleByCategoryID(categoryId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error) {
 	var articleSlice []*pb.Article
 	articles, err := model.GetArticlesByConditionWithPage("category_id = ?", iPage, categoryId)
 	if err != nil {
@@ -234,5 +235,65 @@ func (b *ArticleService) GetArticleByCategoryID(categoryId int, iPage *page.IPag
 		}
 		articleSlice = append(articleSlice, a)
 	}
-	return articleSlice, nil
+
+	category, err := model.GetCategoryByID(categoryId)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ArticlesByCategoryOrTag{
+		ArticleList: articleSlice,
+		Name:        category.CategoryName,
+	}, nil
+}
+
+func (b *ArticleService) GetArticleByTagID(tagId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error) {
+	var articleSlice []*pb.Article
+	articles, err := model.GetArticlesByTagIdWithPage(tagId, iPage)
+	if err != nil {
+		return nil, err
+	}
+	for _, article := range articles {
+		logging.Logger.Debug(article)
+		var tagSlice []*pb.Tag
+		tags, err := model.GetTagNameByArticleId(article.ID)
+		if err != nil {
+			return nil, err
+		}
+		for _, tag := range tags {
+			t := &pb.Tag{
+				Id:         int32(tag.ID),
+				TagName:    tag.TagName,
+				ClickCount: int64(tag.ClickCount),
+			}
+			tagSlice = append(tagSlice, t)
+		}
+		a := &pb.Article{
+			Id:             int32(article.ID),
+			UserId:         int32(article.UserID),
+			CategoryID:     int32(article.CategoryID),
+			ArticleCover:   article.ArticleCover,
+			ArticleTitle:   article.ArticleTitle,
+			ArticleContent: article.ArticleContent,
+			CreateTime:     article.CreateTime,
+			UpdateTime:     article.UpdateTime,
+			IsTop:          article.IsTop == 1,
+			IsPublish:      article.IsPublish == 1,
+			IsDelete:       article.IsDelete == 1,
+			IsOriginal:     article.IsOriginal == 1,
+			ClickCount:     int64(article.ClickCount),
+			CollectCount:   int64(article.CollectCount),
+			Tags:           tagSlice,
+			CategoryName:   article.CategoryName,
+		}
+		articleSlice = append(articleSlice, a)
+	}
+
+	tag, err := model.GetTagByID(tagId)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ArticlesByCategoryOrTag{
+		ArticleList: articleSlice,
+		Name:        tag.TagName,
+	}, nil
 }

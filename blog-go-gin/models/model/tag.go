@@ -43,7 +43,7 @@ func UpdateTag(m *Tag) error {
 
 func GetTagByID(id int) (*Tag, error) {
 	var m Tag
-	if err := dao.Db.First(&m, id).Error; err != nil {
+	if err := dao.Db.Debug().First(&m, id).Error; err != nil {
 		return nil, err
 	}
 	return &m, nil
@@ -51,7 +51,7 @@ func GetTagByID(id int) (*Tag, error) {
 
 func GetTags(condition string, args ...interface{}) ([]*Tag, error) {
 	res := make([]*Tag, 0)
-	if err := dao.Db.Where(condition, args...).Find(&res).Error; err != nil {
+	if err := dao.Db.Debug().Where(condition, args...).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

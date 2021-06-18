@@ -87,6 +87,17 @@ func GetArticlesByConditionWithPage(condition string, iPage *page.IPage, args ..
 	return res, nil
 }
 
+func GetArticlesByTagIdWithPage(tagId int, iPage *page.IPage) ([]*Article, error) {
+	res := make([]*Article, 0)
+	if err := dao.Db.Debug().Table("tb_article").Select("tb_article.id, article_cover, article_title, tb_article.create_time, category_id,category_name").
+		Joins("JOIN tb_category c ON tb_article.category_id = c.id").
+		Where("tb_article.id IN (SELECT article_id FROM tb_article_tags WHERE tag_id = ?) AND is_delete = 0 AND is_publish = 1", tagId).
+		Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func GetArticlesOnHome(iPage page.IPage) ([]*Article, error) {
 	res := make([]*Article, 0)
 	if err := dao.Db.Debug().Table("tb_article").

@@ -84,6 +84,7 @@ const (
 	GetArticleByIdFail
 	GetArticleArchivesFail
 	GetCategoriesFail
+	GetTagsFail
 	GetArticleByCategoryIDFail
 )
 
@@ -158,6 +159,7 @@ var Error = map[ErrorCode]error{
 	GetArticleByIdFail:         errors.New("获取文章失败"),
 	GetArticleArchivesFail:     errors.New("获取归档失败"),
 	GetCategoriesFail:          errors.New("获取分类失败"),
+	GetTagsFail:                errors.New("获取标签失败"),
 	GetArticleByCategoryIDFail: errors.New("获取分类文章失败"),
 }
 

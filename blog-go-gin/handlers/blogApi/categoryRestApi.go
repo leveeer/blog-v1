@@ -44,10 +44,10 @@ func (c *CategoryRestApi) GetArticleByCategoryID(ctx *gin.Context) {
 		return
 	}
 	data := &pb.ResponsePkg{
-		CmdId:       pb.Response_ResponseBeginIndex,
-		Code:        pb.ResultCode_SuccessOK,
-		ServerTime:  time.Now().Unix(),
-		ArticleList: articles,
+		CmdId:                   pb.Response_ResponseBeginIndex,
+		Code:                    pb.ResultCode_SuccessOK,
+		ServerTime:              time.Now().Unix(),
+		ArticlesByCategoryOrTag: articles,
 	}
 	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
 }

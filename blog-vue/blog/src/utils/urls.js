@@ -3,7 +3,8 @@ export const urls = {
   articles: "/blog/articles",
   blog_info: "/blog/blog_info",
   archive: "/blog/archives",
-  categories: "/blog/categories"
+  categories: "/blog/categories",
+  tags: "/blog/tags"
 };
 
 export default urls;

@@ -7,10 +7,10 @@ import (
 )
 
 var (
-	ArticleApi      = &blogApi.ArticleRestApi{}
-	BlogInfoApi     = &blogApi.BlogInfoRestApi{}
-	TagApi          = &blogApi.TagRestApi{}
-	CategoryRestApi = &blogApi.CategoryRestApi{}
+	ArticleApi  = &blogApi.ArticleRestApi{}
+	BlogInfoApi = &blogApi.BlogInfoRestApi{}
+	TagApi      = &blogApi.TagRestApi{}
+	CategoryApi = &blogApi.CategoryRestApi{}
 )
 
 func blogRouters(r *gin.Engine) {
@@ -19,7 +19,8 @@ func blogRouters(r *gin.Engine) {
 	blog.POST(common.ArticleList, ArticleApi.GetArticleList)
 	blog.GET(common.ArticleById, ArticleApi.GetArticleById)
 	blog.POST(common.Archive, ArticleApi.GetArticleArchives)
-	blog.POST(common.TagList, TagApi.GetTagList)
-	blog.GET(common.Categories, CategoryRestApi.GetCategories)
-	blog.GET(common.ArticleByCategoryID, CategoryRestApi.GetArticleByCategoryID)
+	blog.GET(common.Tags, TagApi.GetTags)
+	blog.GET(common.Categories, CategoryApi.GetCategories)
+	blog.GET(common.ArticleByCategoryID, CategoryApi.GetArticleByCategoryID)
+	blog.GET(common.ArticleByTagID, TagApi.GetArticlesByTagID)
 }
