@@ -39,4 +39,5 @@ const (
 	ArticleByTagID      = "/tags/:tagId"
 	About               = "/about"
 	Message             = "/messages"
+	FriendLinks         = "/links"
 )

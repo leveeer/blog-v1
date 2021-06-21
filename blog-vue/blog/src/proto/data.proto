@@ -95,3 +95,12 @@ message Message{
   int32 time = 7;
   int64 createTime = 8;
 }
+
+message FriendLink{
+  int32 id = 1;
+  string linkAddress = 2;
+  string linkAvatar = 3;
+  string linkIntro = 4;
+  string linkName = 5;
+  int64 createTime = 6;
+}

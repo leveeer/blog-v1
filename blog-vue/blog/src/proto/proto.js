@@ -331,6 +331,34 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      FriendLink: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          linkAddress: {
+            type: "string",
+            id: 2
+          },
+          linkAvatar: {
+            type: "string",
+            id: 3
+          },
+          linkIntro: {
+            type: "string",
+            id: 4
+          },
+          linkName: {
+            type: "string",
+            id: 5
+          },
+          createTime: {
+            type: "int64",
+            id: 6
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -371,6 +399,11 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "Message",
             id: 6
+          },
+          friendLinks: {
+            rule: "repeated",
+            type: "FriendLink",
+            id: 7
           },
           errMsg: {
             type: "string",

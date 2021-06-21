@@ -39,5 +39,9 @@ export function getMessages() {
 }
 
 export function addMessages(params) {
-  return service.post(urls.messages,params);
+  return service.post(urls.messages, params);
+}
+
+export function getLinks() {
+  return service.get(urls.links);
 }

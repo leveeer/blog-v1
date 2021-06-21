@@ -6,7 +6,8 @@ export const urls = {
   categories: "/blog/categories",
   tags: "/blog/tags",
   about: "/blog/about",
-  messages: "/blog/messages"
+  messages: "/blog/messages",
+  links: "/blog/links"
 };
 
 export default urls;

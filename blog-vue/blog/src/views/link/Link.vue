@@ -55,6 +55,7 @@
 
 <script>
 import Comment from "../../components/Comment";
+import { getLinks } from "../../api/api";
 export default {
   components: {
     Comment
@@ -72,8 +73,8 @@ export default {
   },
   methods: {
     listFriendLink() {
-      this.axios.get("/api/links").then(({ data }) => {
-        this.friendLinkList = data.data;
+      getLinks().then(( data ) => {
+        this.friendLinkList = data.friendLinks;
       });
     },
     listComments() {
@@ -101,9 +102,7 @@ blockquote {
   border-radius: 4px;
 }
 .link-banner {
-  background: url(https://www.static.talkxj.com/ne78w4%20.jpg) center center /
-    cover no-repeat;
-  background-color: #49b1f5;
+  background: #49b1f5 url(https://www.static.talkxj.com/ne78w4%20.jpg) no-repeat center center;
 }
 .link-title {
   color: #344c67;

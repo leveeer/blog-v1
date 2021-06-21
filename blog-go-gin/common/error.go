@@ -79,6 +79,7 @@ const (
 	GetAboutFail
 	GetMessagesFail
 	AddMessageFail
+	GetFriendLinksFail
 )
 
 // unknown group
@@ -157,6 +158,7 @@ var Error = map[ErrorCode]error{
 	GetAboutFail:               errors.New("获取关于失败"),
 	GetMessagesFail:            errors.New("获取留言失败"),
 	AddMessageFail:             errors.New("留言失败"),
+	GetFriendLinksFail:         errors.New("获取友链失败"),
 }
 
 func GetMsg(code ErrorCode) string {
