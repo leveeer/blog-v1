@@ -2,9 +2,9 @@
   <v-footer app padless absolute v-if="!this.isMessage">
     <div class="footer-wrap">
       <div>©2019 - {{ new Date().getFullYear() }} By Einson</div>
-      <!--<a href="https://beian.miit.gov.cn/" target="_blank">
-        湘ICP备19021924号
-      </a>-->
+<!--      <a href="https://beian.miit.gov.cn/" target="_blank">-->
+<!--        湘ICP备19021924号-->
+<!--      </a>-->
     </div>
   </v-footer>
 </template>
@@ -28,7 +28,8 @@ export default {
   color: #eee;
   font-size: 14px;
   text-align: center;
-  background: linear-gradient(-45deg, rgb(20, 20, 226), #17db8f, #23a6d5, #23d5ab);
+  /*background: linear-gradient(-45deg, rgb(20, 20, 226), #17db8f, #23a6d5, #23d5ab);*/
+  background: #121212;
   background-size: 400% 400%;
   animation: Gradient 10s ease infinite;
 }
