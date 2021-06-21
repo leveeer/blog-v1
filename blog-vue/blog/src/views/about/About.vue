@@ -20,45 +20,50 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.getAboutContent();
-  },
-  data: function() {
-    return {
-      aboutContent: ""
-    };
-  },
-  methods: {
-    getAboutContent() {
-      this.axios.get("/api/about").then(({ data }) => {
-        const MarkdownIt = require("markdown-it");
-        const md = new MarkdownIt();
-        this.aboutContent = md.render(data.data);
-      });
+  import { getAbout } from "../../api/api";
+
+  export default {
+    created() {
+      this.getAboutContent();
+    },
+    data: function() {
+      return {
+        aboutContent: ""
+      };
+    },
+    methods: {
+      getAboutContent() {
+        getAbout().then((data) => {
+          console.log(data)
+          const MarkdownIt = require("markdown-it");
+          const md = new MarkdownIt();
+          this.aboutContent = md.render(data.about.content);
+        });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.about-banner {
-  background: url(https://www.static.talkxj.com/8xy.jpg) center center / cover
-    no-repeat;
-  background-color: #49b1f5;
-}
-.about-content {
-  word-break: break-word;
-  line-height: 1.8;
-  font-size: 14px;
-}
-.my-wrapper {
-  text-align: center;
-}
-.author-avatar {
-  transition: all 0.5s;
-}
-.author-avatar:hover {
-  transform: rotate(360deg);
-}
+  .about-banner {
+    background: #49b1f5 url(https://www.static.talkxj.com/8xy.jpg) no-repeat center center;
+  }
+
+  .about-content {
+    word-break: break-word;
+    line-height: 1.8;
+    font-size: 14px;
+  }
+
+  .my-wrapper {
+    text-align: center;
+  }
+
+  .author-avatar {
+    transition: all 0.5s;
+  }
+
+  .author-avatar:hover {
+    transform: rotate(360deg);
+  }
 </style>

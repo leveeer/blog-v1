@@ -9,7 +9,7 @@ import (
 func StatisticalViews() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//获取用户ip
-		clientIP := common.GetClientIP(ctx)
+		clientIP := ctx.ClientIP()
 		//从session中获取ip
 		// 初始化session对象
 		session := sessions.Default(ctx)

@@ -31,6 +31,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           articleId: {
             type: "uint32",
             id: 3
+          },
+          message: {
+            type: "Message",
+            id: 4
           }
         }
       },
@@ -283,6 +287,50 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      About: {
+        fields: {
+          content: {
+            type: "string",
+            id: 1
+          }
+        }
+      },
+      Message: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          ipAddress: {
+            type: "string",
+            id: 2
+          },
+          ipSource: {
+            type: "string",
+            id: 3
+          },
+          nickname: {
+            type: "string",
+            id: 4
+          },
+          avatar: {
+            type: "string",
+            id: 5
+          },
+          messageContent: {
+            type: "string",
+            id: 6
+          },
+          time: {
+            type: "int32",
+            id: 7
+          },
+          createTime: {
+            type: "int64",
+            id: 8
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -319,6 +367,11 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             type: "Tag",
             id: 5
           },
+          messages: {
+            rule: "repeated",
+            type: "Message",
+            id: 6
+          },
           errMsg: {
             type: "string",
             id: 10
@@ -343,6 +396,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           archiveInfo: {
             type: "Archives",
             id: 15
+          },
+          about: {
+            type: "About",
+            id: 16
           }
         }
       }

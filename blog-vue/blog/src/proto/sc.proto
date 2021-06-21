@@ -19,10 +19,12 @@ message ResponsePkg {
   repeated Category categories = 3;
   ArticlesByCategoryOrTag articlesByCategoryOrTag = 4;
   repeated Tag tags = 5;
+  repeated Message messages = 6;
   string errMsg = 10; //消息
   int64 serverTime = 11; //服务器时间
   repeated Article articleList = 12;
   BlogHomeInfo blogHomeInfo = 13;
   ArticleInfo articleInfo = 14;
   Archives archiveInfo = 15;
+  About about = 16;
 }

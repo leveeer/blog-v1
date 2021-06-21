@@ -10,15 +10,11 @@ type ErrorCode uint
 // user group
 const (
 	AccountIsBanned ErrorCode = iota + 10001
-	RequestFrequently
-	CreateGuestUserFail
 	UserNotFound
 	CheckPasswordFail
 	AdminPrivilegeNeeded
 	GetRoomIdFail
 	GetUserMatchGroupFail
-	CreateWeChatUserFail
-	WeChatLoginFail
 	AlreadyInTeamFail
 	NoGameServerFail
 	ServerException
@@ -27,13 +23,7 @@ const (
 // request group
 const (
 	InvalidRequestParams ErrorCode = iota + 20001
-	MissingRequestParams
-	UnknownLoginType
-	TokenHasExpired
-	TokenNotMatch
-	TokenRefreshFail
 	TokenCreateFail
-	ThirdPartyAPIAccessTimeout
 	InvalidUserNameLength
 	InvalidUserEmail
 	CreateUserFail
@@ -86,6 +76,9 @@ const (
 	GetCategoriesFail
 	GetTagsFail
 	GetArticleByCategoryIDFail
+	GetAboutFail
+	GetMessagesFail
+	AddMessageFail
 )
 
 // unknown group
@@ -161,6 +154,9 @@ var Error = map[ErrorCode]error{
 	GetCategoriesFail:          errors.New("获取分类失败"),
 	GetTagsFail:                errors.New("获取标签失败"),
 	GetArticleByCategoryIDFail: errors.New("获取分类文章失败"),
+	GetAboutFail:               errors.New("获取关于失败"),
+	GetMessagesFail:            errors.New("获取留言失败"),
+	AddMessageFail:             errors.New("留言失败"),
 }
 
 func GetMsg(code ErrorCode) string {

@@ -1,4 +1,4 @@
-package service
+package impl
 
 import (
 	"blog-go-gin/common"
@@ -12,8 +12,27 @@ import (
 	"sync"
 )
 
-type BlogInfoService struct {
+type BlogInfoServiceImpl struct {
 	wg sync.WaitGroup
+}
+
+func (b *BlogInfoServiceImpl) GetAbout() (*pb.About, error) {
+	about, err := common.RedisUtil.Get(common.ABOUT)
+	logging.Logger.Debug(about)
+
+	if err != nil && errors.Is(err, redis.Nil) {
+		about = "博客Go语言版即将上线，敬请期待！"
+		if err = common.RedisUtil.Set(common.ABOUT, about); err != nil {
+			logging.Logger.Error(err)
+			return nil, err
+		}
+	} else if err != nil && !errors.Is(err, redis.Nil) {
+		logging.Logger.Error(err)
+		return nil, err
+	}
+	return &pb.About{
+		Content: about,
+	}, nil
 }
 
 /*func (b *blogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
@@ -66,7 +85,7 @@ type BlogInfoService struct {
 	}, nil
 }*/
 
-/*func (b *BlogInfoService) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
+/*func (b *BlogInfoServiceImpl) GetBlogInfo() (*vo.BlogHomeInfoVo, error) {
 	result := make(map[string]interface{}, 6)
 	done := make(chan struct{})
 	// 新增阻塞chan
@@ -162,7 +181,7 @@ type BlogInfoService struct {
 	}
 }*/
 
-func (b *BlogInfoService) GetBlogInfo() (*pb.BlogHomeInfo, error) {
+func (b *BlogInfoServiceImpl) GetBlogInfo() (*pb.BlogHomeInfo, error) {
 
 	var userInfo *model.UserInfo
 	var categoryCount int64
@@ -220,12 +239,12 @@ func (b *BlogInfoService) GetBlogInfo() (*pb.BlogHomeInfo, error) {
 
 		func() (err error) {
 			viewsCountStr, err := common.RedisUtil.Get(common.BlogViewsCount)
-			if err != nil && errors.Is(err, redis.Nil){
+			if err != nil && errors.Is(err, redis.Nil) {
 				if err := common.RedisUtil.Set(common.BlogViewsCount, strconv.Itoa(0)); err != nil {
 					return err
 				}
 				viewsCountStr = "0"
-			}else if err != nil && !errors.Is(err, redis.Nil) {
+			} else if err != nil && !errors.Is(err, redis.Nil) {
 				logging.Logger.Error(err)
 				return err
 			}

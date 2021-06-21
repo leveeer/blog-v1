@@ -3,12 +3,14 @@ package dao
 import (
 	conf "blog-go-gin/config"
 	"blog-go-gin/logging"
+	"errors"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"log"
 	"os"
+	"runtime/debug"
 	"time"
 )
 
@@ -50,4 +52,33 @@ func InitMysql() {
 	sqlDB.SetMaxOpenConns(100)
 	//设置了连接可复用的最大时间。
 	sqlDB.SetConnMaxLifetime(time.Hour)
+}
+
+// SqlTransaction /*sql事务*/
+func SqlTransaction(tx *gorm.DB, txFunc func(tx *gorm.DB) error) (err error) {
+	if tx == nil {
+		err := errors.New("nullptr tx")
+		logging.Logger.Error(err, string(debug.Stack()))
+		return err
+	}
+	defer func() {
+		if err != nil {
+			if rbErr := tx.Rollback().Error; rbErr != nil {
+				logging.Logger.Errorf("roll back transaction fail.err:%v,call stack:%v",
+					rbErr, string(debug.Stack()))
+			}
+		}
+	}()
+
+	err = txFunc(tx)
+	if err != nil {
+		return err
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		logging.Logger.Error(err)
+		return err
+	}
+
+	return nil
 }

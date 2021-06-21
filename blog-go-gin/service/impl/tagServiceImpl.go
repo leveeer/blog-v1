@@ -1,4 +1,4 @@
-package service
+package impl
 
 import (
 	pb "blog-go-gin/go_proto"
@@ -6,11 +6,11 @@ import (
 	"sync"
 )
 
-type TagService struct {
+type TagServiceImpl struct {
 	wg sync.WaitGroup
 }
 
-func (t *TagService) GetTags() ([]*pb.Tag, error) {
+func (t *TagServiceImpl) GetTags() ([]*pb.Tag, error) {
 	var tagList []*pb.Tag
 	tags, err := model.GetTags("1 =1")
 	if err != nil {

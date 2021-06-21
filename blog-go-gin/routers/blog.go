@@ -11,6 +11,7 @@ var (
 	BlogInfoApi = &blogApi.BlogInfoRestApi{}
 	TagApi      = &blogApi.TagRestApi{}
 	CategoryApi = &blogApi.CategoryRestApi{}
+	MessageApi  = &blogApi.MessageRestApi{}
 )
 
 func blogRouters(r *gin.Engine) {
@@ -23,4 +24,7 @@ func blogRouters(r *gin.Engine) {
 	blog.GET(common.Categories, CategoryApi.GetCategories)
 	blog.GET(common.ArticleByCategoryID, CategoryApi.GetArticleByCategoryID)
 	blog.GET(common.ArticleByTagID, TagApi.GetArticlesByTagID)
+	blog.GET(common.About, BlogInfoApi.GetAbout)
+	blog.GET(common.Message, MessageApi.GetMessages)
+	blog.POST(common.Message, MessageApi.AddMessages)
 }

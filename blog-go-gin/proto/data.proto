@@ -80,3 +80,18 @@ message ArticlesByCategoryOrTag{
   repeated Article articleList = 1;
   string name = 2;
 }
+
+message About{
+  string content = 1;
+}
+
+message Message{
+  int32 id = 1;
+  string ipAddress = 2;
+  string ipSource = 3;
+  string nickname = 4;
+  string avatar = 5;
+  string messageContent = 6;
+  int32 time = 7;
+  int64 createTime = 8;
+}

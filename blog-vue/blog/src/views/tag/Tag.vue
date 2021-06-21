@@ -22,56 +22,62 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.listTags();
-  },
-  data: function() {
-    return {
-      tagList: [],
-      count: 0
-    };
-  },
-  methods: {
-    listTags() {
-      this.axios.get("/api/tags").then(({ data }) => {
-        this.tagList = data.data.recordList;
-        this.count = data.data.count;
-      });
+  import { getTags } from "../../api/api";
+
+  export default {
+    created() {
+      this.listTags();
+    },
+    data: function() {
+      return {
+        tagList: [],
+        count: 0
+      };
+    },
+    methods: {
+      listTags() {
+        getTags().then((data) => {
+          console.log(data)
+          this.tagList = data.tags;
+          this.count = data.tags.length;
+        });
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.tag-banner {
-  background: url(https://www.static.talkxj.com/73lleo.png) center center /
-    cover no-repeat;
-  background-color: #49b1f5;
-}
-.tag-cloud-title {
-  line-height: 2;
-  font-size: 36px;
-  text-align: center;
-}
-@media (max-width: 759px) {
-  .tag-cloud-title {
-    font-size: 25px;
+  .tag-banner {
+    background: #49b1f5 url(https://www.static.talkxj.com/73lleo.png) no-repeat center center;
   }
-}
-.tag-cloud {
-  text-align: center;
-}
-.tag-cloud a {
-  color: #616161;
-  display: inline-block;
-  text-decoration: none;
-  padding: 0 8px;
-  line-height: 2;
-  transition: all 0.3s;
-}
-.tag-cloud a:hover {
-  color: #03a9f4 !important;
-  transform: scale(1.1);
-}
+
+  .tag-cloud-title {
+    line-height: 2;
+    font-size: 36px;
+    text-align: center;
+  }
+
+  @media (max-width: 759px) {
+    .tag-cloud-title {
+      font-size: 25px;
+    }
+  }
+
+  .tag-cloud {
+    text-align: center;
+  }
+
+  .tag-cloud a {
+    color: #616161;
+    display: inline-block;
+    text-decoration: none;
+    padding: 0 8px;
+    line-height: 2;
+    transition: all 0.3s;
+  }
+
+  .tag-cloud a:hover {
+    color: #03a9f4 !important;
+    transform: scale(1.1);
+  }
 </style>

@@ -29,3 +29,15 @@ export function getTags() {
 export function getCategoryOrTagArticleList(path, params) {
   return service.get("/blog" + path, params);
 }
+
+export function getAbout() {
+  return service.get(urls.about);
+}
+
+export function getMessages() {
+  return service.get(urls.messages);
+}
+
+export function addMessages(params) {
+  return service.post(urls.messages,params);
+}

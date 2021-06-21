@@ -6,6 +6,7 @@ import (
 	"blog-go-gin/handlers/base"
 	"blog-go-gin/models/page"
 	"blog-go-gin/service"
+	"blog-go-gin/service/impl"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -13,7 +14,7 @@ import (
 )
 
 var (
-	CategoryService = &service.CategoryService{}
+	CategoryService service.ICategoryService = &impl.CategoryServiceImpl{}
 )
 
 type CategoryRestApi struct {

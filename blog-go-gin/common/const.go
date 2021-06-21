@@ -37,4 +37,6 @@ const (
 	Categories          = "/categories"
 	ArticleByCategoryID = "/categories/:categoryId"
 	ArticleByTagID      = "/tags/:tagId"
+	About               = "/about"
+	Message             = "/messages"
 )

@@ -6,6 +6,7 @@ import (
 	"blog-go-gin/handlers/base"
 	"blog-go-gin/models/page"
 	"blog-go-gin/service"
+	"blog-go-gin/service/impl"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -17,7 +18,7 @@ type TagRestApi struct {
 }
 
 var (
-	TagService = &service.TagService{}
+	TagService service.ITagService = &impl.TagServiceImpl{}
 )
 
 func (c *TagRestApi) GetTags(ctx *gin.Context) {

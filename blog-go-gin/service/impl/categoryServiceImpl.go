@@ -1,4 +1,4 @@
-package service
+package impl
 
 import (
 	pb "blog-go-gin/go_proto"
@@ -7,11 +7,11 @@ import (
 	"sync"
 )
 
-type CategoryService struct {
+type CategoryServiceImpl struct {
 	wg sync.WaitGroup
 }
 
-func (receiver *CategoryService) GetCategories() ([]*pb.Category, error) {
+func (receiver *CategoryServiceImpl) GetCategories() ([]*pb.Category, error) {
 
 	categories, err := model.GetCategories("1 = 1")
 	if err != nil {

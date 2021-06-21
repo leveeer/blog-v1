@@ -7,6 +7,7 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models/page"
 	"blog-go-gin/service"
+	"blog-go-gin/service/impl"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
 	"io/ioutil"
@@ -16,7 +17,7 @@ import (
 )
 
 var (
-	ArticleService = &service.ArticleService{}
+	ArticleService service.IArticleService = &impl.ArticleServiceImpl{}
 )
 
 type ArticleRestApi struct {
@@ -27,12 +28,16 @@ func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 	body, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
 		logging.Logger.Error(err)
+		c.RespFailWithDesc(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
 	}
 	//ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 	request := &pb.RequestPkg{}
 	err = proto.Unmarshal(body, request)
 	if err != nil {
 		logging.Logger.Error(err)
+		c.RespFailWithDesc(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
 	}
 	logging.Logger.Debug(request)
 	var ipage page.IPage

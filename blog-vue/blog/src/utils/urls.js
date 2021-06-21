@@ -4,7 +4,9 @@ export const urls = {
   blog_info: "/blog/blog_info",
   archive: "/blog/archives",
   categories: "/blog/categories",
-  tags: "/blog/tags"
+  tags: "/blog/tags",
+  about: "/blog/about",
+  messages: "/blog/messages"
 };
 
 export default urls;

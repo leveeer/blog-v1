@@ -1,4 +1,4 @@
-package service
+package impl
 
 import (
 	"blog-go-gin/common"
@@ -9,11 +9,11 @@ import (
 	"sync"
 )
 
-type ArticleService struct {
+type ArticleServiceImpl struct {
 	wg sync.WaitGroup
 }
 
-func (b *ArticleService) GetArticleList(page page.IPage) ([]*pb.Article, error) {
+func (b *ArticleServiceImpl) GetArticleList(page page.IPage) ([]*pb.Article, error) {
 	articles, err := model.GetArticlesOnHome(page)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (b *ArticleService) GetArticleList(page page.IPage) ([]*pb.Article, error) 
 	return articleSlice, err
 }
 
-func (b *ArticleService) GetArticleById(id int) (*pb.ArticleInfo, error) {
+func (b *ArticleServiceImpl) GetArticleById(id int) (*pb.ArticleInfo, error) {
 	//获取当前文章
 	article, err := model.GetArticleByID(id)
 	if err != nil {
@@ -168,7 +168,7 @@ func (b *ArticleService) GetArticleById(id int) (*pb.ArticleInfo, error) {
 	}, nil
 }
 
-func (b *ArticleService) GetArchiveList(ipage *page.IPage) (*pb.Archives, error) {
+func (b *ArticleServiceImpl) GetArchiveList(ipage *page.IPage) (*pb.Archives, error) {
 	articles, err := model.GetArchives(ipage)
 	if err != nil {
 		return nil, err
@@ -195,7 +195,7 @@ func (b *ArticleService) GetArchiveList(ipage *page.IPage) (*pb.Archives, error)
 	}, nil
 }
 
-func (b *ArticleService) GetArticleByCategoryID(categoryId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error) {
+func (b *ArticleServiceImpl) GetArticleByCategoryID(categoryId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error) {
 	var articleSlice []*pb.Article
 	articles, err := model.GetArticlesByConditionWithPage("category_id = ?", iPage, categoryId)
 	if err != nil {
@@ -246,7 +246,7 @@ func (b *ArticleService) GetArticleByCategoryID(categoryId int, iPage *page.IPag
 	}, nil
 }
 
-func (b *ArticleService) GetArticleByTagID(tagId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error) {
+func (b *ArticleServiceImpl) GetArticleByTagID(tagId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error) {
 	var articleSlice []*pb.Article
 	articles, err := model.GetArticlesByTagIdWithPage(tagId, iPage)
 	if err != nil {
