@@ -4,6 +4,7 @@ import (
 	conf "blog-go-gin/config"
 	"blog-go-gin/logging"
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"time"
 )
@@ -103,6 +104,70 @@ func (*redisUtil) IncrBy(key string, increment int64) int64 {
 		panic(err)
 	}
 	return val
+}
+
+// HashSet 向key的hash中添加元素field的值
+func (*redisUtil) HashSet(key, field string, data interface{}) error {
+	err := redisClient.HSet(ctx, key, field, data).Err()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// BatchHashSet 批量向key的hash添加对应元素field的值
+func (*redisUtil) BatchHashSet(key string, fields map[string]interface{}) (bool, error) {
+	val, err := redisClient.HMSet(ctx, key, fields).Result()
+	if err != nil {
+		logging.Logger.Error("Redis HMSet Error:", err)
+		return false, err
+	}
+	return val, nil
+}
+
+// HashGet 通过key获取hash的元素值
+func (*redisUtil) HashGet(key, field string) (string, error) {
+	result := ""
+	val, err := redisClient.HGet(ctx, key, field).Result()
+	if err == redis.Nil {
+		logging.Logger.Info("Key Doesn't Exists:", field)
+		return result, err
+	} else if err != nil {
+		logging.Logger.Error("Redis HGet Error:", err)
+		return result, err
+	}
+	return val, nil
+}
+
+// BatchHashGet 批量获取key的hash中对应多元素值
+func (*redisUtil) BatchHashGet(key string, fields ...string) (map[string]interface{}, error) {
+	resMap := make(map[string]interface{})
+	for _, field := range fields {
+		var result interface{}
+		val, err := redisClient.HGet(ctx, key, fmt.Sprintf("%s", field)).Result()
+		if err == redis.Nil {
+			logging.Logger.Info("Key Doesn't Exists:", field)
+			resMap[field] = result
+		} else if err != nil {
+			logging.Logger.Error("Redis HMGet Error:", err)
+			return nil, err
+		}
+		if val != "" {
+			resMap[field] = val
+		} else {
+			resMap[field] = result
+		}
+	}
+	return resMap, nil
+}
+
+func (*redisUtil) HashGetAll(key string) (map[string]string, error) {
+	result, err := redisClient.HGetAll(ctx, key).Result()
+	if err != nil {
+		logging.Logger.Error("Redis HashGetAll Error:", err)
+		return nil, err
+	}
+	return result, nil
 }
 
 var RedisUtil = &redisUtil{}

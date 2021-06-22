@@ -359,6 +359,108 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      Comment: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          userId: {
+            type: "int32",
+            id: 2
+          },
+          nickname: {
+            type: "string",
+            id: 3
+          },
+          avatar: {
+            type: "string",
+            id: 4
+          },
+          webSite: {
+            type: "string",
+            id: 5
+          },
+          commentContent: {
+            type: "string",
+            id: 6
+          },
+          likeCount: {
+            type: "uint32",
+            id: 7
+          },
+          createTime: {
+            type: "int64",
+            id: 8
+          },
+          replyCount: {
+            type: "uint32",
+            id: 9
+          },
+          replyList: {
+            rule: "repeated",
+            type: "Reply",
+            id: 10
+          }
+        }
+      },
+      CommentInfo: {
+        fields: {
+          commentList: {
+            rule: "repeated",
+            type: "Comment",
+            id: 1
+          },
+          count: {
+            type: "uint32",
+            id: 2
+          }
+        }
+      },
+      Reply: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          parentId: {
+            type: "int32",
+            id: 2
+          },
+          userId: {
+            type: "int32",
+            id: 3
+          },
+          nickname: {
+            type: "string",
+            id: 4
+          },
+          avatar: {
+            type: "string",
+            id: 5
+          },
+          webSite: {
+            type: "string",
+            id: 6
+          },
+          replyId: {
+            type: "int32",
+            id: 7
+          },
+          commentContent: {
+            type: "string",
+            id: 8
+          },
+          likeCount: {
+            type: "uint32",
+            id: 9
+          },
+          createTime: {
+            type: "int64",
+            id: 10
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -404,6 +506,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "FriendLink",
             id: 7
+          },
+          commentInfo: {
+            type: "CommentInfo",
+            id: 8
           },
           errMsg: {
             type: "string",

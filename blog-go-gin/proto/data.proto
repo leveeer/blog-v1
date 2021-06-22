@@ -104,3 +104,34 @@ message FriendLink{
   string linkName = 5;
   int64 createTime = 6;
 }
+
+message Comment{
+  int32 id = 1;
+  int32 userId = 2;
+  string nickname = 3;
+  string avatar = 4;
+  string webSite = 5;
+  string commentContent = 6;
+  uint32 likeCount = 7;
+  int64 createTime = 8;
+  uint32 replyCount = 9;
+  repeated Reply replyList = 10;
+}
+
+message CommentInfo{
+  repeated Comment commentList = 1;
+  uint32 count = 2;
+}
+
+message Reply{
+  int32 id = 1;
+  int32 parentId = 2;
+  int32 userId = 3;
+  string nickname = 4;
+  string avatar = 5;
+  string webSite = 6;
+  int32 replyId = 7;
+  string commentContent = 8;
+  uint32 likeCount = 9;
+  int64 createTime = 10;
+}

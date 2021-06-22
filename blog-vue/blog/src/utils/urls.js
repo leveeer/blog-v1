@@ -7,7 +7,8 @@ export const urls = {
   tags: "/blog/tags",
   about: "/blog/about",
   messages: "/blog/messages",
-  links: "/blog/links"
+  links: "/blog/links",
+  comments: "/blog/comments",
 };
 
 export default urls;

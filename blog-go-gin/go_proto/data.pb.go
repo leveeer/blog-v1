@@ -1024,6 +1024,299 @@ func (x *FriendLink) GetCreateTime() int64 {
 	return 0
 }
 
+type Comment struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id             int32    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId         int32    `protobuf:"varint,2,opt,name=userId,proto3" json:"userId,omitempty"`
+	Nickname       string   `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Avatar         string   `protobuf:"bytes,4,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	WebSite        string   `protobuf:"bytes,5,opt,name=webSite,proto3" json:"webSite,omitempty"`
+	CommentContent string   `protobuf:"bytes,6,opt,name=commentContent,proto3" json:"commentContent,omitempty"`
+	LikeCount      uint32   `protobuf:"varint,7,opt,name=likeCount,proto3" json:"likeCount,omitempty"`
+	CreateTime     int64    `protobuf:"varint,8,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	ReplyCount     uint32   `protobuf:"varint,9,opt,name=replyCount,proto3" json:"replyCount,omitempty"`
+	ReplyList      []*Reply `protobuf:"bytes,10,rep,name=replyList,proto3" json:"replyList,omitempty"`
+}
+
+func (x *Comment) Reset() {
+	*x = Comment{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_data_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Comment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Comment) ProtoMessage() {}
+
+func (x *Comment) ProtoReflect() protoreflect.Message {
+	mi := &file_data_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Comment.ProtoReflect.Descriptor instead.
+func (*Comment) Descriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *Comment) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Comment) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *Comment) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *Comment) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+func (x *Comment) GetWebSite() string {
+	if x != nil {
+		return x.WebSite
+	}
+	return ""
+}
+
+func (x *Comment) GetCommentContent() string {
+	if x != nil {
+		return x.CommentContent
+	}
+	return ""
+}
+
+func (x *Comment) GetLikeCount() uint32 {
+	if x != nil {
+		return x.LikeCount
+	}
+	return 0
+}
+
+func (x *Comment) GetCreateTime() int64 {
+	if x != nil {
+		return x.CreateTime
+	}
+	return 0
+}
+
+func (x *Comment) GetReplyCount() uint32 {
+	if x != nil {
+		return x.ReplyCount
+	}
+	return 0
+}
+
+func (x *Comment) GetReplyList() []*Reply {
+	if x != nil {
+		return x.ReplyList
+	}
+	return nil
+}
+
+type CommentInfo struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	CommentList []*Comment `protobuf:"bytes,1,rep,name=commentList,proto3" json:"commentList,omitempty"`
+	Count       uint32     `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+}
+
+func (x *CommentInfo) Reset() {
+	*x = CommentInfo{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_data_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CommentInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CommentInfo) ProtoMessage() {}
+
+func (x *CommentInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_data_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CommentInfo.ProtoReflect.Descriptor instead.
+func (*CommentInfo) Descriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *CommentInfo) GetCommentList() []*Comment {
+	if x != nil {
+		return x.CommentList
+	}
+	return nil
+}
+
+func (x *CommentInfo) GetCount() uint32 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+type Reply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id             int32  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	ParentId       int32  `protobuf:"varint,2,opt,name=parentId,proto3" json:"parentId,omitempty"`
+	UserId         int32  `protobuf:"varint,3,opt,name=userId,proto3" json:"userId,omitempty"`
+	Nickname       string `protobuf:"bytes,4,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	Avatar         string `protobuf:"bytes,5,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	WebSite        string `protobuf:"bytes,6,opt,name=webSite,proto3" json:"webSite,omitempty"`
+	ReplyId        int32  `protobuf:"varint,7,opt,name=replyId,proto3" json:"replyId,omitempty"`
+	CommentContent string `protobuf:"bytes,8,opt,name=commentContent,proto3" json:"commentContent,omitempty"`
+	LikeCount      uint32 `protobuf:"varint,9,opt,name=likeCount,proto3" json:"likeCount,omitempty"`
+	CreateTime     int64  `protobuf:"varint,10,opt,name=createTime,proto3" json:"createTime,omitempty"`
+}
+
+func (x *Reply) Reset() {
+	*x = Reply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_data_proto_msgTypes[14]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Reply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Reply) ProtoMessage() {}
+
+func (x *Reply) ProtoReflect() protoreflect.Message {
+	mi := &file_data_proto_msgTypes[14]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Reply.ProtoReflect.Descriptor instead.
+func (*Reply) Descriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *Reply) GetId() int32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Reply) GetParentId() int32 {
+	if x != nil {
+		return x.ParentId
+	}
+	return 0
+}
+
+func (x *Reply) GetUserId() int32 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *Reply) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *Reply) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+func (x *Reply) GetWebSite() string {
+	if x != nil {
+		return x.WebSite
+	}
+	return ""
+}
+
+func (x *Reply) GetReplyId() int32 {
+	if x != nil {
+		return x.ReplyId
+	}
+	return 0
+}
+
+func (x *Reply) GetCommentContent() string {
+	if x != nil {
+		return x.CommentContent
+	}
+	return ""
+}
+
+func (x *Reply) GetLikeCount() uint32 {
+	if x != nil {
+		return x.LikeCount
+	}
+	return 0
+}
+
+func (x *Reply) GetCreateTime() int64 {
+	if x != nil {
+		return x.CreateTime
+	}
+	return 0
+}
+
 var File_data_proto protoreflect.FileDescriptor
 
 var file_data_proto_rawDesc = []byte{
@@ -1170,9 +1463,51 @@ var file_data_proto_rawDesc = []byte{
 	0x0a, 0x08, 0x6c, 0x69, 0x6e, 0x6b, 0x4e, 0x61, 0x6d, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x08, 0x6c, 0x69, 0x6e, 0x6b, 0x4e, 0x61, 0x6d, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x72,
 	0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a,
-	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x42, 0x13, 0x5a, 0x11, 0x2e, 0x2e,
-	0x2f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
-	0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x22, 0xb1, 0x02, 0x0a, 0x07, 0x43,
+	0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1a,
+	0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x76,
+	0x61, 0x74, 0x61, 0x72, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x76, 0x61, 0x74,
+	0x61, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x77, 0x65, 0x62, 0x53, 0x69, 0x74, 0x65, 0x18, 0x05, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x07, 0x77, 0x65, 0x62, 0x53, 0x69, 0x74, 0x65, 0x12, 0x26, 0x0a, 0x0e,
+	0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x06,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e,
+	0x74, 0x65, 0x6e, 0x74, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x69, 0x6b, 0x65, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x6c, 0x69, 0x6b, 0x65, 0x43, 0x6f, 0x75,
+	0x6e, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65,
+	0x18, 0x08, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69,
+	0x6d, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x43, 0x6f, 0x75, 0x6e, 0x74,
+	0x18, 0x09, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x0a, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x43, 0x6f, 0x75,
+	0x6e, 0x74, 0x12, 0x2a, 0x0a, 0x09, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x18,
+	0x0a, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65,
+	0x70, 0x6c, 0x79, 0x52, 0x09, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x22, 0x55,
+	0x0a, 0x0b, 0x43, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x30, 0x0a,
+	0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03,
+	0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x65,
+	0x6e, 0x74, 0x52, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x12,
+	0x14, 0x0a, 0x05, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x05,
+	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x99, 0x02, 0x0a, 0x05, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x1a, 0x0a, 0x08, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x05, 0x52, 0x08, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x12, 0x16, 0x0a, 0x06, 0x75,
+	0x73, 0x65, 0x72, 0x49, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x06, 0x75, 0x73, 0x65,
+	0x72, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x18,
+	0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12,
+	0x16, 0x0a, 0x06, 0x61, 0x76, 0x61, 0x74, 0x61, 0x72, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x61, 0x76, 0x61, 0x74, 0x61, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x77, 0x65, 0x62, 0x53, 0x69,
+	0x74, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x77, 0x65, 0x62, 0x53, 0x69, 0x74,
+	0x65, 0x12, 0x18, 0x0a, 0x07, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x49, 0x64, 0x18, 0x07, 0x20, 0x01,
+	0x28, 0x05, 0x52, 0x07, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x49, 0x64, 0x12, 0x26, 0x0a, 0x0e, 0x63,
+	0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18, 0x08, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x0e, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x74,
+	0x65, 0x6e, 0x74, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x69, 0x6b, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74,
+	0x18, 0x09, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x09, 0x6c, 0x69, 0x6b, 0x65, 0x43, 0x6f, 0x75, 0x6e,
+	0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d, 0x65, 0x18,
+	0x0a, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54, 0x69, 0x6d,
+	0x65, 0x42, 0x13, 0x5a, 0x11, 0x2e, 0x2e, 0x2f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -1187,7 +1522,7 @@ func file_data_proto_rawDescGZIP() []byte {
 	return file_data_proto_rawDescData
 }
 
-var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_data_proto_goTypes = []interface{}{
 	(*Article)(nil),                 // 0: proto.Article
 	(*Tag)(nil),                     // 1: proto.Tag
@@ -1201,22 +1536,27 @@ var file_data_proto_goTypes = []interface{}{
 	(*About)(nil),                   // 9: proto.About
 	(*Message)(nil),                 // 10: proto.Message
 	(*FriendLink)(nil),              // 11: proto.FriendLink
+	(*Comment)(nil),                 // 12: proto.Comment
+	(*CommentInfo)(nil),             // 13: proto.CommentInfo
+	(*Reply)(nil),                   // 14: proto.Reply
 }
 var file_data_proto_depIdxs = []int32{
-	1, // 0: proto.Article.tags:type_name -> proto.Tag
-	3, // 1: proto.BlogHomeInfo.userInfo:type_name -> proto.UserInfo
-	0, // 2: proto.ArticleInfo.article:type_name -> proto.Article
-	0, // 3: proto.ArticleInfo.lastArticle:type_name -> proto.Article
-	0, // 4: proto.ArticleInfo.nextArticle:type_name -> proto.Article
-	0, // 5: proto.ArticleInfo.recommendArticleList:type_name -> proto.Article
-	0, // 6: proto.ArticleInfo.articleLatestList:type_name -> proto.Article
-	6, // 7: proto.Archives.archiveList:type_name -> proto.ArchiveArticleInfo
-	0, // 8: proto.ArticlesByCategoryOrTag.articleList:type_name -> proto.Article
-	9, // [9:9] is the sub-list for method output_type
-	9, // [9:9] is the sub-list for method input_type
-	9, // [9:9] is the sub-list for extension type_name
-	9, // [9:9] is the sub-list for extension extendee
-	0, // [0:9] is the sub-list for field type_name
+	1,  // 0: proto.Article.tags:type_name -> proto.Tag
+	3,  // 1: proto.BlogHomeInfo.userInfo:type_name -> proto.UserInfo
+	0,  // 2: proto.ArticleInfo.article:type_name -> proto.Article
+	0,  // 3: proto.ArticleInfo.lastArticle:type_name -> proto.Article
+	0,  // 4: proto.ArticleInfo.nextArticle:type_name -> proto.Article
+	0,  // 5: proto.ArticleInfo.recommendArticleList:type_name -> proto.Article
+	0,  // 6: proto.ArticleInfo.articleLatestList:type_name -> proto.Article
+	6,  // 7: proto.Archives.archiveList:type_name -> proto.ArchiveArticleInfo
+	0,  // 8: proto.ArticlesByCategoryOrTag.articleList:type_name -> proto.Article
+	14, // 9: proto.Comment.replyList:type_name -> proto.Reply
+	12, // 10: proto.CommentInfo.commentList:type_name -> proto.Comment
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_data_proto_init() }
@@ -1369,6 +1709,42 @@ func file_data_proto_init() {
 				return nil
 			}
 		}
+		file_data_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Comment); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_data_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*CommentInfo); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_data_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Reply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1376,7 +1752,7 @@ func file_data_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_data_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

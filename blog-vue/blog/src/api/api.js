@@ -45,3 +45,7 @@ export function addMessages(params) {
 export function getLinks() {
   return service.get(urls.links);
 }
+
+export function getComments(params) {
+  return service.get(urls.comments, params);
+}

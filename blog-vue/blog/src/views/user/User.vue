@@ -109,9 +109,7 @@ export default {
 
 <style scoped>
 .user-banner {
-  background: url(https://www.static.talkxj.com/article/setting.jpeg) center
-    center / cover no-repeat;
-  background-color: #49b1f5;
+  background: #49b1f5 url(https://www.static.talkxj.com/article/setting.jpeg) no-repeat center center;
 }
 .info-title {
   font-size: 1.25rem;

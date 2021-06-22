@@ -52,3 +52,31 @@ func TestCopyField(t *testing.T) {
 	logging.Logger.Info(a2)
 
 }
+
+func TestMap(t *testing.T) {
+	repliesSlice := []*pb.Reply{
+		{
+			Id:       2,
+			ParentId: 1,
+		},
+		{
+			Id:       3,
+			ParentId: 2,
+		},
+		{
+			Id:       4,
+			ParentId: 1,
+		},
+		{
+			Id:       5,
+			ParentId: 3,
+		},
+	}
+	replyCountMap := make(map[int32][]*pb.Reply)
+	logging.Logger.Debug(replyCountMap)
+	for _, reply := range repliesSlice {
+		repliesByGroup := append(replyCountMap[reply.ParentId], reply)
+		replyCountMap[reply.ParentId] = repliesByGroup
+	}
+	logging.Logger.Debug(replyCountMap)
+}

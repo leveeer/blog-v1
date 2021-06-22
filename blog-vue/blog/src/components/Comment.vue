@@ -285,7 +285,7 @@ export default {
         return false;
       }
       //判空
-      if (this.commentContent.trim() == "") {
+      if (this.commentContent.trim() === "") {
         this.$toast({ type: "error", message: "评论不能为空" });
         return false;
       }

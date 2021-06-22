@@ -13,6 +13,7 @@ var (
 	CategoryApi   = &blogApi.CategoryRestApi{}
 	MessageApi    = &blogApi.MessageRestApi{}
 	FriendLinkApi = &blogApi.FriendLinkRestApi{}
+	CommentApi    = &blogApi.CommentRestApi{}
 )
 
 func blogRouters(r *gin.Engine) {
@@ -29,4 +30,5 @@ func blogRouters(r *gin.Engine) {
 	blog.GET(common.Message, MessageApi.GetMessages)
 	blog.POST(common.Message, MessageApi.AddMessages)
 	blog.GET(common.FriendLinks, FriendLinkApi.GetFriendLinks)
+	blog.GET(common.Comments, CommentApi.GetComments)
 }

@@ -2,6 +2,8 @@ package model
 
 import (
 	"blog-go-gin/dao"
+	"blog-go-gin/logging"
+	"blog-go-gin/models/page"
 )
 
 type Comment struct {
@@ -13,8 +15,10 @@ type Comment struct {
 	ParentID       int    `gorm:"column:parent_id;not null" json:"parent_id"`
 	ReplyID        int    `gorm:"column:reply_id;not null" json:"reply_id"`
 	UserID         int    `gorm:"column:user_id;not null" json:"user_id"`
-	UserNickname   string `gorm:"-"`
-	ReplyNickname  string `gorm:"-"`
+	Nickname       string `gorm:"-" json:"nickname"`
+	Avatar         string `gorm:"-" json:"avatar"`
+	WebSite        string `gorm:"-" json:"web_site"`
+	ReplyCount     int    `gorm:"-" json:"reply_count"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -57,5 +61,51 @@ func GetComments(condition string, args ...interface{}) ([]*Comment, error) {
 	if err := dao.Db.Debug().Where(condition, args...).Find(&res).Error; err != nil {
 		return nil, err
 	}
+	return res, nil
+}
+
+func GetCommentsCountByCondition(condition string, args ...interface{}) (int64, error) {
+	var m Comment
+	var count int64
+	if err := dao.Db.Debug().Table("tb_comment").Where(condition, args...).Find(&m).Count(&count).Error; err != nil {
+		return int64(0), err
+	}
+	return count, nil
+}
+
+func GetCommentsAndUserInfo(iPage *page.IPage, condition string, args ...interface{}) ([]*Comment, error) {
+	res := make([]*Comment, 0)
+	if err := dao.Db.Debug().Table("tb_comment as c").
+		Select(" u.nickname,u.avatar,u.web_site,c.user_id,c.id,c.comment_content,c.create_time").
+		Where(condition, args...).Joins("JOIN tb_user_info u ON c.user_id = u.id").Order("create_time DESC").
+		Scopes(page.Paginate(iPage)).
+		Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetReplies(commentIds []int64) ([]*Comment, error) {
+	res := make([]*Comment, 0)
+	subQuery := dao.Db.Debug().Table("tb_comment as c").
+		Select("c.user_id,u.nickname,u.avatar,u.web_site,c.reply_id, c.id,c.parent_id,c.comment_content,c.create_time,row_number () over ( PARTITION BY parent_id ORDER BY c.create_time ) row_num").
+		Joins("INNER JOIN tb_user_info u ON c.user_id = u.id").
+		Where("c.is_delete = 0 AND parent_id IN (?)", commentIds)
+	if err := dao.Db.Debug().Table("(?) as t", subQuery).Where("4 > row_num").
+		Find(&res).Error; err != nil {
+		return nil, err
+	}
+	logging.Logger.Debugf("%+v", &res)
+	return res, nil
+}
+
+func GetReplyCountByCommentId(commentIds []int64) ([]*Comment, error) {
+	res := make([]*Comment, 0)
+	if err := dao.Db.Debug().Table("tb_comment").Select("parent_id,count(1) AS reply_count").
+		Where("is_delete = 0 AND parent_id IN (?)", commentIds).Group("parent_id").
+		Find(&res).Error; err != nil {
+		return nil, err
+	}
+	logging.Logger.Debugf("%+v", &res)
 	return res, nil
 }

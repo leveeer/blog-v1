@@ -40,4 +40,5 @@ const (
 	About               = "/about"
 	Message             = "/messages"
 	FriendLinks         = "/links"
+	Comments            = "/comments"
 )
