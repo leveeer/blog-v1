@@ -210,11 +210,11 @@
           <!-- 分割线 -->
           <hr />
           <!-- 评论 -->
-          <!-- <comment
+           <comment
             :commentList="commentList"
             :count="count"
             @reloadComment="listComment"
-          /> -->
+          />
         </v-card>
       </v-col>
       <!-- 侧边功能 -->

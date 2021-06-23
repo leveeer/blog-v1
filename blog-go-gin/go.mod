@@ -9,6 +9,7 @@ require (
 	github.com/gin-gonic/gin v1.7.1
 	github.com/go-redis/redis/v8 v8.8.3
 	github.com/golang/protobuf v1.4.2
+	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/mattn/go-colorable v0.1.8
 	github.com/robfig/cron v1.2.0
 	github.com/sirupsen/logrus v1.8.1

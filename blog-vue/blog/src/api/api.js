@@ -49,3 +49,7 @@ export function getLinks() {
 export function getComments(params) {
   return service.get(urls.comments, params);
 }
+
+export function getLoginCode(params) {
+  return service.get(urls.code,params)
+}

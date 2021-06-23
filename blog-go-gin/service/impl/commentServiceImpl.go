@@ -31,6 +31,7 @@ func (c *CommentServiceImpl) GetComments(articleId int, ipage *page.IPage) (*pb.
 	}
 	var commentsSlice []*pb.Comment
 	for _, comment := range comments {
+		logging.Logger.Debug(comment)
 		commentsSlice = append(commentsSlice, &pb.Comment{
 			Id:             int32(comment.ID),
 			UserId:         int32(comment.UserID),
@@ -46,12 +47,10 @@ func (c *CommentServiceImpl) GetComments(articleId int, ipage *page.IPage) (*pb.
 	if err != nil {
 		return nil, err
 	}
-	logging.Logger.Debug(likeCountMap)
 	//封装评论点赞量
 	var commentIdSlice []int64
 	for _, comment := range commentsSlice {
 		commentIdSlice = append(commentIdSlice, int64(comment.Id))
-		logging.Logger.Debug(comment.Id)
 		likeCount, _ := strconv.Atoi(likeCountMap[string(comment.Id)])
 		comment.LikeCount = uint32(likeCount)
 	}
@@ -96,7 +95,6 @@ func (c *CommentServiceImpl) GetComments(articleId int, ipage *page.IPage) (*pb.
 		comment.ReplyList = replyMap[comment.Id]
 		comment.ReplyCount = uint32(replyCountMap[comment.Id])
 	}
-	logging.Logger.Debug(commentsSlice)
 
 	return &pb.CommentInfo{
 		CommentList: commentsSlice,

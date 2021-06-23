@@ -1,9 +1,15 @@
 package common
 
 const (
-	BloggerId = 1 //博主id
-	False     = 0 //否
-	True      = 1 //是
+	BloggerId              = 1 //博主id
+	False                  = 0 //否
+	True                   = 1 //是
+	AppSecretKey           = "0qPhpSBdQXfN8ey6iaAA3kQ**"
+	EmailAuthorizationCode = "ilrqvjyahhbahdia"
+	EmailServerAddr        = "smtp.qq.com:25"
+	Sender                 = "1519695805@qq.com"
+	EmailHost              = "smtp.qq.com"
+	EmailSubject           = "验证码"
 )
 
 //RedisPrefixConst
@@ -41,4 +47,7 @@ const (
 	Message             = "/messages"
 	FriendLinks         = "/links"
 	Comments            = "/comments"
+
+	UserBaseUrl = "/users"
+	VerifyCode  = "/code"
 )

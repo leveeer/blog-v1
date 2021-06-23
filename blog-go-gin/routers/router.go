@@ -36,5 +36,6 @@ func InitWebRouter() *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 	}
 	blogRouters(r)
+	userRouters(r)
 	return r
 }

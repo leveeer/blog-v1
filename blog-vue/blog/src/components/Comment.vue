@@ -67,7 +67,7 @@
             <a v-else :href="item.webSite" target="_blank">
               {{ item.nickname }}
             </a>
-            <span class="blogger-tag" v-if="item.userId == 1">博主</span>
+            <span class="blogger-tag" v-if="item.userId === 1">博主</span>
           </div>
           <!-- 信息 -->
           <div class="comment-info">
@@ -91,7 +91,7 @@
           <!-- 回复人 -->
           <div
             style="display:flex"
-            v-for="reply of item.replyDTOList"
+            v-for="reply of item.replyList"
             :key="reply.id"
           >
             <!-- 头像 -->
@@ -105,7 +105,7 @@
                 <a v-else :href="reply.webSite" target="_blank">
                   {{ reply.nickname }}
                 </a>
-                <span class="blogger-tag" v-if="reply.userId == 1">博主</span>
+                <span class="blogger-tag" v-if="reply.userId === 1">博主</span>
               </div>
               <!-- 信息 -->
               <div class="comment-info">
@@ -127,17 +127,17 @@
               <!-- 回复内容 -->
               <p class="comment-content">
                 <!-- 回复用户名 -->
-                <template v-if="reply.replyId != item.userId">
-                  <span v-if="!reply.replyWebSite" class="ml-1">
-                    @{{ reply.replyNickname }}
+                <template v-if="reply.userId !== item.userId">
+                  <span v-if="!reply.webSite" class="ml-1">
+                    @{{ reply.nickname }}
                   </span>
                   <a
                     v-else
-                    :href="reply.replyWebSite"
+                    :href="reply.webSite"
                     target="_blank"
                     class="comment-nickname ml-1"
                   >
-                    @{{ reply.replyNickname }}
+                    @{{ reply.nickname }}
                   </a>
                   ，
                 </template>
@@ -360,7 +360,7 @@ export default {
     isLike() {
       return function(commentId) {
         var commentLikeSet = this.$store.state.commentLikeSet;
-        return commentLikeSet.indexOf(commentId) != -1 ? "like-active" : "like";
+        return commentLikeSet.indexOf(commentId) !== -1 ? "like-active" : "like";
       };
     }
   },

@@ -9,6 +9,7 @@ export const urls = {
   messages: "/blog/messages",
   links: "/blog/links",
   comments: "/blog/comments",
+  code: "/users/code"
 };
 
 export default urls;
