@@ -22,7 +22,7 @@ message ResponsePkg {
   repeated Message messages = 6;
   repeated FriendLink friendLinks = 7;
   CommentInfo commentInfo = 8;
-  string errMsg = 10; //消息
+  string message = 10; //消息
   int64 serverTime = 11; //服务器时间
   repeated Article articleList = 12;
   BlogHomeInfo blogHomeInfo = 13;

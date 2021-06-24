@@ -135,3 +135,9 @@ message Reply{
   uint32 likeCount = 9;
   int64 createTime = 10;
 }
+
+message User{
+  string username = 1;
+  string password = 2;
+  string code = 3;
+}

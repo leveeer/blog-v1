@@ -11,7 +11,7 @@
           label="邮箱号"
           placeholder="请输入您的邮箱号"
           clearable
-          @keyup.enter="register"
+          @keyup.enter="registerCheck"
         />
         <!-- 验证码 -->
         <div class="mt-7 send-wrapper">
@@ -20,7 +20,7 @@
             v-model="code"
             label="验证码"
             placeholder="请输入6位验证码"
-            @keyup.enter="register"
+            @keyup.enter="registerCheck"
           />
           <v-btn text small :disabled="flag" @click="sendCode">
             {{ codeMsg }}
@@ -32,7 +32,7 @@
           class="mt-7"
           label="密码"
           placeholder="请输入您的密码"
-          @keyup.enter="register"
+          @keyup.enter="registerCheck"
           :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
           :type="show ? 'text' : 'password'"
           @click:append="show = !show"
@@ -43,7 +43,7 @@
           block
           color="red"
           style="color:#fff"
-          @click="register"
+          @click="registerCheck"
         >
           注册
         </v-btn>
@@ -57,122 +57,118 @@
 </template>
 
 <script>
-import { getLoginCode } from "../../api/api";
+  import { getLoginCode, register, login } from "../../api/api";
 
-export default {
-  data: function() {
-    return {
-      username: "",
-      code: "",
-      password: "",
-      flag: true,
-      codeMsg: "发送",
-      time: 60,
-      show: false
-    };
-  },
-  methods: {
-    openLogin() {
-      this.$store.state.registerFlag = false;
-      this.$store.state.loginFlag = true;
+  export default {
+    data: function() {
+      return {
+        username: "",
+        code: "",
+        password: "",
+        flag: true,
+        codeMsg: "发送",
+        time: 60,
+        show: false
+      };
     },
-    sendCode() {
-      const that = this;
-      const captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function(res) {
-        if (res.ret === 0) {
-          //发送邮件
-          that.countDown();
-          getLoginCode({
+    methods: {
+      openLogin() {
+        this.$store.state.registerFlag = false;
+        this.$store.state.loginFlag = true;
+      },
+      sendCode() {
+        const that = this;
+        const captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function(res) {
+          if (res.ret === 0) {
+            //发送邮件
+            that.countDown();
+            getLoginCode({
               params: { username: that.username }
             })
-            .then(( data ) => {
-              if (data.flag) {
-                that.$toast({ type: "success", message: data.message });
-              } else {
-                that.$toast({ type: "error", message: data.message });
-              }
-            });
-        }
-      });
-      // 显示验证码
-      captcha.show();
-    },
-    countDown() {
-      this.flag = true;
-      this.timer = setInterval(() => {
-        this.time--;
-        this.codeMsg = this.time + "s";
-        if (this.time <= 0) {
-          clearInterval(this.timer);
-          this.codeMsg = "发送";
-          this.time = 60;
-          this.flag = false;
-        }
-      }, 1000);
-    },
-    register() {
-      var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-      if (!reg.test(this.username)) {
-        this.$toast({ type: "error", message: "邮箱格式不正确" });
-        return false;
-      }
-      if (this.code.trim().length != 6) {
-        this.$toast({ type: "error", message: "请输入6位验证码" });
-        return false;
-      }
-      if (this.password.trim().length < 6) {
-        this.$toast({ type: "error", message: "密码不能少于6位" });
-        return false;
-      }
-      const user = {
-        username: this.username,
-        password: this.password,
-        code: this.code
-      };
-      this.axios.post("/api/users", user).then(({ data }) => {
-        if (data.flag) {
-          let param = new URLSearchParams();
-          param.append("username", user.username);
-          param.append("password", user.password);
-          this.axios.post("/api/login", param).then(({ data }) => {
-            this.username = "";
-            this.password = "";
-            this.$store.commit("login", data.data);
-            this.$store.commit("closeModel");
-          });
-          this.$toast({ type: "success", message: data.message });
-        } else {
-          this.$toast({ type: "error", message: data.message });
-        }
-      });
-    }
-  },
-  computed: {
-    registerFlag: {
-      set(value) {
-        this.$store.state.registerFlag = value;
+              .then((data) => {
+                if (data.flag) {
+                  that.$toast({ type: "success", message: data.message });
+                } else {
+                  that.$toast({ type: "error", message: data.message });
+                }
+              });
+          }
+        });
+        // 显示验证码
+        captcha.show();
       },
-      get() {
-        return this.$store.state.registerFlag;
+      countDown() {
+        this.flag = true;
+        this.timer = setInterval(() => {
+          this.time--;
+          this.codeMsg = this.time + "s";
+          if (this.time <= 0) {
+            clearInterval(this.timer);
+            this.codeMsg = "发送";
+            this.time = 60;
+            this.flag = false;
+          }
+        }, 1000);
+      },
+      registerCheck() {
+        const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        if (!reg.test(this.username)) {
+          this.$toast({ type: "error", message: "邮箱格式不正确" });
+          return false;
+        }
+        if (this.code.trim().length !== 6) {
+          this.$toast({ type: "error", message: "请输入6位验证码" });
+          return false;
+        }
+        if (this.password.trim().length < 6) {
+          this.$toast({ type: "error", message: "密码不能少于6位" });
+          return false;
+        }
+        const userModel = {
+          username: this.username,
+          password: this.password,
+          code: this.code
+        };
+        register({
+          user : userModel
+        }).then((data) => {
+          console.log(data)
+          if (data.code === 10000) {
+            let param = new URLSearchParams();
+            param.append("username", userModel.username);
+            param.append("password", userModel.password);
+            login(param).then((data) => {
+              this.username = "";
+              this.password = "";
+              this.$store.commit("login", data.data);
+              this.$store.commit("closeModel");
+            });
+            this.$toast({ type: "success", message: data.message });
+          } else {
+            this.$toast({ type: "error", message: data.message });
+          }
+        });
       }
     },
-    isMobile() {
-      const clientWidth = document.documentElement.clientWidth;
-      if (clientWidth > 960) {
-        return false;
+    computed: {
+      registerFlag: {
+        set(value) {
+          this.$store.state.registerFlag = value;
+        },
+        get() {
+          return this.$store.state.registerFlag;
+        }
+      },
+      isMobile() {
+        const clientWidth = document.documentElement.clientWidth;
+        return clientWidth <= 960;
       }
-      return true;
-    }
-  },
-  watch: {
-    username(value) {
-      var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-      if (reg.test(value)) {
-        this.flag = false;
-      } else {
-        this.flag = true;
+    },
+    watch: {
+      username(value) {
+        const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        this.flag = !reg.test(value);
       }
     }
-  }
-};
+  };
 </script>

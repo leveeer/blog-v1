@@ -22,7 +22,7 @@ type BlogInfoRestApi struct {
 func (c *BlogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
 	blogHomeInfo, err := BlogInfoService.GetBlogInfo()
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetBlogHomeInfoFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetBlogHomeInfoFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -31,14 +31,14 @@ func (c *BlogInfoRestApi) GetBlogInfo(ctx *gin.Context) {
 		ServerTime:   time.Now().Unix(),
 		BlogHomeInfo: blogHomeInfo,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }
 
 func (c *BlogInfoRestApi) GetAbout(ctx *gin.Context) {
 
 	about, err := BlogInfoService.GetAbout()
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetAboutFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetAboutFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -47,6 +47,6 @@ func (c *BlogInfoRestApi) GetAbout(ctx *gin.Context) {
 		ServerTime: time.Now().Unix(),
 		About:      about,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 
 }

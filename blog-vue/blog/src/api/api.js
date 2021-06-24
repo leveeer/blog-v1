@@ -53,3 +53,11 @@ export function getComments(params) {
 export function getLoginCode(params) {
   return service.get(urls.code,params)
 }
+
+export function register(params) {
+  return service.post(urls.register,params)
+}
+
+export function login(params) {
+  return service.post(urls.login,params)
+}

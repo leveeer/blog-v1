@@ -35,6 +35,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           message: {
             type: "Message",
             id: 4
+          },
+          user: {
+            type: "User",
+            id: 5
           }
         }
       },
@@ -461,6 +465,22 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      User: {
+        fields: {
+          username: {
+            type: "string",
+            id: 1
+          },
+          password: {
+            type: "string",
+            id: 2
+          },
+          code: {
+            type: "string",
+            id: 3
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -511,7 +531,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             type: "CommentInfo",
             id: 8
           },
-          errMsg: {
+          message: {
             type: "string",
             id: 10
           },

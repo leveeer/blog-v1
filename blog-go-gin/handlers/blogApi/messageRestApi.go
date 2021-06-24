@@ -25,7 +25,7 @@ var (
 func (c *MessageRestApi) GetMessages(ctx *gin.Context) {
 	messages, err := MessageService.GetMessages()
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetMessagesFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetMessagesFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -34,13 +34,13 @@ func (c *MessageRestApi) GetMessages(ctx *gin.Context) {
 		ServerTime: time.Now().Unix(),
 		Messages:   messages,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }
 
 func (c *MessageRestApi) AddMessages(ctx *gin.Context) {
 	body, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.InvalidRequestParams)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
 		logging.Logger.Error(err)
 		return
 	}
@@ -48,7 +48,7 @@ func (c *MessageRestApi) AddMessages(ctx *gin.Context) {
 	err = proto.Unmarshal(body, request)
 	if err != nil {
 		logging.Logger.Error(err)
-		c.RespFailWithDesc(ctx, http.StatusOK, common.InvalidRequestParams)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
 		return
 	}
 	logging.Logger.Debug(request)
@@ -56,7 +56,7 @@ func (c *MessageRestApi) AddMessages(ctx *gin.Context) {
 	request.Message.CreateTime = time.Now().Unix()
 	err = MessageService.AddMessage(request.Message)
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.AddMessageFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.AddMessageFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -64,5 +64,5 @@ func (c *MessageRestApi) AddMessages(ctx *gin.Context) {
 		Code:       pb.ResultCode_SuccessOK,
 		ServerTime: time.Now().Unix(),
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }

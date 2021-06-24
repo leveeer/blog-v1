@@ -2,9 +2,15 @@ package impl
 
 import (
 	"blog-go-gin/common"
+	"blog-go-gin/dao"
+	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
+	"blog-go-gin/models/enum"
+	"blog-go-gin/models/model"
 	"fmt"
 	"github.com/jordan-wright/email"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"math/rand"
 	"net/smtp"
 	"sync"
@@ -13,6 +19,61 @@ import (
 
 type UserAuthServiceImpl struct {
 	wg sync.WaitGroup
+}
+
+func (u *UserAuthServiceImpl) Register(user *pb.User) error {
+	//TODO 检测账号是否存在
+
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		//新增用户信息
+		userId, err := model.AddUserInfo(tx, &model.UserInfo{
+			Email:      user.GetUsername(),
+			Nickname:   fmt.Sprintf("用户%s", common.GetRandomString()),
+			Avatar:     common.DefaultAvatar,
+			CreateTime: time.Now().Unix(),
+		})
+		if err != nil {
+			return err
+		}
+		//新增用户账号
+		hashPwd, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost) //加密处理
+		if err != nil {
+			return err
+		}
+		err = model.AddUserAuth(tx, &model.UserAuth{
+			UserInfoID: userId,
+			Username:   user.GetUsername(),
+			Password:   string(hashPwd),
+			CreateTime: time.Now().Unix(),
+			LoginType:  enum.EMAIL.GetLoginType(),
+		})
+		if err != nil {
+			return err
+		}
+		//绑定用户角色
+		err = model.AddUserRole(tx, &model.UserRole{
+			UserID: userId,
+			RoleID: enum.Admin.GetRoleId(),
+		})
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (u *UserAuthServiceImpl) Login(user *pb.User) error {
+	//err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginPwd)) //验证（对比）
+	//if err != nil {
+	//	fmt.Println("pwd wrong")
+	//} else {
+	//	fmt.Println("pwd ok")
+	//}
+	panic("implement me")
 }
 
 func (u *UserAuthServiceImpl) GetLoginCode(username string) error {

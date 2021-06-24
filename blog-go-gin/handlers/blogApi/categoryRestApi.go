@@ -24,7 +24,7 @@ type CategoryRestApi struct {
 func (c *CategoryRestApi) GetCategories(ctx *gin.Context) {
 	categories, err := CategoryService.GetCategories()
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetCategoriesFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetCategoriesFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -33,7 +33,7 @@ func (c *CategoryRestApi) GetCategories(ctx *gin.Context) {
 		ServerTime: time.Now().Unix(),
 		Categories: categories,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }
 
 func (c *CategoryRestApi) GetArticleByCategoryID(ctx *gin.Context) {
@@ -41,7 +41,7 @@ func (c *CategoryRestApi) GetArticleByCategoryID(ctx *gin.Context) {
 	currentPage, _ := strconv.Atoi(ctx.Query("currentPage"))
 	articles, err := ArticleService.GetArticleByCategoryID(id, &page.IPage{Current: currentPage})
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticleByCategoryIDFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticleByCategoryIDFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -50,5 +50,5 @@ func (c *CategoryRestApi) GetArticleByCategoryID(ctx *gin.Context) {
 		ServerTime:              time.Now().Unix(),
 		ArticlesByCategoryOrTag: articles,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }

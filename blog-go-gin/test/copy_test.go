@@ -7,6 +7,9 @@ import (
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
+	"crypto/rand"
+	"fmt"
+	"strings"
 	"testing"
 	"time"
 )
@@ -79,4 +82,17 @@ func TestMap(t *testing.T) {
 		replyCountMap[reply.ParentId] = repliesByGroup
 	}
 	logging.Logger.Debug(replyCountMap)
+}
+
+func TestEncode(t *testing.T) {
+	//encode := common.Encode(uint64(time.Now().Unix()))
+	//encode := common.ULID()
+	n := 6
+	b := make([]byte, n)
+	if _, err := rand.Read(b); err != nil {
+		panic(err)
+	}
+	s := fmt.Sprintf("%X", b)
+	s = strings.ToLower(s)
+	fmt.Println(s)
 }

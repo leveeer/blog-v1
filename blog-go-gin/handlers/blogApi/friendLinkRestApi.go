@@ -22,7 +22,7 @@ type FriendLinkRestApi struct {
 func (c *FriendLinkRestApi) GetFriendLinks(ctx *gin.Context) {
 	friendLinks, err := FriendLinkService.GetFriendLinks()
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetMessagesFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetMessagesFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -31,6 +31,6 @@ func (c *FriendLinkRestApi) GetFriendLinks(ctx *gin.Context) {
 		ServerTime:  time.Now().Unix(),
 		FriendLinks: friendLinks,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 
 }

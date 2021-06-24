@@ -91,12 +91,12 @@ export default {
       this.$store.state.forgetFlag = true;
     },
     login() {
-      var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+      const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
       if (!reg.test(this.username)) {
         this.$toast({ type: "error", message: "邮箱格式不正确" });
         return false;
       }
-      if (this.password.trim().length == 0) {
+      if (this.password.trim().length === 0) {
         this.$toast({ type: "error", message: "密码不能为空" });
         return false;
       }

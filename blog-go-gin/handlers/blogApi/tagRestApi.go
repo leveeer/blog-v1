@@ -24,7 +24,7 @@ var (
 func (c *TagRestApi) GetTags(ctx *gin.Context) {
 	tags, err := TagService.GetTags()
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetTagsFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetTagsFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -33,7 +33,7 @@ func (c *TagRestApi) GetTags(ctx *gin.Context) {
 		ServerTime: time.Now().Unix(),
 		Tags:       tags,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }
 
 func (c *TagRestApi) GetArticlesByTagID(ctx *gin.Context) {
@@ -41,7 +41,7 @@ func (c *TagRestApi) GetArticlesByTagID(ctx *gin.Context) {
 	currentPage, _ := strconv.Atoi(ctx.Query("currentPage"))
 	articles, err := ArticleService.GetArticleByTagID(tagId, &page.IPage{Current: currentPage})
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticleByCategoryIDFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticleByCategoryIDFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -50,5 +50,5 @@ func (c *TagRestApi) GetArticlesByTagID(ctx *gin.Context) {
 		ServerTime:              time.Now().Unix(),
 		ArticlesByCategoryOrTag: articles,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }

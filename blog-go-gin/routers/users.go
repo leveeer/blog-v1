@@ -11,6 +11,8 @@ var (
 )
 
 func userRouters(r *gin.Engine) {
-	blog := r.Group(common.UserBaseUrl)
-	blog.GET(common.VerifyCode, UsersApi.GetLoginCode)
+	user := r.Group(common.UserBaseUrl)
+	user.GET(common.VerifyCode, UsersApi.GetLoginCode)
+	user.POST(common.Register, UsersApi.Register)
+	user.POST(common.Login, UsersApi.Login)
 }

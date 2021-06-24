@@ -26,7 +26,7 @@ func (c *CommentRestApi) GetComments(ctx *gin.Context) {
 	currentPage, _ := strconv.Atoi(ctx.Query("currentPage"))
 	commentInfo, err := CommentService.GetComments(id, &page.IPage{Current: currentPage})
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetCommentsFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetCommentsFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -35,5 +35,5 @@ func (c *CommentRestApi) GetComments(ctx *gin.Context) {
 		ServerTime:  time.Now().Unix(),
 		CommentInfo: commentInfo,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }

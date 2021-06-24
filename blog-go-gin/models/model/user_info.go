@@ -2,6 +2,7 @@ package model
 
 import (
 	"blog-go-gin/dao"
+	"gorm.io/gorm"
 )
 
 type UserInfo struct {
@@ -21,31 +22,35 @@ func (model *UserInfo) TableName() string {
 	return "tb_user_info"
 }
 
-func AddUserInfo(m *UserInfo) error {
-	return dao.Db.Save(m).Error
+func AddUserInfo(tx *gorm.DB, m *UserInfo) (int, error) {
+	err := tx.Debug().Save(m).Error
+	if err != nil {
+		return 0, err
+	}
+	return m.ID, nil
 }
 
 func DeleteUserInfoByID(id int) (bool, error) {
-	if err := dao.Db.Delete(&UserInfo{}, id).Error; err != nil {
+	if err := dao.Db.Debug().Delete(&UserInfo{}, id).Error; err != nil {
 		return false, err
 	}
-	return dao.Db.RowsAffected > 0, nil
+	return dao.Db.Debug().RowsAffected > 0, nil
 }
 
 func DeleteUserInfo(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Where(condition, args...).Delete(&UserInfo{}).Error; err != nil {
+	if err := dao.Db.Debug().Where(condition, args...).Delete(&UserInfo{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.RowsAffected, nil
+	return dao.Db.Debug().RowsAffected, nil
 }
 
 func UpdateUserInfo(m *UserInfo) error {
-	return dao.Db.Save(m).Error
+	return dao.Db.Debug().Save(m).Error
 }
 
 func GetUserInfoByID(id int) (*UserInfo, error) {
 	var m UserInfo
-	if err := dao.Db.First(&m, id).Error; err != nil {
+	if err := dao.Db.Debug().First(&m, id).Error; err != nil {
 		return nil, err
 	}
 	return &m, nil
@@ -53,7 +58,7 @@ func GetUserInfoByID(id int) (*UserInfo, error) {
 
 func GetUserInfos(condition string, args ...interface{}) ([]*UserInfo, error) {
 	res := make([]*UserInfo, 0)
-	if err := dao.Db.Where(condition, args...).Find(&res).Error; err != nil {
+	if err := dao.Db.Debug().Where(condition, args...).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

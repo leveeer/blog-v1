@@ -19,5 +19,6 @@ message RequestPkg{
   uint32 currentPage = 2;
   uint32 articleId = 3;
   Message message = 4;
+  User user = 5;
 }
 

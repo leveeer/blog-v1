@@ -28,7 +28,7 @@ func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 	body, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
 		logging.Logger.Error(err)
-		c.RespFailWithDesc(ctx, http.StatusOK, common.InvalidRequestParams)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
 		return
 	}
 	//ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
@@ -36,7 +36,7 @@ func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 	err = proto.Unmarshal(body, request)
 	if err != nil {
 		logging.Logger.Error(err)
-		c.RespFailWithDesc(ctx, http.StatusOK, common.InvalidRequestParams)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
 		return
 	}
 	logging.Logger.Debug(request)
@@ -44,7 +44,7 @@ func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 	ipage.Current = int(request.CurrentPage)
 	articles, err := ArticleService.GetArticleList(ipage)
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticlesFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticlesFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -53,14 +53,14 @@ func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
 		ServerTime:  time.Now().Unix(),
 		ArticleList: articles,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }
 
 func (c *ArticleRestApi) GetArticleById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	articleInfo, err := ArticleService.GetArticleById(id)
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticleByIdFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticleByIdFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -69,7 +69,7 @@ func (c *ArticleRestApi) GetArticleById(ctx *gin.Context) {
 		ServerTime:  time.Now().Unix(),
 		ArticleInfo: articleInfo,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }
 
 func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
@@ -89,7 +89,7 @@ func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
 	}
 	archiveInfo, err := ArticleService.GetArchiveList(iPage)
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusOK, common.GetArticleArchivesFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticleArchivesFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -98,5 +98,5 @@ func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
 		ServerTime:  time.Now().Unix(),
 		ArchiveInfo: archiveInfo,
 	}
-	c.WriteWithProtoBuf(ctx, http.StatusOK, data)
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }
