@@ -14,6 +14,10 @@ type CommentServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func NewCommentServiceImpl() *CommentServiceImpl {
+	return &CommentServiceImpl{}
+}
+
 func (c *CommentServiceImpl) GetComments(articleId int, ipage *page.IPage) (*pb.CommentInfo, error) {
 	condition := "article_id = ? and parent_id = ? and is_delete = ?"
 	//查询文章评论量

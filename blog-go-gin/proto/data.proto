@@ -2,7 +2,7 @@ syntax = "proto3";
 option go_package = "../go_proto;proto";
 package proto;
 
-message Article{
+message Article {
   int32 id = 1;
   int32 userId = 2;
   int32 categoryID = 3;
@@ -21,7 +21,7 @@ message Article{
   string categoryName = 16;
 }
 
-message Tag{
+message Tag {
   int32 id = 1;
   string tagName = 2;
   int64 createTime = 3;
@@ -30,7 +30,7 @@ message Tag{
   int64 clickCount = 6;
 }
 
-message BlogHomeInfo{
+message BlogHomeInfo {
   UserInfo userInfo = 1;
   int64 articleCount = 2;
   int64 categoryCount = 3;
@@ -39,7 +39,7 @@ message BlogHomeInfo{
   int64 viewCount = 6;
 }
 
-message UserInfo{
+message UserInfo {
   int32 id = 1;
   string email = 2;
   string nickName = 3;
@@ -51,7 +51,7 @@ message UserInfo{
   bool isDisable = 9;
 }
 
-message ArticleInfo{
+message ArticleInfo {
   Article article = 1;
   Article lastArticle = 2;
   Article nextArticle = 3;
@@ -59,33 +59,33 @@ message ArticleInfo{
   repeated Article articleLatestList = 5;
 }
 
-message Archives{
+message Archives {
   repeated ArchiveArticleInfo archiveList = 1;
   int32 count = 2;
 }
 
-message ArchiveArticleInfo{
+message ArchiveArticleInfo {
   int32 id = 1;
   string articleTitle = 2;
   int64 createTime = 3;
 }
 
-message Category{
+message Category {
   int32 id = 1;
   string categoryName = 2;
   int32 articleCount = 3;
 }
 
-message ArticlesByCategoryOrTag{
+message ArticlesByCategoryOrTag {
   repeated Article articleList = 1;
   string name = 2;
 }
 
-message About{
+message About {
   string content = 1;
 }
 
-message Message{
+message Message {
   int32 id = 1;
   string ipAddress = 2;
   string ipSource = 3;
@@ -96,7 +96,7 @@ message Message{
   int64 createTime = 8;
 }
 
-message FriendLink{
+message FriendLink {
   int32 id = 1;
   string linkAddress = 2;
   string linkAvatar = 3;
@@ -105,7 +105,7 @@ message FriendLink{
   int64 createTime = 6;
 }
 
-message Comment{
+message Comment {
   int32 id = 1;
   int32 userId = 2;
   string nickname = 3;
@@ -118,12 +118,12 @@ message Comment{
   repeated Reply replyList = 10;
 }
 
-message CommentInfo{
+message CommentInfo {
   repeated Comment commentList = 1;
   uint32 count = 2;
 }
 
-message Reply{
+message Reply {
   int32 id = 1;
   int32 parentId = 2;
   int32 userId = 3;
@@ -136,8 +136,37 @@ message Reply{
   int64 createTime = 10;
 }
 
-message User{
+message User {
   string username = 1;
   string password = 2;
   string code = 3;
+}
+
+message UserRole {
+  int32 id = 1;
+  int32 roleId = 2;
+  int32 userId = 3;
+  string username = 4;
+}
+
+message UserAuth {
+  int32 id = 1;
+  int32 userInfoId = 2;
+  string username = 3;
+  int32 loginType = 4;
+  int64 createTime = 5;
+}
+
+message LoginResponse {
+  int32 userId = 1;
+  string email = 2;
+  string nickName = 3;
+  string avatar = 4;
+  string intro = 5;
+  string website = 6;
+  repeated int32 articleLikeSet = 7;
+  repeated int32 commentLikeSet = 8;
+  bool isDisable = 9;
+  int32 loginType = 10;
+  string token = 11;
 }

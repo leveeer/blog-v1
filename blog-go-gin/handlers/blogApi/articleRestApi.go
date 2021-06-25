@@ -17,11 +17,15 @@ import (
 )
 
 var (
-	ArticleService service.IArticleService = &impl.ArticleServiceImpl{}
+	ArticleService service.IArticleService = impl.NewArticleServiceImpl()
 )
 
 type ArticleRestApi struct {
 	base.Handler
+}
+
+func NewArticleRestApi() *ArticleRestApi {
+	return &ArticleRestApi{}
 }
 
 func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {

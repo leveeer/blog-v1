@@ -16,6 +16,10 @@ type BlogInfoServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func NewBlogInfoServiceImpl() *BlogInfoServiceImpl {
+	return &BlogInfoServiceImpl{}
+}
+
 func (b *BlogInfoServiceImpl) GetAbout() (*pb.About, error) {
 	about, err := common.RedisUtil.Get(common.ABOUT)
 	logging.Logger.Debug(about)

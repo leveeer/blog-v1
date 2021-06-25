@@ -10,6 +10,10 @@ type TagServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func NewTagServiceImpl() *TagServiceImpl {
+	return &TagServiceImpl{}
+}
+
 func (t *TagServiceImpl) GetTags() ([]*pb.Tag, error) {
 	var tagList []*pb.Tag
 	tags, err := model.GetTags("1 =1")

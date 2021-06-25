@@ -13,6 +13,10 @@ type ArticleServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func NewArticleServiceImpl() *ArticleServiceImpl {
+	return &ArticleServiceImpl{}
+}
+
 func (b *ArticleServiceImpl) GetArticleList(page page.IPage) ([]*pb.Article, error) {
 	articles, err := model.GetArticlesOnHome(page)
 	if err != nil {

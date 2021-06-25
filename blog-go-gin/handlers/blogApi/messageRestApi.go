@@ -18,8 +18,12 @@ type MessageRestApi struct {
 	base.Handler
 }
 
+func NewMessageRestApi() *MessageRestApi {
+	return &MessageRestApi{}
+}
+
 var (
-	MessageService service.IMessageService = &impl.MessageServiceImpl{}
+	MessageService service.IMessageService = impl.NewMessageServiceImpl()
 )
 
 func (c *MessageRestApi) GetMessages(ctx *gin.Context) {

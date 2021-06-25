@@ -12,11 +12,15 @@ import (
 )
 
 var (
-	BlogInfoService service.IBlogInfoService = &impl.BlogInfoServiceImpl{}
+	BlogInfoService service.IBlogInfoService = impl.NewBlogInfoServiceImpl()
 )
 
 type BlogInfoRestApi struct {
 	base.Handler
+}
+
+func NewBlogInfoRestApi() *BlogInfoRestApi {
+	return &BlogInfoRestApi{}
 }
 
 func (c *BlogInfoRestApi) GetBlogInfo(ctx *gin.Context) {

@@ -15,6 +15,11 @@ type UserAuth struct {
 	Password      string `gorm:"column:password;not null"`
 	UserInfoID    int    `gorm:"column:user_info_id;not null"`
 	Username      string `gorm:"column:username;unique;not null"`
+	NickName      string `gorm:"->"`
+	Avatar        string `gorm:"->"`
+	Intro         string `gorm:"->"`
+	WebSite       string `gorm:"->"`
+	IsDisable     bool   `gorm:"->"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -52,10 +57,30 @@ func GetUserAuthByID(id int) (*UserAuth, error) {
 	return &m, nil
 }
 
+func GetUserAuthByUsername(username string) (*UserAuth, error) {
+	var m UserAuth
+	if err := dao.Db.Debug().Where("username = ?", username).First(&m).Error; err != nil {
+		return nil, err
+	}
+	return &m, nil
+}
+
 func GetUserAuths(condition string, args ...interface{}) ([]*UserAuth, error) {
 	res := make([]*UserAuth, 0)
 	if err := dao.Db.Debug().Where(condition, args...).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil
+}
+
+func GetLoginResponse(username string) (*UserAuth, error) {
+	var m UserAuth
+	if err := dao.Db.Debug().Select("tb_user_auth.*,tui.nickname,tui.avatar,tui.intro,tui.web_site,tui.is_disable").
+		Where("username = ?", username).
+		Joins("JOIN tb_user_info as tui on tui.id = tb_user_auth.user_info_id").
+		Find(&m).Error; err != nil {
+		return nil, err
+	}
+	return &m, nil
+
 }

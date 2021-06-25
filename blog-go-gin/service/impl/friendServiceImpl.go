@@ -10,6 +10,10 @@ type FriendLinkServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func NewFriendLinkServiceImpl() *FriendLinkServiceImpl {
+	return &FriendLinkServiceImpl{}
+}
+
 func (f *FriendLinkServiceImpl) GetFriendLinks() ([]*pb.FriendLink, error) {
 	friendLinks, err := model.GetFriendLinks("1 = 1")
 	if err != nil {

@@ -11,6 +11,10 @@ type CategoryServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func NewCategoryServiceImpl() *CategoryServiceImpl {
+	return &CategoryServiceImpl{}
+}
+
 func (receiver *CategoryServiceImpl) GetCategories() ([]*pb.Category, error) {
 
 	categories, err := model.GetCategories("1 = 1")

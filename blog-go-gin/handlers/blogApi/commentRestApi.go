@@ -14,11 +14,15 @@ import (
 )
 
 var (
-	CommentService service.ICommentService = &impl.CommentServiceImpl{}
+	CommentService service.ICommentService = impl.NewCommentServiceImpl()
 )
 
 type CommentRestApi struct {
 	base.Handler
+}
+
+func NewCommentRestApi() *CommentRestApi {
+	return &CommentRestApi{}
 }
 
 func (c *CommentRestApi) GetComments(ctx *gin.Context) {

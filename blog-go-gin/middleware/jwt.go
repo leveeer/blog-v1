@@ -1,5 +1,22 @@
 package middleware
 
+import (
+	"blog-go-gin/common"
+	pb "blog-go-gin/go_proto"
+	"blog-go-gin/helper"
+	"blog-go-gin/logging"
+	"blog-go-gin/service"
+	"blog-go-gin/service/impl"
+	"encoding/json"
+	"errors"
+	jwt "github.com/appleboy/gin-jwt/v2"
+	"github.com/gin-gonic/gin"
+	"github.com/golang/protobuf/proto"
+	"io/ioutil"
+	"net/http"
+	"time"
+)
+
 //### 如果是使用Go Module,gin-jwt模块应使用v2
 //下载安装，开启Go Module "go env -w GO111MODULE=on",然后执行"go get github.com/appleboy/gin-jwt/v2"
 //导入应写成 import "github.com/appleboy/gin-jwt/v2"
@@ -8,13 +25,24 @@ package middleware
 //导入import "github.com/appleboy/gin-jwt"
 
 // JWT 注入IService
-/*type JWT struct {
+type JWT struct {
 	UserAuthService service.IUserAuthService `inject:""`
 	UserRoleService service.IUserRoleService `inject:""`
 }
 
+func NewJWT() *JWT {
+	return &JWT{
+		UserAuthService: impl.NewUserAuthServiceImpl(),
+		UserRoleService: impl.NewUserRoleServiceImpl(),
+	}
+}
+
+var (
+	loginResponse *pb.LoginResponse
+)
+
 //GinJWTMiddlewareInit 初始化中间件
-func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizer IAuthorizator) (authMiddleware *jwt.GinJWTMiddleware) {
+func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator helper.IAuthorizator) (authMiddleware *jwt.GinJWTMiddleware) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte("secret key"),
@@ -22,14 +50,22 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizer IAuthorizator) (authMiddleware 
 		MaxRefresh:  time.Hour,
 		IdentityKey: common.IdentityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
-			if v, ok := data.(*model.UserRole); ok {
+			if v, ok := data.(*pb.UserRole); ok {
 				//get roles from username
-				v.UserRoles = j.UserRoleService.GetUserRoles(v.UserID)
-				jsonRole, _ := json.Marshal(v.UserRoles)
+				logging.Logger.Debug(data)
+				userAuth, err := j.UserAuthService.GetUserAuthByUsername(v.Username)
+				if err != nil {
+					logging.Logger.Error("get user auth err:", err)
+				}
+				role, err := j.UserRoleService.GetUserRoleAndUsername(int(userAuth.UserInfoId))
+				if err != nil {
+					logging.Logger.Error("get user role err:", err)
+				}
+				jsonRole, _ := json.Marshal(role)
 				//maps the claims in the JWT
 				return jwt.MapClaims{
-					"userName":  v.UserName,
-					"userRoles": helper.B2S(jsonRole),
+					"username": v.Username,
+					"userRole": jsonRole,
 				}
 			}
 			return jwt.MapClaims{}
@@ -37,51 +73,71 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizer IAuthorizator) (authMiddleware 
 		IdentityHandler: func(c *gin.Context) interface{} {
 			roles := jwt.ExtractClaims(c)
 			//extracts identity from roles
-			jsonRole := roles["userRoles"].(string)
-			var userRoles []*models.Role
-			json.Unmarshal(helper.S2B(jsonRole), &userRoles)
+			role := roles["userRole"].(string)
+			var userRole *pb.UserRole
+			err := json.Unmarshal([]byte(role), &userRole)
+			if err != nil {
+				logging.Logger.Error(errors.New("IdentityHandler,json.Unmarshal err:"), err)
+			}
 			//Set the identity
-			return &models.UserRole{
-				UserName:  roles["userName"].(string),
-				UserRoles: userRoles,
+			return &pb.UserRole{
+				UserId:   userRole.GetUserId(),
+				RoleId:   userRole.GetRoleId(),
+				Username: userRole.GetUsername(),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
 			//handles the login logic. On success LoginResponse is called, on failure Unauthorized is called
-			var loginVals models.User
-			if err := c.ShouldBind(&loginVals); err != nil {
-				return "", jwt.ErrMissingLoginValues
+			body, err := ioutil.ReadAll(c.Request.Body)
+			if err != nil {
+				logging.Logger.Error(err)
+				return nil, err
 			}
-			userID := loginVals.Username
-			password := loginVals.Password
-			if j.UserService.CheckUser(userID, password) {
-				return &models.UserRole{
-					UserName: userID,
+			request := &pb.RequestPkg{}
+			if err = proto.Unmarshal(body, request); err != nil {
+				logging.Logger.Error(err)
+				return nil, err
+			}
+			logging.Logger.Debug(request)
+			ok, err := j.UserAuthService.Login(request.User)
+			if err != nil {
+				return nil, errors.New(common.GetMsg(common.LoginFail))
+			}
+			if ok {
+				loginResponse, err = j.UserAuthService.GetLoginResponse(request.User.Username)
+				if err != nil {
+					return nil, errors.New(common.GetMsg(common.GetUserInfoFail))
+				}
+				return &pb.UserRole{
+					Username: request.User.Username,
 				}, nil
 			}
-
 			return nil, jwt.ErrFailedAuthentication
 		},
+
+		LoginResponse: func(c *gin.Context, code int, token string, t time.Time) {
+			loginResponse.Token = token
+			logging.Logger.Debug(loginResponse)
+			data := &pb.ResponsePkg{
+				Code:          pb.ResultCode_SuccessOK,
+				ServerTime:    time.Now().Unix(),
+				Message:       "登录成功",
+				LoginResponse: loginResponse,
+			}
+			c.ProtoBuf(code, data)
+		},
 		//receives identity and handles authorization logic
-		Authorizator: jwtAuthorizer.HandleAuthorizator,
+		Authorizator: jwtAuthorizator.HandleAuthorizator,
 		//handles unauthorized logic
 		Unauthorized: func(c *gin.Context, code int, message string) {
-			c.JSON(code, gin.H{
-				"code":    code,
-				"message": message,
-			})
+			data := &pb.ResponsePkg{
+				Code:       pb.ResultCode_Fail,
+				ServerTime: time.Now().Unix(),
+				Message:    common.GetMsg(common.LoginFail),
+			}
+			c.ProtoBuf(http.StatusOK, data)
 		},
-		// TokenLookup is a string in the form of "<source>:<name>" that is used
-		// to extract token from the request.
-		// Optional. Default value "header:Authorization".
-		// Possible values:
-		// - "header:<name>"
-		// - "query:<name>"
-		// - "cookie:<name>"
-		// - "param:<name>"
 		TokenLookup: "header: Authorization, query: token, cookie: jwt",
-		// TokenLookup: "query:token",
-		// TokenLookup: "cookie:token",
 
 		// TokenHeadName is a string in the header. Default value is "Bearer"
 		TokenHeadName: "Bearer",
@@ -91,13 +147,13 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizer IAuthorizator) (authMiddleware 
 	})
 
 	if err != nil {
-		log.Fatal("JWT Error:" + err.Error())
+		logging.Logger.Error("JWT Error:" + err.Error())
 	}
 	return
 }
 
 //NoRouteHandler 404 handler
-func NoRouteHandler(c *gin.Context) {
-	code := codes.PageNotFound
-	c.JSON(404, gin.H{"code": code, "message": codes.GetMsg(code)})
-}*/
+//func NoRouteHandler(c *gin.Context) {
+//	code := codes.PageNotFound
+//	c.JSON(404, gin.H{"code": code, "message": codes.GetMsg(code)})
+//}

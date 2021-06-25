@@ -12,6 +12,10 @@ type MessageServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func NewMessageServiceImpl() *MessageServiceImpl {
+	return &MessageServiceImpl{}
+}
+
 func (m *MessageServiceImpl) GetMessages() ([]*pb.Message, error) {
 	messages, err := model.GetMessages("1 = 1")
 	if err != nil {

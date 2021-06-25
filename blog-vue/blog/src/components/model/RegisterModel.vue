@@ -130,14 +130,16 @@
           code: this.code
         };
         register({
-          user : userModel
+          user: userModel
         }).then((data) => {
           console.log(data)
           if (data.code === 10000) {
-            let param = new URLSearchParams();
-            param.append("username", userModel.username);
-            param.append("password", userModel.password);
-            login(param).then((data) => {
+            // let param = new URLSearchParams();
+            // param.append("username", userModel.username);
+            // param.append("password", userModel.password);
+            login({
+              user: userModel,
+            }).then((data) => {
               this.username = "";
               this.password = "";
               this.$store.commit("login", data.data);

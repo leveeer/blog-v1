@@ -14,11 +14,15 @@ import (
 )
 
 var (
-	CategoryService service.ICategoryService = &impl.CategoryServiceImpl{}
+	CategoryService service.ICategoryService = impl.NewCategoryServiceImpl()
 )
 
 type CategoryRestApi struct {
 	base.Handler
+}
+
+func NewCategoryRestApi() *CategoryRestApi {
+	return &CategoryRestApi{}
 }
 
 func (c *CategoryRestApi) GetCategories(ctx *gin.Context) {

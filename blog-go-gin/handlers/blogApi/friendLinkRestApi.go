@@ -12,11 +12,15 @@ import (
 )
 
 var (
-	FriendLinkService service.IFriendLinkService = &impl.FriendLinkServiceImpl{}
+	FriendLinkService service.IFriendLinkService = impl.NewFriendLinkServiceImpl()
 )
 
 type FriendLinkRestApi struct {
 	base.Handler
+}
+
+func NewFriendLinkRestApi() *FriendLinkRestApi {
+	return &FriendLinkRestApi{}
 }
 
 func (c *FriendLinkRestApi) GetFriendLinks(ctx *gin.Context) {

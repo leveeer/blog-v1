@@ -17,8 +17,12 @@ type TagRestApi struct {
 	base.Handler
 }
 
+func NewTagRestApi() *TagRestApi {
+	return &TagRestApi{}
+}
+
 var (
-	TagService service.ITagService = &impl.TagServiceImpl{}
+	TagService service.ITagService = impl.NewTagServiceImpl()
 )
 
 func (c *TagRestApi) GetTags(ctx *gin.Context) {

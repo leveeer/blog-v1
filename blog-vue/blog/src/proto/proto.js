@@ -481,6 +481,100 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      UserRole: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          roleId: {
+            type: "int32",
+            id: 2
+          },
+          userId: {
+            type: "int32",
+            id: 3
+          },
+          username: {
+            type: "string",
+            id: 4
+          }
+        }
+      },
+      UserAuth: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          userInfoId: {
+            type: "int32",
+            id: 2
+          },
+          username: {
+            type: "string",
+            id: 3
+          },
+          loginType: {
+            type: "int32",
+            id: 4
+          },
+          createTime: {
+            type: "int64",
+            id: 5
+          }
+        }
+      },
+      LoginResponse: {
+        fields: {
+          userId: {
+            type: "int32",
+            id: 1
+          },
+          email: {
+            type: "string",
+            id: 2
+          },
+          nickName: {
+            type: "string",
+            id: 3
+          },
+          avatar: {
+            type: "string",
+            id: 4
+          },
+          intro: {
+            type: "string",
+            id: 5
+          },
+          website: {
+            type: "string",
+            id: 6
+          },
+          articleLikeSet: {
+            rule: "repeated",
+            type: "int32",
+            id: 7
+          },
+          commentLikeSet: {
+            rule: "repeated",
+            type: "int32",
+            id: 8
+          },
+          isDisable: {
+            type: "bool",
+            id: 9
+          },
+          loginType: {
+            type: "int32",
+            id: 10
+          },
+          token: {
+            type: "string",
+            id: 11
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -530,6 +624,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           commentInfo: {
             type: "CommentInfo",
             id: 8
+          },
+          loginResponse: {
+            type: "LoginResponse",
+            id: 9
           },
           message: {
             type: "string",

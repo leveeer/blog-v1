@@ -7,9 +7,13 @@ import (
 )
 
 var (
-	UserRoleService service.IUserRoleService = &impl.UserRoleServiceImpl{}
+	UserRoleService service.IUserRoleService = impl.NewUserRoleServiceImpl()
 )
 
 type UserRoleRestApi struct {
 	base.Handler
+}
+
+func NewUserRoleRestApi() *UserRoleRestApi {
+	return &UserRoleRestApi{}
 }

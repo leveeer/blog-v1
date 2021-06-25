@@ -21,6 +21,44 @@ type UserAuthServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func (u *UserAuthServiceImpl) GetLoginResponse(username string) (*pb.LoginResponse, error) {
+	userAuth, err := model.GetLoginResponse(username)
+	//TODO 获取用户点赞的文章id集合
+	//TODO 获取用户点赞的评论d集合
+	if err != nil {
+		return nil, err
+	}
+	return &pb.LoginResponse{
+		UserId:    int32(userAuth.UserInfoID),
+		Email:     userAuth.Username,
+		NickName:  userAuth.NickName,
+		Avatar:    userAuth.Avatar,
+		Intro:     userAuth.Intro,
+		Website:   userAuth.WebSite,
+		IsDisable: userAuth.IsDisable,
+		LoginType: int32(userAuth.LoginType),
+	}, nil
+}
+
+func (u *UserAuthServiceImpl) GetUserAuthByUsername(username string) (*pb.UserAuth, error) {
+	userAuth, err := model.GetUserAuthByUsername(username)
+	if err != nil {
+		return nil, err
+	}
+	return &pb.UserAuth{
+		Id:         int32(userAuth.ID),
+		UserInfoId: int32(userAuth.UserInfoID),
+		Username:   userAuth.Username,
+		LoginType:  int32(userAuth.LoginType),
+		CreateTime: userAuth.CreateTime,
+	}, nil
+
+}
+
+func NewUserAuthServiceImpl() *UserAuthServiceImpl {
+	return &UserAuthServiceImpl{}
+}
+
 func (u *UserAuthServiceImpl) Register(user *pb.User) error {
 	//TODO 检测账号是否存在
 
@@ -66,14 +104,17 @@ func (u *UserAuthServiceImpl) Register(user *pb.User) error {
 	return nil
 }
 
-func (u *UserAuthServiceImpl) Login(user *pb.User) error {
-	//err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(loginPwd)) //验证（对比）
-	//if err != nil {
-	//	fmt.Println("pwd wrong")
-	//} else {
-	//	fmt.Println("pwd ok")
-	//}
-	panic("implement me")
+func (u *UserAuthServiceImpl) Login(user *pb.User) (bool, error) {
+	//从数据库获取用户密码
+	userAuth, err := model.GetUserAuthByUsername(user.Username)
+	if err != nil {
+		return false, err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(userAuth.Password), []byte(user.Password)) //验证（对比）
+	if err != nil {
+		return false, err
+	}
+	return true, err
 }
 
 func (u *UserAuthServiceImpl) GetLoginCode(username string) error {
