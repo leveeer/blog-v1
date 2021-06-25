@@ -14,10 +14,10 @@ type Comment struct {
 	ParentID       int    `gorm:"column:parent_id;not null" json:"parent_id"`
 	ReplyID        int    `gorm:"column:reply_id;not null" json:"reply_id"`
 	UserID         int    `gorm:"column:user_id;not null" json:"user_id"`
-	Nickname       string `json:"nickname"`
-	Avatar         string `json:"avatar"`
-	WebSite        string `json:"web_site"`
-	ReplyCount     int    `json:"reply_count"`
+	Nickname       string `gorm:"->"`
+	Avatar         string `gorm:"->"`
+	WebSite        string `gorm:"->"`
+	ReplyCount     int    `gorm:"->"`
 }
 
 // TableName sets the insert table name for this struct type

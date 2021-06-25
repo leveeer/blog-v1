@@ -26,11 +26,11 @@ export default new Vuex.Store({
   },
   mutations: {
     login(state, user) {
-      state.userId = user.userInfoId;
+      state.userId = user.userId;
       state.avatar = user.avatar;
       state.nickname = user.nickname;
       state.intro = user.intro;
-      state.webSite = user.webSite;
+      state.webSite = user.website;
       state.articleLikeSet = user.articleLikeSet ? user.articleLikeSet : [];
       state.commentLikeSet = user.commentLikeSet ? user.commentLikeSet : [];
       state.email = user.email;

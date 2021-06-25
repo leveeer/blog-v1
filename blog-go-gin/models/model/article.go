@@ -22,7 +22,7 @@ type Article struct {
 	ClickCount     int    `gorm:"column:click_count;not null" json:"click_count"`
 	CollectCount   int    `gorm:"column:collect_count;not null" json:"collect_count"`
 	Tags           []*Tag `gorm:"-" json:"tags"`
-	CategoryName   string `json:"category_name"`
+	CategoryName   string `gorm:"->"`
 }
 
 // TableName sets the insert table name for this struct type

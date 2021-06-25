@@ -14,7 +14,7 @@ var (
 
 func userRouters(r *gin.Engine) {
 	jwtMiddleware := middleware.NewJWT()
-	authMiddleware := jwtMiddleware.GinJWTMiddlewareInit(&helper.UserAuthorizator{})
+	authMiddleware := jwtMiddleware.GinJWTMiddlewareInit(&helper.AllUserAuthorizator{})
 	user := r.Group(common.UserBaseUrl)
 	{
 		user.GET(common.VerifyCode, UserAuthApi.GetLoginCode)

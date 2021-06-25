@@ -3,8 +3,8 @@ package main
 import (
 	"blog-go-gin/common"
 	"blog-go-gin/config"
+	"blog-go-gin/crons"
 	"blog-go-gin/dao"
-	"blog-go-gin/jobs"
 	"blog-go-gin/logging"
 	"blog-go-gin/routers"
 	"context"
@@ -25,10 +25,11 @@ func main() {
 	common.InitRedis()
 	router = routers.InitWebRouter()
 	//注册定时任务
-	jobs.RegisterCron()
+	crons.RegisterCron()
 	srv := &http.Server{
-		Addr:    ":" + strconv.Itoa(int(config.GetConf().HttpPort)),
-		Handler: router,
+		Addr:           ":" + strconv.Itoa(int(config.GetConf().HttpPort)),
+		Handler:        router,
+		MaxHeaderBytes: 1 << 20,
 	}
 
 	go func() {

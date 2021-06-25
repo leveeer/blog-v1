@@ -50,6 +50,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator helper.IAuthorizator) (authMi
 		MaxRefresh:  time.Hour,
 		IdentityKey: common.IdentityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
+			logging.Logger.Debug("执行PayloadFunc")
 			if v, ok := data.(*pb.UserRole); ok {
 				//get roles from username
 				logging.Logger.Debug(data)
@@ -71,6 +72,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator helper.IAuthorizator) (authMi
 			return jwt.MapClaims{}
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
+			logging.Logger.Debug("执行IdentityHandler")
 			roles := jwt.ExtractClaims(c)
 			//extracts identity from roles
 			role := roles["userRole"].(string)
@@ -87,6 +89,7 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator helper.IAuthorizator) (authMi
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
+			logging.Logger.Debug("执行Authenticator")
 			//handles the login logic. On success LoginResponse is called, on failure Unauthorized is called
 			body, err := ioutil.ReadAll(c.Request.Body)
 			if err != nil {
