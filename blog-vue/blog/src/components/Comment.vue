@@ -129,15 +129,15 @@
                 <!-- 回复用户名 -->
                 <template v-if="reply.userId !== item.userId">
                   <span v-if="!reply.webSite" class="ml-1">
-                    @{{ reply.nickname }}
+                    @{{ reply.replyNickname }}
                   </span>
                   <a
                     v-else
-                    :href="reply.webSite"
+                    :href="reply.replyWebSite"
                     target="_blank"
                     class="comment-nickname ml-1"
                   >
-                    @{{ reply.nickname }}
+                    @{{ reply.replyNickname }}
                   </a>
                   ，
                 </template>

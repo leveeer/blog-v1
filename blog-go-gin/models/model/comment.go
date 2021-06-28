@@ -19,6 +19,8 @@ type Comment struct {
 	Avatar         string `gorm:"->"`
 	WebSite        string `gorm:"->"`
 	ReplyCount     int    `gorm:"->"`
+	ReplyNickname  string `gorm:"->"`
+	ReplyWebSite   string `gorm:"->"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -89,8 +91,9 @@ func GetCommentsAndUserInfo(iPage *page.IPage, condition string, args ...interfa
 func GetReplies(commentIds []int64) ([]*Comment, error) {
 	res := make([]*Comment, 0)
 	subQuery := dao.Db.Debug().Table("tb_comment as c").
-		Select("c.user_id,nickname,avatar,web_site,c.reply_id, c.id,c.parent_id,c.comment_content,c.create_time,row_number () over ( PARTITION BY parent_id ORDER BY c.create_time ) row_num").
+		Select("c.user_id,u.nickname,u.avatar,u.web_site,c.reply_id, c.id,c.parent_id,c.comment_content,c.create_time,ui.nickname as reply_nickname,ui.web_site as reply_web_site,row_number () over ( PARTITION BY parent_id ORDER BY c.create_time ) row_num").
 		Joins("JOIN tb_user_info u ON c.user_id = u.id").
+		Joins("JOIN tb_user_info ui ON c.reply_id = ui.id").
 		Where("c.is_delete = 0 AND parent_id IN (?)", commentIds)
 	if err := dao.Db.Debug().Table("(?) as t", subQuery).Where("4 > row_num").
 		Find(&res).Error; err != nil {
@@ -113,8 +116,9 @@ func GetRepliesByCommentId(iPage *page.IPage, commentIds []int64) ([]*Comment, e
 	res := make([]*Comment, 0)
 	iPage.Size = 5
 	if err := dao.Db.Debug().Table("tb_comment as c").
-		Select("c.user_id,nickname,avatar,web_site,c.reply_id, c.id,c.parent_id,c.comment_content,c.create_time").
+		Select("c.user_id,u.nickname,u.avatar,u.web_site,c.reply_id, c.id,c.parent_id,c.comment_content,c.create_time,ui.nickname as reply_nickname,ui.web_site as reply_web_site").
 		Joins("JOIN tb_user_info u ON c.user_id = u.id").
+		Joins("JOIN tb_user_info ui ON c.reply_id = ui.id").
 		Where("c.is_delete = 0 AND parent_id IN (?)", commentIds).
 		Order("create_time ASC").
 		Scopes(page.Paginate(iPage)).

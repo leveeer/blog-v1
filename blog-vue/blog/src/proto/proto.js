@@ -487,17 +487,25 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             type: "int32",
             id: 7
           },
-          commentContent: {
+          replyNickname: {
             type: "string",
             id: 8
           },
+          replyWebSite: {
+            type: "string",
+            id: 9
+          },
+          commentContent: {
+            type: "string",
+            id: 10
+          },
           likeCount: {
             type: "uint32",
-            id: 9
+            id: 11
           },
           createTime: {
             type: "int64",
-            id: 10
+            id: 12
           }
         }
       },

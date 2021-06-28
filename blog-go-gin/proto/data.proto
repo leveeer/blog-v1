@@ -131,9 +131,11 @@ message Reply {
   string avatar = 5;
   string webSite = 6;
   int32 replyId = 7;
-  string commentContent = 8;
-  uint32 likeCount = 9;
-  int64 createTime = 10;
+  string replyNickname = 8;
+  string replyWebSite = 9;
+  string commentContent = 10;
+  uint32 likeCount = 11;
+  int64 createTime = 12;
 }
 
 message User {

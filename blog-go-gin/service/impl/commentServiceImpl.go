@@ -36,6 +36,8 @@ func (c *CommentServiceImpl) GetReplies(commentId int, ipage *page.IPage) ([]*pb
 			Avatar:         reply.Avatar,
 			WebSite:        reply.WebSite,
 			ReplyId:        int32(reply.ReplyID),
+			ReplyNickname:  reply.ReplyNickname,
+			ReplyWebSite:   reply.ReplyWebSite,
 			CommentContent: reply.CommentContent,
 			CreateTime:     reply.CreateTime,
 		})
@@ -121,6 +123,8 @@ func (c *CommentServiceImpl) GetComments(articleId int, ipage *page.IPage) (*pb.
 			Avatar:         reply.Avatar,
 			WebSite:        reply.WebSite,
 			ReplyId:        int32(reply.ReplyID),
+			ReplyNickname:  reply.ReplyNickname,
+			ReplyWebSite:   reply.ReplyWebSite,
 			CommentContent: reply.CommentContent,
 			CreateTime:     reply.CreateTime,
 		})
