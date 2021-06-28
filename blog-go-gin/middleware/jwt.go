@@ -17,10 +17,10 @@ import (
 	"time"
 )
 
-//### 如果是使用Go Module,gin-jwt模块应使用v2
+//如果是使用Go Module,gin-jwt模块应使用v2
 //下载安装，开启Go Module "go env -w GO111MODULE=on",然后执行"go get github.com/appleboy/gin-jwt/v2"
 //导入应写成 import "github.com/appleboy/gin-jwt/v2"
-//### 如果不是使用Go Module
+//如果不是使用Go Module
 //下载安装gin-jwt，"go get github.com/appleboy/gin-jwt"
 //导入import "github.com/appleboy/gin-jwt"
 

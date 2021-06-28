@@ -49,6 +49,7 @@ const (
 	Message             = "/messages"
 	FriendLinks         = "/links"
 	Comments            = "/comments"
+	Replies             = "/replies/:commentId"
 
 	UserBaseUrl = "/users"
 	VerifyCode  = "/code"

@@ -2,12 +2,15 @@ package impl
 
 import (
 	"blog-go-gin/common"
+	"blog-go-gin/dao"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
+	"gorm.io/gorm"
 	"strconv"
 	"sync"
+	"time"
 )
 
 type CommentServiceImpl struct {
@@ -16,6 +19,51 @@ type CommentServiceImpl struct {
 
 func NewCommentServiceImpl() *CommentServiceImpl {
 	return &CommentServiceImpl{}
+}
+
+func (c *CommentServiceImpl) GetReplies(commentId int, ipage *page.IPage) ([]*pb.Reply, error) {
+	replies, err := model.GetRepliesByCommentId(ipage, []int64{int64(commentId)})
+	if err != nil {
+		return nil, err
+	}
+	var repliesSlice []*pb.Reply
+	for _, reply := range replies {
+		repliesSlice = append(repliesSlice, &pb.Reply{
+			Id:             int32(reply.ID),
+			ParentId:       int32(reply.ParentID),
+			UserId:         int32(reply.UserID),
+			Nickname:       reply.Nickname,
+			Avatar:         reply.Avatar,
+			WebSite:        reply.WebSite,
+			ReplyId:        int32(reply.ReplyID),
+			CommentContent: reply.CommentContent,
+			CreateTime:     reply.CreateTime,
+		})
+	}
+	return repliesSlice, err
+}
+
+func (c *CommentServiceImpl) AddComment(comment *pb.CsComment) error {
+	c1 := &model.Comment{
+		ArticleID:      int(comment.GetArticleId()),
+		UserID:         int(comment.GetUserId()),
+		CommentContent: comment.GetCommentContent(),
+		CreateTime:     time.Now().Unix(),
+		ReplyID:        int(comment.ReplyId),
+		ParentID:       int(comment.ParentId),
+		IsDelete:       0,
+	}
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		err := model.AddComment(tx, c1)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CommentServiceImpl) GetComments(articleId int, ipage *page.IPage) (*pb.CommentInfo, error) {

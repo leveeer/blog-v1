@@ -198,153 +198,161 @@
 </template>
 
 <script>
-import Reply from "./Reply";
-import Paging from "./Paging";
-import Emoji from "./Emoji";
-import EmojiList from "../assets/js/emoji";
-export default {
-  components: {
-    Reply,
-    Emoji,
-    Paging
-  },
-  props: {
-    commentList: {
-      type: Array
+  import Reply from "./Reply";
+  import Paging from "./Paging";
+  import Emoji from "./Emoji";
+  import EmojiList from "../assets/js/emoji";
+  import { addComments, getComments, getReplies } from "../api/api";
+  import { getResultCode } from "../utils/util";
+  import { resultMap } from "../utils/constant";
+
+  export default {
+    components: {
+      Reply,
+      Emoji,
+      Paging
     },
-    count: {
-      type: Number
-    }
-  },
-  data: function() {
-    return {
-      reFresh: true,
-      commentContent: "",
-      chooseEmoji: false,
-      current: 1
-    };
-  },
-  methods: {
-    replyComment(index, item) {
-      this.$refs.reply.forEach(item => {
-        item.$el.style.display = "none";
-      });
-      //传值给回复框
-      this.$refs.reply[index].commentContent = "";
-      this.$refs.reply[index].nickname = item.nickname;
-      this.$refs.reply[index].replyId = item.userId;
-      this.$refs.reply[index].parentId = this.commentList[index].id;
-      this.$refs.reply[index].chooseEmoji = false;
-      this.$refs.reply[index].index = index;
-      this.$refs.reply[index].$el.style.display = "block";
-    },
-    addEmoji(key) {
-      this.commentContent += key;
-    },
-    checkReplies(index, item) {
-      this.axios
-        .get("/api/comments/replies/" + item.id, {
-          params: { current: 1 }
-        })
-        .then(({ data }) => {
-          this.$refs.check[index].style.display = "none";
-          item.replyDTOList = data.data;
-          //超过1页才显示分页
-          if (Math.ceil(item.replyCount / 5) > 1) {
-            this.$refs.paging[index].style.display = "flex";
-          }
-        });
-    },
-    changeReplyCurrent(current, index, commentId) {
-      //查看下一页回复
-      this.axios
-        .get("/api/comments/replies/" + commentId, {
-          params: { current: current }
-        })
-        .then(({ data }) => {
-          this.commentList[index].replyDTOList = data.data;
-        });
-    },
-    listComments() {
-      //查看下一页评论
-      this.current++;
-      const path = this.$route.path;
-      const arr = path.split("/");
-      this.axios
-        .get("/api/comments", {
-          params: { current: this.current, articleId: arr[2] }
-        })
-        .then(({ data }) => {
-          this.commentList.push(...data.data.recordList);
-        });
-    },
-    insertComment() {
-      //判断登录
-      if (!this.$store.state.userId) {
-        this.$store.state.loginFlag = true;
-        return false;
+    props: {
+      commentList: {
+        type: Array
+      },
+      count: {
+        type: Number
       }
-      //判空
-      if (this.commentContent.trim() === "") {
-        this.$toast({ type: "error", message: "评论不能为空" });
-        return false;
-      }
-      //解析表情
-      var reg = /\[.+?\]/g;
-      this.commentContent = this.commentContent.replace(reg, function(str) {
-        return (
-          "<img src= '" +
-          EmojiList[str] +
-          "' width='22'height='20' style='padding: 0 1px'/>"
-        );
-      });
-      //发送请求
-      const path = this.$route.path;
-      const arr = path.split("/");
-      var comment = {
-        articleId: arr[2],
-        commentContent: this.commentContent
+    },
+    data: function() {
+      return {
+        reFresh: true,
+        commentContent: "",
+        chooseEmoji: false,
+        current: 1
       };
-      this.commentContent = "";
-      this.axios.post("/api/comments", comment).then(({ data }) => {
-        if (data.flag) {
-          //查询最新评论
-          this.$emit("reloadComment");
-          this.$toast({ type: "success", message: data.message });
-        } else {
-          this.$toast({ type: "error", message: data.message });
-        }
-      });
     },
-    like(comment) {
-      //判断登录
-      if (!this.$store.state.userId) {
-        this.$store.state.loginFlag = true;
-        return false;
-      }
-      //发送请求
-      let param = new URLSearchParams();
-      param.append("commentId", comment.id);
-      this.axios.post("/api/comments/like", param).then(({ data }) => {
-        if (data.flag) {
-          //判断是否点赞
-          if (this.$store.state.commentLikeSet.indexOf(comment.id) != -1) {
-            this.$set(comment, "likeCount", comment.likeCount - 1);
-          } else {
-            this.$set(comment, "likeCount", comment.likeCount + 1);
-          }
-          this.$store.commit("commentLike", comment.id);
-        }
-      });
-    },
-    reloadReply(index) {
-      this.axios
-        .get("/api/comments/replies/" + this.commentList[index].id, {
-          params: {
-            current: this.$refs.page[index].current
-          }
+    methods: {
+      replyComment(index, item) {
+        this.$refs.reply.forEach(item => {
+          item.$el.style.display = "none";
+        });
+        //传值给回复框
+        this.$refs.reply[index].commentContent = "";
+        this.$refs.reply[index].nickname = item.nickname;
+        this.$refs.reply[index].replyId = item.userId;
+        this.$refs.reply[index].parentId = this.commentList[index].id;
+        this.$refs.reply[index].chooseEmoji = false;
+        this.$refs.reply[index].index = index;
+        this.$refs.reply[index].$el.style.display = "block";
+      },
+      addEmoji(key) {
+        this.commentContent += key;
+      },
+      checkReplies(index, item) {
+        getReplies(item.id, {
+          params: { currentPage: 1 }
         })
-        .then(({ data }) => {
+          .then((data) => {
+            this.$refs.check[index].style.display = "none";
+            item.replyList = data.replyList;
+            //超过1页才显示分页
+            if (Math.ceil(item.replyCount / 5) > 1) {
+              this.$refs.paging[index].style.display = "flex";
+            }
+          });
+      },
+      changeReplyCurrent(current, index, commentId) {
+        //查看下一页回复
+        getReplies(commentId, {
+          params: { currentPage: current }
+        })
+          .then((data) => {
+            this.commentList[index].replyList = data.replyList;
+          });
+      },
+      listComments() {
+        //查看下一页评论
+        this.current++;
+        const path = this.$route.path;
+        const arr = path.split("/");
+        getComments({
+          params: { currentPage: this.current, articleId: arr[2] }
+        })
+          .then((data) => {
+            this.commentList.push(...data.commentInfo.commentList);
+          });
+      },
+      insertComment() {
+        //判断登录
+        if (!this.$store.state.userId) {
+          this.$store.state.loginFlag = true;
+          return false;
+        }
+        //判空
+        if (this.commentContent.trim() === "") {
+          this.$toast({ type: "error", message: "评论不能为空" });
+          return false;
+        }
+        //解析表情
+        const reg = /\[.+?\]/g;
+        this.commentContent = this.commentContent.replace(reg, function(str) {
+          return (
+            "<img src= '" +
+            EmojiList[str] +
+            "' width='22'height='20' style='padding: 0 1px'/>"
+          );
+        });
+        //发送请求
+        const path = this.$route.path;
+        const arr = path.split("/");
+        console.log(path);
+        console.log(arr);
+        const comment = {
+          articleId: arr[2],
+          commentContent: this.commentContent,
+          userId: this.$store.state.userId,
+        };
+        this.commentContent = "";
+        addComments(
+          {
+            csComment: comment
+          }).then((data) => {
+          console.log(data);
+          console.log(getResultCode(resultMap.SuccessOK));
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
+            //查询最新评论
+            this.$emit("reloadComment");
+            this.$toast({ type: "success", message: data.message });
+          } else {
+            this.$toast({ type: "error", message: data.message });
+          }
+        });
+      },
+      like(comment) {
+        //判断登录
+        if (!this.$store.state.userId) {
+          this.$store.state.loginFlag = true;
+          return false;
+        }
+        //发送请求
+        let param = new URLSearchParams();
+        param.append("commentId", comment.id);
+        this.axios.post("/api/comments/like", param).then(({ data }) => {
+          if (data.flag) {
+            //判断是否点赞
+            if (this.$store.state.commentLikeSet.indexOf(comment.id) !== -1) {
+              this.$set(comment, "likeCount", comment.likeCount - 1);
+            } else {
+              this.$set(comment, "likeCount", comment.likeCount + 1);
+            }
+            this.$store.commit("commentLike", comment.id);
+          }
+        });
+      },
+      reloadReply(index) {
+        getReplies(this.commentList[index].id, {
+          params: {
+            currentPage: this.$refs.page[index].current
+          }
+        }).then((data) => {
+          console.log(data);
           this.commentList[index].replyCount++;
           //回复大于5条展示分页
           if (this.commentList[index].replyCount > 5) {
@@ -352,130 +360,152 @@ export default {
           }
           this.$refs.check[index].style.display = "none";
           this.$refs.reply[index].$el.style.display = "none";
-          this.commentList[index].replyDTOList = data.data;
+          this.commentList[index].replyList = data.replyList;
         });
+      }
+    },
+    computed: {
+      isLike() {
+        return function(commentId) {
+          const commentLikeSet = this.$store.state.commentLikeSet;
+          return commentLikeSet.indexOf(commentId) !== -1 ? "like-active" : "like";
+        };
+      }
     }
-  },
-  computed: {
-    isLike() {
-      return function(commentId) {
-        var commentLikeSet = this.$store.state.commentLikeSet;
-        return commentLikeSet.indexOf(commentId) !== -1 ? "like-active" : "like";
-      };
-    }
-  },
-  watch: {
-    commentList() {
-      this.reFresh = false;
-      this.$nextTick(() => {
-        this.reFresh = true;
-      });
+    ,
+    watch: {
+      commentList() {
+        this.reFresh = false;
+        this.$nextTick(() => {
+          this.reFresh = true;
+        });
+      }
     }
   }
-};
+  ;
 </script>
 
 <style scoped>
-p {
-  margin-bottom: 1.25rem !important;
-}
-.blogger-tag {
-  background: #ffa51e;
-  font-size: 12px;
-  display: inline-block;
-  border-radius: 2px;
-  color: #fff;
-  padding: 0 5px;
-  margin-left: 6px;
-}
-.comment-title {
-  display: flex;
-  align-items: center;
-  font-size: 1.25rem;
-  font-weight: bold;
-  line-height: 40px;
-  margin-bottom: 10px;
-}
-.comment-title i {
-  font-size: 1.5rem;
-  margin-right: 5px;
-}
-.comment-input-wrapper {
-  border: 1px solid #90939950;
-  border-radius: 4px;
-  padding: 10px;
-  margin: 0 0 10px;
-}
-.count {
-  padding: 5px;
-  line-height: 1.75;
-  font-size: 1.25rem;
-  font-weight: bold;
-}
-.comment-meta {
-  margin-left: 0.8rem;
-  width: 100%;
-  border-bottom: 1px dashed #f5f5f5;
-}
-.reply-meta {
-  margin-left: 0.8rem;
-  width: 100%;
-}
-.comment-user {
-  font-size: 14px;
-  line-height: 1.75;
-}
-.comment-user a {
-  color: #1abc9c !important;
-  font-weight: 500;
-  transition: 0.3s all;
-}
-.comment-nickname {
-  text-decoration: none;
-  color: #1abc9c !important;
-  font-weight: 500;
-}
-.comment-info {
-  line-height: 1.75;
-  font-size: 0.75rem;
-  color: #b3b3b3;
-}
-.reply-btn {
-  cursor: pointer;
-  float: right;
-  color: #ef2f11;
-}
-.comment-content {
-  font-size: 0.875rem;
-  line-height: 1.75;
-  padding-top: 0.625rem;
-}
-.comment-avatar {
-  transition: all 0.5s;
-}
-.comment-avatar:hover {
-  transform: rotate(360deg);
-}
-.like {
-  cursor: pointer;
-  font-size: 0.875rem;
-}
-.like:hover {
-  color: #eb5055;
-}
-.like-active {
-  cursor: pointer;
-  font-size: 0.875rem;
-  color: #eb5055;
-}
-.load-wrapper {
-  margin-top: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.load-wrapper button {
-  background-color: #49b1f5;
-  color: #fff;
-}
+  p {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .blogger-tag {
+    background: #ffa51e;
+    font-size: 12px;
+    display: inline-block;
+    border-radius: 2px;
+    color: #fff;
+    padding: 0 5px;
+    margin-left: 6px;
+  }
+
+  .comment-title {
+    display: flex;
+    align-items: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    line-height: 40px;
+    margin-bottom: 10px;
+  }
+
+  .comment-title i {
+    font-size: 1.5rem;
+    margin-right: 5px;
+  }
+
+  .comment-input-wrapper {
+    border: 1px solid #90939950;
+    border-radius: 4px;
+    padding: 10px;
+    margin: 0 0 10px;
+  }
+
+  .count {
+    padding: 5px;
+    line-height: 1.75;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+
+  .comment-meta {
+    margin-left: 0.8rem;
+    width: 100%;
+    border-bottom: 1px dashed #f5f5f5;
+  }
+
+  .reply-meta {
+    margin-left: 0.8rem;
+    width: 100%;
+  }
+
+  .comment-user {
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .comment-user a {
+    color: #1abc9c !important;
+    font-weight: 500;
+    transition: 0.3s all;
+  }
+
+  .comment-nickname {
+    text-decoration: none;
+    color: #1abc9c !important;
+    font-weight: 500;
+  }
+
+  .comment-info {
+    line-height: 1.75;
+    font-size: 0.75rem;
+    color: #b3b3b3;
+  }
+
+  .reply-btn {
+    cursor: pointer;
+    float: right;
+    color: #ef2f11;
+  }
+
+  .comment-content {
+    font-size: 0.875rem;
+    line-height: 1.75;
+    padding-top: 0.625rem;
+  }
+
+  .comment-avatar {
+    transition: all 0.5s;
+  }
+
+  .comment-avatar:hover {
+    transform: rotate(360deg);
+  }
+
+  .like {
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .like:hover {
+    color: #eb5055;
+  }
+
+  .like-active {
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: #eb5055;
+  }
+
+  .load-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .load-wrapper button {
+    background-color: #49b1f5;
+    color: #fff;
+  }
 </style>

@@ -20,5 +20,16 @@ message RequestPkg{
   uint32 articleId = 3;
   Message message = 4;
   User user = 5;
+  CsComment csComment = 6;
+}
+
+message CsComment{
+  uint32 articleId = 1;
+  uint32 userId = 2;
+  string commentContent = 3;
+  int64 createTime = 4;
+  uint32 replyId = 5;
+  uint32 parentId = 6;
+  uint32 isDelete = 7;
 }
 

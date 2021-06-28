@@ -9,6 +9,7 @@ export const urls = {
   messages: "/blog/messages",
   links: "/blog/links",
   comments: "/blog/comments",
+  replies: "/blog/replies/",
   code: "/users/code",
   register: "/users/register",
   login: "/users/login"

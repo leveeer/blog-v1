@@ -24,29 +24,15 @@ if (process.env.NODE_ENV === "development") {
   });
 }
 
-const requestMap = {
-  CsBeginIndex: "CsBeginIndex",
-  CsGetArticles: "CsGetArticles",
-  CsGetArticleById: "CsGetArticleById ",
-  CsGetBlogHomeInfo: "CsGetBlogHomeInfo"
-};
 
-const protoObj = {
+export const protoObj = {
   CsId: protoRoot.lookup("proto.CsId"),
   // 请求体message
   RequestPkg: protoRoot.lookupType("proto.RequestPkg"),
   // 响应体的message
-  ResponsePkg: protoRoot.lookupType("proto.ResponsePkg")
+  ResponsePkg: protoRoot.lookupType("proto.ResponsePkg"),
+  ResultCode: protoRoot.lookup("proto.ResultCode")
 };
-
-function getReqValue(reqString) {
-  return protoObj.CsId.values[reqString];
-}
-
-function getReqString(reqID) {
-  return protoObj.CsId.valuesById[reqID];
-}
-
 
 // request 拦截器 axios 的一些配置
 service.interceptors.request.use(

@@ -84,6 +84,9 @@ const (
 	GetLoginCodeFail
 	RegisterFail
 	LoginFail
+	AddCommentFail
+	AddReplyFail
+	GetRepliesFail
 )
 
 // unknown group
@@ -167,6 +170,9 @@ var Error = map[ErrorCode]error{
 	GetLoginCodeFail:           errors.New("获取验证码失败"),
 	RegisterFail:               errors.New("注册失败"),
 	LoginFail:                  errors.New("用户名或密码错误"),
+	AddCommentFail:             errors.New("评论失败"),
+	AddReplyFail:               errors.New("回复失败"),
+	GetRepliesFail:             errors.New("获取回复列表失败"),
 }
 
 func GetMsg(code ErrorCode) string {

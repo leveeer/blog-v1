@@ -465,7 +465,7 @@
       },
       isLike() {
         var articleLikeSet = this.$store.state.articleLikeSet;
-        return articleLikeSet.indexOf(this.article.id) != -1
+        return articleLikeSet.indexOf(this.article.id) !== -1
           ? "like-btn-active"
           : "like-btn";
       },

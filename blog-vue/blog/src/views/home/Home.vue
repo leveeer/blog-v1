@@ -339,7 +339,7 @@
     left: 0;
     right: 0;
     height: 100vh;
-    background: #49b1f5 url("http://qt36u2hdb.hn-bkt.clouddn.com/wallhaven-rddgwm.jpg") no-repeat fixed center center;
+    background: #49b1f5 url("https://pic.imgdb.cn/item/60d986fb5132923bf84d2857.jpg") no-repeat fixed center center;
     text-align: center;
     color: #fff !important;
     animation: header-effect 1s;

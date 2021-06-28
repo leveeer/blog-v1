@@ -30,4 +30,5 @@ message ResponsePkg {
   ArticleInfo articleInfo = 14;
   Archives archiveInfo = 15;
   About about = 16;
+  repeated Reply replyList = 17;
 }

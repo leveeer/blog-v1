@@ -39,6 +39,42 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           user: {
             type: "User",
             id: 5
+          },
+          csComment: {
+            type: "CsComment",
+            id: 6
+          }
+        }
+      },
+      CsComment: {
+        fields: {
+          articleId: {
+            type: "uint32",
+            id: 1
+          },
+          userId: {
+            type: "uint32",
+            id: 2
+          },
+          commentContent: {
+            type: "string",
+            id: 3
+          },
+          createTime: {
+            type: "int64",
+            id: 4
+          },
+          replyId: {
+            type: "uint32",
+            id: 5
+          },
+          parentId: {
+            type: "uint32",
+            id: 6
+          },
+          isDelete: {
+            type: "uint32",
+            id: 7
           }
         }
       },
@@ -657,6 +693,11 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           about: {
             type: "About",
             id: 16
+          },
+          replyList: {
+            rule: "repeated",
+            type: "Reply",
+            id: 17
           }
         }
       }

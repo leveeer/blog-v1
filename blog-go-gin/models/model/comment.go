@@ -3,6 +3,7 @@ package model
 import (
 	"blog-go-gin/dao"
 	"blog-go-gin/models/page"
+	"gorm.io/gorm"
 )
 
 type Comment struct {
@@ -25,8 +26,8 @@ func (model *Comment) TableName() string {
 	return "tb_comment"
 }
 
-func AddComment(m *Comment) error {
-	return dao.Db.Debug().Save(m).Error
+func AddComment(tx *gorm.DB, m *Comment) error {
+	return tx.Debug().Save(m).Error
 }
 
 func DeleteCommentByID(id int) (bool, error) {
@@ -74,6 +75,7 @@ func GetCommentsCountByCondition(condition string, args ...interface{}) (int64, 
 
 func GetCommentsAndUserInfo(iPage *page.IPage, condition string, args ...interface{}) ([]*Comment, error) {
 	res := make([]*Comment, 0)
+	iPage.Size = 10
 	if err := dao.Db.Debug().Table("tb_comment").
 		Select(" tb_user_info.nickname,tb_user_info.avatar,tb_user_info.web_site,tb_comment.user_id,tb_comment.id,tb_comment.comment_content,tb_comment.create_time").
 		Where(condition, args...).Joins("JOIN tb_user_info ON tb_comment.user_id = tb_user_info.id").Order("create_time DESC").
@@ -101,6 +103,21 @@ func GetReplyCountByCommentId(commentIds []int64) ([]*Comment, error) {
 	res := make([]*Comment, 0)
 	if err := dao.Db.Debug().Table("tb_comment").Select("parent_id,count(1) AS reply_count").
 		Where("is_delete = 0 AND parent_id IN (?)", commentIds).Group("parent_id").
+		Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetRepliesByCommentId(iPage *page.IPage, commentIds []int64) ([]*Comment, error) {
+	res := make([]*Comment, 0)
+	iPage.Size = 5
+	if err := dao.Db.Debug().Table("tb_comment as c").
+		Select("c.user_id,nickname,avatar,web_site,c.reply_id, c.id,c.parent_id,c.comment_content,c.create_time").
+		Joins("JOIN tb_user_info u ON c.user_id = u.id").
+		Where("c.is_delete = 0 AND parent_id IN (?)", commentIds).
+		Order("create_time ASC").
+		Scopes(page.Paginate(iPage)).
 		Find(&res).Error; err != nil {
 		return nil, err
 	}

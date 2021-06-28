@@ -50,6 +50,14 @@ export function getComments(params) {
   return service.get(urls.comments, params);
 }
 
+export function addComments(params) {
+  return service.post(urls.comments, params);
+}
+
+export function getReplies(commentId,params) {
+  return service.get(urls.replies + commentId, params);
+}
+
 export function getLoginCode(params) {
   return service.get(urls.code,params)
 }
