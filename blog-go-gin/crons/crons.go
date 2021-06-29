@@ -8,12 +8,12 @@ import (
 )
 
 func ClearIpSet() {
-	members := common.RedisUtil.SMembers(common.IpSet)
+	members := common.GetRedisUtil().SMembers(common.IpSet)
 	var slice []interface{}
 	for _, member := range members {
 		slice = append(slice, member)
 	}
-	common.RedisUtil.SRems(common.IpSet, slice...)
+	common.GetRedisUtil().SRems(common.IpSet, slice...)
 }
 
 func RegisterCron() {

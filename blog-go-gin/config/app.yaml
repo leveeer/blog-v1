@@ -23,3 +23,11 @@ redis:
   redisconn: 47.119.168.227:6379
   redispwd:
   db: 1
+
+#ws配置
+ws:
+  id: 1
+  host: 127.0.0.1
+  port: 33000
+  debug: true
+

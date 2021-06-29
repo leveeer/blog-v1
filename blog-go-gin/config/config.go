@@ -18,6 +18,7 @@ type Config struct {
 	//LogLevel  string `yaml:"loglevel"`
 	Mysql Mysql `yaml:"mysql"`
 	Redis Redis `yaml:"redis"`
+	Ws    WS    `yaml:"ws"`
 }
 
 type Mysql struct {
@@ -33,6 +34,13 @@ type Redis struct {
 	RedisConn string `yaml:"redisconn"`
 	RedisPwd  string `yaml:"redispwd"`
 	Db        int    `yaml:"db"`
+}
+
+type WS struct {
+	ID    uint32 `yaml:"id"`
+	Host  string `yaml:"host"`
+	Port  uint32 `yaml:"port"`
+	Debug bool   `yaml:"debug"`
 }
 
 func (c *Config) loadConf() {

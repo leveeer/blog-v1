@@ -30,7 +30,7 @@
         </ul>
         <!-- 搜索结果不存在提示 -->
         <div
-          v-show="flag && articleList.length == 0"
+          v-show="flag && articleList.length === 0"
           style="font-size:0.875rem"
         >
           找不到您查询的内容：{{ keywords }}
@@ -66,15 +66,12 @@ export default {
     },
     isMobile() {
       const clientWidth = document.documentElement.clientWidth;
-      if (clientWidth > 960) {
-        return false;
-      }
-      return true;
+      return clientWidth <= 960;
     }
   },
   watch: {
     keywords(value) {
-      this.flag = value.trim() != "" ? true : false;
+      this.flag = value.trim() !== "";
       this.axios
         .get("/api/articles/search", {
           params: { current: 1, keywords: value }

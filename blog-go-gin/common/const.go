@@ -27,6 +27,7 @@ const (
 	ABOUT             = "about"               //关于我信息
 	NOTICE            = "notice"              //公告
 	IpSet             = "ip_set"              //ip集合
+	ChatServer        = "chat_server"         //聊天服
 )
 
 //code status

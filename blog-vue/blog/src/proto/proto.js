@@ -15,7 +15,9 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           CsBeginIndex: 0,
           CsGetArticles: 1,
           CsGetArticleById: 2,
-          CsGetBlogHomeInfo: 3
+          CsGetBlogHomeInfo: 3,
+          CsLogout: 4,
+          CsChatMessage: 5
         }
       },
       RequestPkg: {
@@ -43,6 +45,14 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           csComment: {
             type: "CsComment",
             id: 6
+          },
+          csBeatMessage: {
+            type: "CsBeatMessage",
+            id: 7
+          },
+          csChatMessage: {
+            type: "CsChatMessage",
+            id: 8
           }
         }
       },
@@ -75,6 +85,54 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           isDelete: {
             type: "uint32",
             id: 7
+          }
+        }
+      },
+      CsBeatMessage: {
+        fields: {
+          type: {
+            type: "uint32",
+            id: 1
+          },
+          data: {
+            type: "string",
+            id: 2
+          }
+        }
+      },
+      CsChatMessage: {
+        fields: {
+          nickname: {
+            type: "string",
+            id: 1
+          },
+          avatar: {
+            type: "string",
+            id: 2
+          },
+          content: {
+            type: "string",
+            id: 3
+          },
+          userId: {
+            type: "uint32",
+            id: 4
+          },
+          type: {
+            type: "uint32",
+            id: 5
+          },
+          ipAddr: {
+            type: "string",
+            id: 6
+          },
+          ipSource: {
+            type: "string",
+            id: 7
+          },
+          createTime: {
+            type: "int64",
+            id: 8
           }
         }
       },

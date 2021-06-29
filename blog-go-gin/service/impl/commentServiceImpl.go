@@ -97,7 +97,7 @@ func (c *CommentServiceImpl) GetComments(articleId int, ipage *page.IPage) (*pb.
 		})
 	}
 	//查询评论点赞数据
-	likeCountMap, err := common.RedisUtil.HashGetAll(common.CommentLikeCount)
+	likeCountMap, err := common.GetRedisUtil().HashGetAll(common.CommentLikeCount)
 	if err != nil {
 		return nil, err
 	}

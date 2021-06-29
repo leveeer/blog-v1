@@ -11,6 +11,8 @@ enum CsId{
   CsGetArticles = 1;
   CsGetArticleById = 2;
   CsGetBlogHomeInfo = 3;
+  CsLogout = 4;
+  CsChat = 5;
 }
 
 
@@ -21,6 +23,8 @@ message RequestPkg{
   Message message = 4;
   User user = 5;
   CsComment csComment = 6;
+  CsBeatMessage csBeatMessage = 7;
+  CsChatMessage csChatMessage = 8;
 }
 
 message CsComment{
@@ -32,4 +36,21 @@ message CsComment{
   uint32 parentId = 6;
   uint32 isDelete = 7;
 }
+
+message CsBeatMessage{
+  uint32 type = 1;
+  string data = 2;
+}
+
+message CsChatMessage{
+  string nickname = 1;
+  string avatar = 2;
+  string content = 3;
+  uint32 userId = 4;
+  uint32 type = 5;
+  string ipAddr = 6;
+  string ipSource = 7;
+  int64 createTime = 8;
+}
+
 

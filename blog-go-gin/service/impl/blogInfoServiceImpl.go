@@ -21,12 +21,12 @@ func NewBlogInfoServiceImpl() *BlogInfoServiceImpl {
 }
 
 func (b *BlogInfoServiceImpl) GetAbout() (*pb.About, error) {
-	about, err := common.RedisUtil.Get(common.ABOUT)
+	about, err := common.GetRedisUtil().Get(common.ABOUT)
 	logging.Logger.Debug(about)
 
 	if err != nil && errors.Is(err, redis.Nil) {
 		about = "博客Go语言版即将上线，敬请期待！"
-		if err = common.RedisUtil.Set(common.ABOUT, about); err != nil {
+		if err = common.GetRedisUtil().Set(common.ABOUT, about); err != nil {
 			logging.Logger.Error(err)
 			return nil, err
 		}
@@ -226,10 +226,10 @@ func (b *BlogInfoServiceImpl) GetBlogInfo() (*pb.BlogHomeInfo, error) {
 			return nil
 		},
 		func() (err error) {
-			notice, err = common.RedisUtil.Get(common.NOTICE)
+			notice, err = common.GetRedisUtil().Get(common.NOTICE)
 			if err != nil && errors.Is(err, redis.Nil) {
 				notice = "博客Go语言版即将上线，敬请期待！"
-				if err = common.RedisUtil.Set(common.NOTICE, notice); err != nil {
+				if err = common.GetRedisUtil().Set(common.NOTICE, notice); err != nil {
 					logging.Logger.Error(err)
 					return err
 				}
@@ -242,9 +242,9 @@ func (b *BlogInfoServiceImpl) GetBlogInfo() (*pb.BlogHomeInfo, error) {
 		},
 
 		func() (err error) {
-			viewsCountStr, err := common.RedisUtil.Get(common.BlogViewsCount)
+			viewsCountStr, err := common.GetRedisUtil().Get(common.BlogViewsCount)
 			if err != nil && errors.Is(err, redis.Nil) {
-				if err := common.RedisUtil.Set(common.BlogViewsCount, strconv.Itoa(0)); err != nil {
+				if err := common.GetRedisUtil().Set(common.BlogViewsCount, strconv.Itoa(0)); err != nil {
 					return err
 				}
 				viewsCountStr = "0"

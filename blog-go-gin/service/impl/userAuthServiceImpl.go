@@ -140,6 +140,6 @@ func (u *UserAuthServiceImpl) GetLoginCode(username string) error {
 		return err
 	}
 	// 将验证码存入redis，设置过期时间为15分钟
-	common.RedisUtil.SetEx(common.CodeKey+username, code, common.CodeExpireTime, time.Second)
+	common.GetRedisUtil().SetEx(common.CodeKey+username, code, common.CodeExpireTime, time.Second)
 	return nil
 }

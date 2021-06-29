@@ -98,7 +98,7 @@ export default {
         this.$toast({ type: "error", message: "邮箱格式不正确" });
         return false;
       }
-      if (this.code.trim().length != 6) {
+      if (this.code.trim().length !== 6) {
         this.$toast({ type: "error", message: "请输入6位验证码" });
         return false;
       }
@@ -130,20 +130,13 @@ export default {
     },
     isMobile() {
       const clientWidth = document.documentElement.clientWidth;
-      if (clientWidth > 960) {
-        return false;
-      }
-      return true;
+      return clientWidth <= 960;
     }
   },
   watch: {
     email(value) {
-      var reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-      if (reg.test(value)) {
-        this.flag = false;
-      } else {
-        this.flag = true;
-      }
+      const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+      this.flag = !reg.test(value);
     }
   }
 };

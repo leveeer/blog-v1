@@ -1,6 +1,7 @@
 package common
 
 import (
+	"blog-go-gin/logging"
 	"crypto/md5"
 	"crypto/sha256"
 	"encoding/hex"
@@ -9,6 +10,7 @@ import (
 	"math/rand"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -180,4 +182,24 @@ func CheckUidList(collection []string) bool {
 		}
 	}
 	return true
+}
+
+var gracefulWaitGroup sync.WaitGroup
+
+func GracefulWorkerAdd(delta int) {
+	gracefulWaitGroup.Add(delta)
+}
+
+func GracefulWorkerDone() {
+	gracefulWaitGroup.Done()
+}
+
+func GracefulWorkerWait() {
+	gracefulWaitGroup.Wait()
+}
+
+func WaitWorker() {
+	logging.Logger.Debug("waiting worker")
+	gracefulWaitGroup.Wait()
+	logging.Logger.Debug("all worker is done.")
 }

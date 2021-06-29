@@ -38,7 +38,7 @@ func AppRecoveryMiddleware() gin.HandlerFunc {
 						}
 					}
 				}
-				if logging.Logger != nil {
+				if logging.Entry != nil {
 					stack := stack(3)
 					httpRequest, _ := httputil.DumpRequest(c.Request, false)
 					headers := strings.Split(string(httpRequest), "\r\n")
@@ -49,12 +49,12 @@ func AppRecoveryMiddleware() gin.HandlerFunc {
 						}
 					}
 					if brokenPipe {
-						logging.Logger.WithFields(logrus.Fields{"error_code": c.Writer.Status(), "error_msg": err}).Errorf("%s\n%s%s", err, string(httpRequest))
+						logging.Entry.WithFields(logrus.Fields{"error_code": c.Writer.Status(), "error_msg": err}).Errorf("%s\n%s", err, string(httpRequest))
 					} else if gin.IsDebugging() {
-						logging.Logger.WithFields(logrus.Fields{"error_code": c.Writer.Status(), "error_msg": err}).Errorf("[Recovery] %s panic recovered:\n%s\n%s\n%s",
+						logging.Entry.WithFields(logrus.Fields{"error_code": c.Writer.Status(), "error_msg": err}).Errorf("[Recovery] %s panic recovered:\n%s\n%s\n%s",
 							timeFormat(time.Now()), strings.Join(headers, "\r\n"), err, stack)
 					} else {
-						logging.Logger.WithFields(logrus.Fields{"error_code": c.Writer.Status(), "error_msg": err}).Errorf("[Recovery] %s panic recovered:\n%s\n%s",
+						logging.Entry.WithFields(logrus.Fields{"error_code": c.Writer.Status(), "error_msg": err}).Errorf("[Recovery] %s panic recovered:\n%s\n%s",
 							timeFormat(time.Now()), err, stack)
 					}
 				}

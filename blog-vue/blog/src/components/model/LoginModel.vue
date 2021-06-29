@@ -57,6 +57,8 @@
 
 <script>
   import { login } from "../../api/api";
+  import { getResultCode } from "../../utils/util";
+  import { resultMap } from "../../utils/constant";
 
   export default {
     data: function() {
@@ -101,14 +103,9 @@
         }
         const that = this;
         // eslint-disable-next-line no-undef
-        var captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function(
-          res
-        ) {
+        const captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function(res) {
           if (res.ret === 0) {
             //发送登录请求
-            // let param = new URLSearchParams();
-            // param.append("username", that.username);
-            // param.append("password", that.password);
             login({
               user: {
                 username: that.username,
@@ -116,7 +113,7 @@
               },
             }).then((data) => {
               console.log(data);
-              if (data.code === 10000) {
+              if (data.code === getResultCode(resultMap.SuccessOK)) {
                 that.username = "";
                 that.password = "";
                 that.$store.commit("login", data.loginResponse);

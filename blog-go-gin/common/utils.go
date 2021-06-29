@@ -1,12 +1,16 @@
 package common
 
 import (
+	"blog-go-gin/logging"
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/hex"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"reflect"
+	"runtime"
 	"strings"
 )
 
@@ -136,4 +140,23 @@ func Decode(code string) uint64 {
 		r++
 	}
 	return res
+}
+
+// PrintPanicStack 产生panic时的调用栈打印
+func PrintPanicStack(extras ...interface{}) {
+	i := 0
+	funcName, file, line, ok := runtime.Caller(i)
+	for ok {
+		logging.Logger.Debugf("frame %v:[func:%v,file:%v,line:%v]\n", i, runtime.FuncForPC(funcName).Name(), file, line)
+		i++
+		funcName, file, line, ok = runtime.Caller(i)
+	}
+	for k := range extras {
+		logging.Logger.Debugf("EXRAS#%v DATA:%v", k, spew.Sdump(extras[k]))
+	}
+}
+
+func Serialization(obj interface{}) string {
+	data, _ := json.Marshal(obj)
+	return string(data)
 }

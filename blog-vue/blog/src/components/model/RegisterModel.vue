@@ -58,6 +58,8 @@
 
 <script>
   import { getLoginCode, register, login } from "../../api/api";
+  import { getResultCode } from "../../utils/util";
+  import { resultMap } from "../../utils/constant";
 
   export default {
     data: function() {
@@ -132,11 +134,7 @@
         register({
           user: userModel
         }).then((data) => {
-          console.log(data)
-          if (data.code === 10000) {
-            // let param = new URLSearchParams();
-            // param.append("username", userModel.username);
-            // param.append("password", userModel.password);
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
             login({
               user: userModel,
             }).then((data) => {

@@ -21,10 +21,10 @@ func StatisticalViews() gin.HandlerFunc {
 			//一定要save!!!
 			_ = session.Save()
 			//将redis中的访问量+1
-			common.RedisUtil.IncrBy(common.BlogViewsCount, 1)
+			common.GetRedisUtil().IncrBy(common.BlogViewsCount, 1)
 		}
 		//有,说明用户已访问
-		common.RedisUtil.SAdd(common.IpSet, clientIP)
+		common.GetRedisUtil().SAdd(common.IpSet, clientIP)
 		ctx.Next()
 	}
 }

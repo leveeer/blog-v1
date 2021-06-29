@@ -1,7 +1,6 @@
 package main
 
 import (
-	"blog-go-gin/common"
 	"blog-go-gin/config"
 	"blog-go-gin/crons"
 	"blog-go-gin/dao"
@@ -22,7 +21,6 @@ func main() {
 	gin.DefaultWriter = colorable.NewColorableStdout() // 替换默认Writer（关键步骤）
 	var router *gin.Engine
 	dao.InitMysql()
-	common.InitRedis()
 	router = routers.InitWebRouter()
 	//注册定时任务
 	crons.RegisterCron()
