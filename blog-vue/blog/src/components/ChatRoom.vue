@@ -237,7 +237,8 @@
         this.WebsocketMessage.type = 3;
         this.WebsocketMessage.data = socketMsg;
         sendMessage({
-          cmdId: requestMap.CsChat,
+          // cmdId: requestMap.CsChat,
+          cmdId: 5,
           csChatMessage: socketMsg
         });
         this.content = "";
@@ -253,8 +254,8 @@
           item.style.display = "none";
         });
         if (
-          item.ipAddr == this.ipAddr ||
-          (item.userId != null && item.userId == this.userId)
+          item.ipAddr === this.ipAddr ||
+          (item.userId != null && item.userId === this.userId)
         ) {
           this.$refs.backBtn[index].style.left = e.offsetX + "px";
           this.$refs.backBtn[index].style.bottom = e.offsetY + "px";
@@ -265,7 +266,7 @@
       back(item, index) {
         var socketMsg = {
           id: item.id,
-          isVoice: item.type == 5
+          isVoice: item.type === 5
         };
         this.WebsocketMessage.type = 4;
         this.WebsocketMessage.data = socketMsg;
@@ -365,7 +366,7 @@
         time = Math.ceil(time);
         var str = "⬝⬝⬝";
         for (var i = 0; i < time; i++) {
-          if (i % 2 == 0) {
+          if (i % 2 === 0) {
             str += "⬝";
           }
         }
@@ -377,8 +378,8 @@
       isSelf() {
         return function(item) {
           return (
-            item.ipAddr == this.ipAddr ||
-            (item.userId != null && item.userId == this.userId)
+            item.ipAddr === this.ipAddr ||
+            (item.userId != null && item.userId === this.userId)
           );
         };
       },

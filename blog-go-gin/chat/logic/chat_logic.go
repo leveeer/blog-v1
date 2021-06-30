@@ -20,6 +20,7 @@ type OnlineRouter struct {
 var globalRouter OnlineRouter
 
 func init() {
+	logging.Logger.Debug("chat logic init...")
 	router.WorldMessageChan = make(chan *router.ClientMessage, 64)
 	router.ClosedChan = make(chan struct{})
 	globalRouter.Users = make(map[uint32]*model.UserInfo)
@@ -30,11 +31,7 @@ func init() {
 
 func MessageDispatcher() {
 	// 初始化顺序不能乱
-	vitTick := time.NewTicker(time.Second * 5)
-	moraleTick := time.NewTicker(time.Second * 5)
 	defer func() {
-		vitTick.Stop()
-		moraleTick.Stop()
 		common.GracefulWorkerDone()
 	}()
 	logging.Logger.Info("[MessageDispatcher] running...")

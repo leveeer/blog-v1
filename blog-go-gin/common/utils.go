@@ -9,6 +9,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
+	"net"
+	"net/http"
 	"reflect"
 	"runtime"
 	"strings"
@@ -159,4 +161,27 @@ func PrintPanicStack(extras ...interface{}) {
 func Serialization(obj interface{}) string {
 	data, _ := json.Marshal(obj)
 	return string(data)
+}
+
+// GetIPAddress 借鉴gin.ClientIP()
+func GetIPAddress(r *http.Request) string {
+	// 1.
+	clientIP := r.Header.Get("X-Forwarded-For")
+	clientIP = strings.TrimSpace(strings.Split(clientIP, ",")[0])
+	if clientIP == "" {
+		clientIP = strings.TrimSpace(r.Header.Get("X-Real-Ip"))
+	}
+	if clientIP != "" {
+		return clientIP
+	}
+
+	// 2.
+	if addr := r.Header.Get("X-Appengine-Remote-Addr"); addr != "" {
+		return addr
+	}
+	// 3.
+	if ip, _, err := net.SplitHostPort(strings.TrimSpace(r.RemoteAddr)); err == nil {
+		return ip
+	}
+	return ""
 }

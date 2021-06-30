@@ -19,7 +19,7 @@ const (
 	pongWait = 60 * time.Second
 
 	// Send pings to peer with this period. Must be less than pongWait.
-	pingPeriod = (pongWait * 9) / 10
+	pingPeriod = (pongWait * 5) / 10
 
 	// Maximum message size allowed from peer.
 	maxMessageSize = 2046
@@ -80,32 +80,6 @@ func (p *Session) closeAndCleanup() {
 	p.CloseWs("closeAndCleanup")
 }
 
-// readPump pumps messages from the websocket connection to the hub.
-//
-// The application runs readPump in a per-connection goroutine. The application
-// ensures that there is at most one reader on a connection by executing all
-// reads from this goroutine.
-//const (
-//	// TextMessage denotes a text data message. The text message payload is
-//	// interpreted as UTF-8 encoded text data.
-//	TextMessage = 1
-//
-//	// BinaryMessage denotes a binary data message.
-//	BinaryMessage = 2
-//
-//	// CloseMessage denotes a close control message. The optional message
-//	// payload contains a numeric code and text. Use the FormatCloseMessage
-//	// function to format a close message payload.
-//	CloseMessage = 8
-//
-//	// PingMessage denotes a ping control message. The optional message payload
-//	// is UTF-8 encoded text.
-//	PingMessage = 9
-//
-//	// PongMessage denotes a pong control message. The optional message payload
-//	// is UTF-8 encoded text.
-//	PongMessage = 10
-//)
 func (p *Session) readPump() {
 	defer func(extras ...interface{}) {
 		if err := recover(); err != nil {
@@ -267,7 +241,8 @@ var WorldMessageChan chan *ClientMessage
 var ClosedChan chan struct{}
 
 func MessageHandler(p *Session, data []byte) {
-	ClosedChan = make(chan struct{})
+	//ClosedChan = make(chan struct{})
+	//WorldMessageChan = make(chan *ClientMessage, 64)
 	defer func(extras ...interface{}) {
 		if err := recover(); err != nil {
 			common.PrintPanicStack(extras)
@@ -284,8 +259,8 @@ func MessageHandler(p *Session, data []byte) {
 
 	logging.Logger.Infof("MessageHandler - %s %d", p.Id, pkg.CmdId)
 	switch pkg.CmdId {
-	//case pb.CsId_CsBeginIndex:
-	//	logging.Logger.Debug(pkg)
+	case pb.CsId_CsBeginIndex:
+		logging.Logger.Debug(pkg)
 	//case pb.CsId_CsChat:
 	//	logging.Logger.Debug(pkg)
 	default:
@@ -296,6 +271,7 @@ func MessageHandler(p *Session, data []byte) {
 			Conn: p,
 			Cmd:  pkg,
 		}:
+			logging.Logger.Debug("收到客户端的消息：", <-WorldMessageChan)
 		}
 	}
 }
