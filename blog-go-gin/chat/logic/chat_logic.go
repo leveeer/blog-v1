@@ -19,8 +19,8 @@ type OnlineRouter struct {
 
 var globalRouter OnlineRouter
 
-func init() {
-	logging.Logger.Debug("chat logic init...")
+func InitChatLogic() {
+	fmt.Println("chat logic init...")
 	router.WorldMessageChan = make(chan *router.ClientMessage, 64)
 	router.ClosedChan = make(chan struct{})
 	globalRouter.Users = make(map[uint32]*model.UserInfo)
@@ -30,12 +30,8 @@ func init() {
 }
 
 func MessageDispatcher() {
-	// 初始化顺序不能乱
-	defer func() {
-		common.GracefulWorkerDone()
-	}()
+	defer common.GracefulWorkerDone()
 	logging.Logger.Info("[MessageDispatcher] running...")
-
 	for {
 		select {
 		case msg := <-router.WorldMessageChan:
@@ -89,6 +85,11 @@ func CmdHandler(session *router.Session, pkg *pb.RequestPkg) (err error) {
 }
 
 func Chat(session *router.Session, chatMessage *pb.CsChatMessage) error {
-	logging.Logger.Debug("处理聊天信息", chatMessage)
+	logging.Logger.Debug("处理聊天信息:", chatMessage)
+	return nil
+}
+
+func Logout(session *router.Session) error {
+	delete(globalRouter.UserBySessionId, session.Id)
 	return nil
 }

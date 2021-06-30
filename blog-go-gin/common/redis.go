@@ -129,7 +129,6 @@ func (r *RedisUtil) IncrBy(key string, increment int64) int64 {
 
 // HashSet 向key的hash中添加元素field的值
 func (r *RedisUtil) HashSet(key, field string, data interface{}) error {
-	logging.Logger.Info(r.redisClient)
 	err := r.redisClient.HSet(ctx, key, field, data).Err()
 	if err != nil {
 		return err

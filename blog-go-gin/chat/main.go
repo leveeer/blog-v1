@@ -1,6 +1,7 @@
 package main
 
 import (
+	"blog-go-gin/chat/logic"
 	"blog-go-gin/chat/router"
 	"blog-go-gin/config"
 	"blog-go-gin/logging"
@@ -51,6 +52,7 @@ func main() {
 			logging.Logger.Fatalf("ListenAndServe(): %s", err)
 		}
 	}()
+	logic.InitChatLogic()
 
 	router.UnregisterGameServer(ws)
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

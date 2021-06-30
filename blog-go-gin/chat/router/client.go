@@ -271,7 +271,7 @@ func MessageHandler(p *Session, data []byte) {
 			Conn: p,
 			Cmd:  pkg,
 		}:
-			logging.Logger.Debug("收到客户端的消息：", <-WorldMessageChan)
+			//logging.Logger.Debug("收到客户端的消息：", <-WorldMessageChan)
 		}
 	}
 }
