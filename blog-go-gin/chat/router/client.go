@@ -26,7 +26,7 @@ const (
 	maxMessageSize = 2046
 )
 
-var OnlineManager = NewClientManager()
+var ClientMgr = NewClientManager()
 
 // ClientManager 客户端管理
 type ClientManager struct {
@@ -134,7 +134,7 @@ func NewSession(conn *websocket.Conn) *Session {
 	go client.writePump()
 	go client.readPump()
 	logging.Logger.Infof("upgrade finish %v", client)
-	OnlineManager.register <- client
+	ClientMgr.register <- client
 	return client
 }
 
