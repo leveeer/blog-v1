@@ -17,7 +17,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           CsGetArticleById: 2,
           CsGetBlogHomeInfo: 3,
           CsLogout: 4,
-          CsChatMessage: 5
+          CsChat: 5
         }
       },
       RequestPkg: {
@@ -764,6 +764,22 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "Reply",
             id: 17
+          },
+          scChat: {
+            type: "ScChat",
+            id: 18
+          }
+        }
+      },
+      ScChat: {
+        fields: {
+          type: {
+            type: "uint32",
+            id: 1
+          },
+          online: {
+            type: "uint32",
+            id: 2
           }
         }
       }

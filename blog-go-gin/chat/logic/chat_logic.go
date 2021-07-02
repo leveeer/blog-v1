@@ -6,6 +6,7 @@ import (
 	"blog-go-gin/common"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
+	"blog-go-gin/models/enum"
 	"blog-go-gin/models/model"
 	"errors"
 	"fmt"
@@ -13,27 +14,43 @@ import (
 )
 
 type OnlineRouter struct {
+	UserOnline      *common.Set
 	Users           map[uint32]*model.UserInfo
 	UserBySessionId map[string]*model.UserInfo
 }
 
-var globalRouter OnlineRouter
+var globalRouter *OnlineRouter
 
 func InitChatLogic() {
-	fmt.Println("chat logic init...")
 	router.WorldMessageChan = make(chan *router.ClientMessage, 64)
 	router.ClosedChan = make(chan struct{})
-	globalRouter.Users = make(map[uint32]*model.UserInfo)
-	globalRouter.UserBySessionId = make(map[string]*model.UserInfo)
+	router.SessionChan = make(chan *router.Session)
+	globalRouter = &OnlineRouter{
+		UserOnline:      common.NewSet(0),
+		Users:           make(map[uint32]*model.UserInfo),
+		UserBySessionId: make(map[string]*model.UserInfo),
+	}
 	common.GracefulWorkerAdd(1)
 	go MessageDispatcher()
 }
 
 func MessageDispatcher() {
-	defer common.GracefulWorkerDone()
+	defer func() {
+		common.GracefulWorkerDone()
+	}()
 	logging.Logger.Info("[MessageDispatcher] running...")
 	for {
 		select {
+		case session := <-router.SessionChan:
+			globalRouter.UserOnline.Add(session)
+			session.Send(&pb.ResponsePkg{
+				ServerTime: time.Now().Unix(),
+				ScChat: &pb.ScChat{
+					Type:   uint32(enum.OnlineCount.GetChatType()),
+					Online: uint32(globalRouter.UserOnline.Len()),
+				},
+				Code: pb.ResultCode_SuccessOK,
+			})
 		case msg := <-router.WorldMessageChan:
 			err := CmdHandler(msg.Conn, msg.Cmd)
 			if err != nil {
@@ -86,6 +103,9 @@ func CmdHandler(session *router.Session, pkg *pb.RequestPkg) (err error) {
 
 func Chat(session *router.Session, chatMessage *pb.CsChatMessage) error {
 	logging.Logger.Debug("处理聊天信息:", chatMessage)
+	session.Send(&pb.ResponsePkg{
+		Message: "收到聊天消息",
+	})
 	return nil
 }
 

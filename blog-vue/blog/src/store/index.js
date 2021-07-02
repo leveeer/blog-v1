@@ -22,7 +22,8 @@ export default new Vuex.Store({
     email: null,
     articleLikeSet: [],
     commentLikeSet: [],
-    blogInfo: {}
+    blogInfo: {},
+    online: 0
   },
   mutations: {
     login(state, user) {
@@ -46,6 +47,9 @@ export default new Vuex.Store({
       state.commentLikeSet = [];
       state.email = null;
       state.loginType = null;
+    },
+    updateOnline(state, online) {
+      state.online = online;
     },
     saveLoginUrl(state, url) {
       state.loginUrl = url;

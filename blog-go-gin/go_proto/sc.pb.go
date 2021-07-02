@@ -134,6 +134,7 @@ type ResponsePkg struct {
 	ArchiveInfo             *Archives                `protobuf:"bytes,15,opt,name=archiveInfo,proto3" json:"archiveInfo,omitempty"`
 	About                   *About                   `protobuf:"bytes,16,opt,name=about,proto3" json:"about,omitempty"`
 	ReplyList               []*Reply                 `protobuf:"bytes,17,rep,name=replyList,proto3" json:"replyList,omitempty"`
+	ScChat                  *ScChat                  `protobuf:"bytes,18,opt,name=scChat,proto3" json:"scChat,omitempty"`
 }
 
 func (x *ResponsePkg) Reset() {
@@ -287,11 +288,73 @@ func (x *ResponsePkg) GetReplyList() []*Reply {
 	return nil
 }
 
+func (x *ResponsePkg) GetScChat() *ScChat {
+	if x != nil {
+		return x.ScChat
+	}
+	return nil
+}
+
+type ScChat struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Type   uint32 `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`
+	Online uint32 `protobuf:"varint,2,opt,name=online,proto3" json:"online,omitempty"`
+}
+
+func (x *ScChat) Reset() {
+	*x = ScChat{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sc_proto_msgTypes[1]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ScChat) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ScChat) ProtoMessage() {}
+
+func (x *ScChat) ProtoReflect() protoreflect.Message {
+	mi := &file_sc_proto_msgTypes[1]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ScChat.ProtoReflect.Descriptor instead.
+func (*ScChat) Descriptor() ([]byte, []int) {
+	return file_sc_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ScChat) GetType() uint32 {
+	if x != nil {
+		return x.Type
+	}
+	return 0
+}
+
+func (x *ScChat) GetOnline() uint32 {
+	if x != nil {
+		return x.Online
+	}
+	return 0
+}
+
 var File_sc_proto protoreflect.FileDescriptor
 
 var file_sc_proto_rawDesc = []byte{
 	0x0a, 0x08, 0x73, 0x63, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x05, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x1a, 0x0a, 0x64, 0x61, 0x74, 0x61, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xb7, 0x06,
+	0x6f, 0x1a, 0x0a, 0x64, 0x61, 0x74, 0x61, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0xde, 0x06,
 	0x0a, 0x0b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x50, 0x6b, 0x67, 0x12, 0x25, 0x0a,
 	0x05, 0x63, 0x6d, 0x64, 0x49, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x0f, 0x2e, 0x70,
 	0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x52, 0x05, 0x63,
@@ -343,14 +406,20 @@ var file_sc_proto_rawDesc = []byte{
 	0x62, 0x6f, 0x75, 0x74, 0x52, 0x05, 0x61, 0x62, 0x6f, 0x75, 0x74, 0x12, 0x2a, 0x0a, 0x09, 0x72,
 	0x65, 0x70, 0x6c, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x18, 0x11, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0c,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x52, 0x09, 0x72, 0x65,
-	0x70, 0x6c, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x2a, 0x22, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x12, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42,
-	0x65, 0x67, 0x69, 0x6e, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x10, 0x00, 0x2a, 0x33, 0x0a, 0x0a, 0x52,
-	0x65, 0x73, 0x75, 0x6c, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x53, 0x75, 0x63,
-	0x63, 0x65, 0x73, 0x73, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x46, 0x61, 0x69, 0x6c, 0x10, 0x01,
-	0x12, 0x0e, 0x0a, 0x09, 0x53, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x4f, 0x4b, 0x10, 0x90, 0x4e,
-	0x42, 0x13, 0x5a, 0x11, 0x2e, 0x2e, 0x2f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b,
-	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x70, 0x6c, 0x79, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x25, 0x0a, 0x06, 0x73, 0x63, 0x43, 0x68, 0x61,
+	0x74, 0x18, 0x12, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
+	0x53, 0x63, 0x43, 0x68, 0x61, 0x74, 0x52, 0x06, 0x73, 0x63, 0x43, 0x68, 0x61, 0x74, 0x22, 0x34,
+	0x0a, 0x06, 0x53, 0x63, 0x43, 0x68, 0x61, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x74, 0x79, 0x70, 0x65,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x04, 0x74, 0x79, 0x70, 0x65, 0x12, 0x16, 0x0a, 0x06,
+	0x6f, 0x6e, 0x6c, 0x69, 0x6e, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0d, 0x52, 0x06, 0x6f, 0x6e,
+	0x6c, 0x69, 0x6e, 0x65, 0x2a, 0x22, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x16, 0x0a, 0x12, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x65, 0x67, 0x69,
+	0x6e, 0x49, 0x6e, 0x64, 0x65, 0x78, 0x10, 0x00, 0x2a, 0x33, 0x0a, 0x0a, 0x52, 0x65, 0x73, 0x75,
+	0x6c, 0x74, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x0b, 0x0a, 0x07, 0x53, 0x75, 0x63, 0x63, 0x65, 0x73,
+	0x73, 0x10, 0x00, 0x12, 0x08, 0x0a, 0x04, 0x46, 0x61, 0x69, 0x6c, 0x10, 0x01, 0x12, 0x0e, 0x0a,
+	0x09, 0x53, 0x75, 0x63, 0x63, 0x65, 0x73, 0x73, 0x4f, 0x4b, 0x10, 0x90, 0x4e, 0x42, 0x13, 0x5a,
+	0x11, 0x2e, 0x2e, 0x2f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -366,46 +435,48 @@ func file_sc_proto_rawDescGZIP() []byte {
 }
 
 var file_sc_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_sc_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_sc_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_sc_proto_goTypes = []interface{}{
 	(Response)(0),                   // 0: proto.Response
 	(ResultCode)(0),                 // 1: proto.ResultCode
 	(*ResponsePkg)(nil),             // 2: proto.ResponsePkg
-	(*Category)(nil),                // 3: proto.Category
-	(*ArticlesByCategoryOrTag)(nil), // 4: proto.ArticlesByCategoryOrTag
-	(*Tag)(nil),                     // 5: proto.Tag
-	(*Message)(nil),                 // 6: proto.Message
-	(*FriendLink)(nil),              // 7: proto.FriendLink
-	(*CommentInfo)(nil),             // 8: proto.CommentInfo
-	(*LoginResponse)(nil),           // 9: proto.LoginResponse
-	(*Article)(nil),                 // 10: proto.Article
-	(*BlogHomeInfo)(nil),            // 11: proto.BlogHomeInfo
-	(*ArticleInfo)(nil),             // 12: proto.ArticleInfo
-	(*Archives)(nil),                // 13: proto.Archives
-	(*About)(nil),                   // 14: proto.About
-	(*Reply)(nil),                   // 15: proto.Reply
+	(*ScChat)(nil),                  // 3: proto.ScChat
+	(*Category)(nil),                // 4: proto.Category
+	(*ArticlesByCategoryOrTag)(nil), // 5: proto.ArticlesByCategoryOrTag
+	(*Tag)(nil),                     // 6: proto.Tag
+	(*Message)(nil),                 // 7: proto.Message
+	(*FriendLink)(nil),              // 8: proto.FriendLink
+	(*CommentInfo)(nil),             // 9: proto.CommentInfo
+	(*LoginResponse)(nil),           // 10: proto.LoginResponse
+	(*Article)(nil),                 // 11: proto.Article
+	(*BlogHomeInfo)(nil),            // 12: proto.BlogHomeInfo
+	(*ArticleInfo)(nil),             // 13: proto.ArticleInfo
+	(*Archives)(nil),                // 14: proto.Archives
+	(*About)(nil),                   // 15: proto.About
+	(*Reply)(nil),                   // 16: proto.Reply
 }
 var file_sc_proto_depIdxs = []int32{
 	0,  // 0: proto.ResponsePkg.cmdId:type_name -> proto.Response
 	1,  // 1: proto.ResponsePkg.code:type_name -> proto.ResultCode
-	3,  // 2: proto.ResponsePkg.categories:type_name -> proto.Category
-	4,  // 3: proto.ResponsePkg.articlesByCategoryOrTag:type_name -> proto.ArticlesByCategoryOrTag
-	5,  // 4: proto.ResponsePkg.tags:type_name -> proto.Tag
-	6,  // 5: proto.ResponsePkg.messages:type_name -> proto.Message
-	7,  // 6: proto.ResponsePkg.friendLinks:type_name -> proto.FriendLink
-	8,  // 7: proto.ResponsePkg.commentInfo:type_name -> proto.CommentInfo
-	9,  // 8: proto.ResponsePkg.loginResponse:type_name -> proto.LoginResponse
-	10, // 9: proto.ResponsePkg.articleList:type_name -> proto.Article
-	11, // 10: proto.ResponsePkg.blogHomeInfo:type_name -> proto.BlogHomeInfo
-	12, // 11: proto.ResponsePkg.articleInfo:type_name -> proto.ArticleInfo
-	13, // 12: proto.ResponsePkg.archiveInfo:type_name -> proto.Archives
-	14, // 13: proto.ResponsePkg.about:type_name -> proto.About
-	15, // 14: proto.ResponsePkg.replyList:type_name -> proto.Reply
-	15, // [15:15] is the sub-list for method output_type
-	15, // [15:15] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	4,  // 2: proto.ResponsePkg.categories:type_name -> proto.Category
+	5,  // 3: proto.ResponsePkg.articlesByCategoryOrTag:type_name -> proto.ArticlesByCategoryOrTag
+	6,  // 4: proto.ResponsePkg.tags:type_name -> proto.Tag
+	7,  // 5: proto.ResponsePkg.messages:type_name -> proto.Message
+	8,  // 6: proto.ResponsePkg.friendLinks:type_name -> proto.FriendLink
+	9,  // 7: proto.ResponsePkg.commentInfo:type_name -> proto.CommentInfo
+	10, // 8: proto.ResponsePkg.loginResponse:type_name -> proto.LoginResponse
+	11, // 9: proto.ResponsePkg.articleList:type_name -> proto.Article
+	12, // 10: proto.ResponsePkg.blogHomeInfo:type_name -> proto.BlogHomeInfo
+	13, // 11: proto.ResponsePkg.articleInfo:type_name -> proto.ArticleInfo
+	14, // 12: proto.ResponsePkg.archiveInfo:type_name -> proto.Archives
+	15, // 13: proto.ResponsePkg.about:type_name -> proto.About
+	16, // 14: proto.ResponsePkg.replyList:type_name -> proto.Reply
+	3,  // 15: proto.ResponsePkg.scChat:type_name -> proto.ScChat
+	16, // [16:16] is the sub-list for method output_type
+	16, // [16:16] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_sc_proto_init() }
@@ -427,6 +498,18 @@ func file_sc_proto_init() {
 				return nil
 			}
 		}
+		file_sc_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ScChat); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -434,7 +517,7 @@ func file_sc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sc_proto_rawDesc,
 			NumEnums:      2,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

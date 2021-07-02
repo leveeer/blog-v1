@@ -19,13 +19,72 @@ const (
 	pongWait = 60 * time.Second
 
 	// Send pings to peer with this period. Must be less than pongWait.
-	pingPeriod = (pongWait * 5) / 10
+	pingPeriod = (pongWait * 9) / 10
 
 	// Maximum message size allowed from peer.
 	maxMessageSize = 2046
 )
 
 const compressOn = true
+
+// ClientManager 客户端管理
+type ClientManager struct {
+	//客户端 map 储存并管理所有的长连接client，在线的为true，不在的为false
+	clients map[*Session]bool
+	//web端发送来的的message我们用broadcast来接收，并最后分发给所有的client
+	broadcast chan *pb.ResponsePkg
+	//新创建的长连接client
+	register chan *Session
+	//新注销的长连接client
+	unregister chan *Session
+}
+
+func NewClientManager() *ClientManager {
+	return &ClientManager{
+		clients:    make(map[*Session]bool),
+		broadcast:  make(chan *pb.ResponsePkg),
+		register:   make(chan *Session),
+		unregister: make(chan *Session),
+	}
+}
+
+func (manager *ClientManager) start() {
+	for {
+		select {
+		//如果有新的连接接入,就通过channel把连接传递给conn
+		case session := <-manager.register:
+			//把客户端的连接设置为true
+			manager.clients[session] = true
+
+		//如果连接断开了
+		case session := <-manager.unregister:
+			//判断连接的状态，如果是true,就关闭send，删除连接client的值
+			if _, ok := manager.clients[session]; ok {
+				close(session.sendWs)
+				delete(manager.clients, session)
+			}
+		//广播
+		case message := <-manager.broadcast:
+			//遍历已经连接的客户端，把消息发送给他们
+			for session := range manager.clients {
+				select {
+				case session.sendWs <- message:
+				default:
+					close(session.sendWs)
+					delete(manager.clients, session)
+				}
+			}
+		}
+	}
+}
+
+//定义客户端管理的send方法
+func (manager *ClientManager) send(message *pb.ResponsePkg) {
+	for session := range manager.clients {
+		//不给屏蔽的连接发送消息
+		session.sendWs <- message
+	}
+}
 
 // Session is a middleman between the websocket connection and the hub.
 type Session struct {
@@ -68,6 +127,7 @@ func NewSession(conn *websocket.Conn) *Session {
 	go client.writePump()
 	go client.readPump()
 	logging.Logger.Infof("upgrade finish %v", client)
+	SessionChan <- client
 	return client
 }
 
@@ -214,6 +274,7 @@ func (p *Session) writePump() {
 				return
 			}
 			payload := []byte(strconv.Itoa(int(time.Now().Unix())))
+			logging.Logger.Info("发送心跳包:", payload)
 			if err := p.conn.WriteMessage(websocket.PingMessage, payload); err != nil {
 				logging.Logger.Error("client close WriteMessage PingMessage ", err)
 				return
@@ -239,6 +300,7 @@ type ClientMessage struct {
 
 var WorldMessageChan chan *ClientMessage
 var ClosedChan chan struct{}
+var SessionChan chan *Session
 
 func MessageHandler(p *Session, data []byte) {
 	//ClosedChan = make(chan struct{})

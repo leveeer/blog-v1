@@ -1,6 +1,7 @@
 import { wsURL } from "../utils/constant";
 import { protoObj } from "./https";
 import protobuf from "protobufjs";
+import context from '../main.js'
 
 let websocket = null;
 let heartBeat = null;
@@ -28,24 +29,38 @@ function webSocket() {
 // 连接成功建立的回调方法
   websocket.onopen = function(event) {
     console.log(event);
-    // 发送心跳消息
-    heartBeat = setInterval(function() {
-      const beatMessage = {
-        type: 6,
-        data: "ping"
-      };
-      sendMessage({ csBeatMessage: beatMessage });
-    }, 30 * 1000);
+    // // 发送心跳消息(废弃)  心跳包由服务端发送
+    // heartBeat = setInterval(function() {
+    //   const beatMessage = {
+    //     type: 6,
+    //     data: "ping"
+    //   };
+    //   sendMessage({ csBeatMessage: beatMessage });
+    // }, 60 * 1000);
   };
 // 接收到消息的回调方法
-  /*this.websocket.onmessage = function(event) {
-    const data = JSON.parse(event.data);
-    switch (data.type) {
+  websocket.onmessage = function(event) {
+    protoObj.ResponsePkg.verify(event.data);
+    const buffer = protobuf.util.newBuffer(event.data);
+    const message = protoObj.ResponsePkg.decode(buffer);
+    const data = protoObj.ResponsePkg.toObject(message, {
+      enums: Number,  // enums as string names
+      longs: Number,  // longs as strings (requires long.js)
+      bytes: Number,  // bytes as base64 encoded strings
+      defaults: false, // includes default values
+      arrays: false,   // populates empty arrays (repeated fields) even if defaults=false
+      objects: false,  // populates empty objects (map fields) even if defaults=false
+      oneofs: true    // includes virtual oneof fields set to the present field's name
+    });
+    console.log(data);
+    switch (data.scChat.type) {
+
       case 1:
         // 在线人数
-        that.count = data.data;
+        context.$store.commit("updateOnline", data.scChat.online);
+
         break;
-      case 2:
+      /*case 2:
         // 历史记录
         that.chatRecordList = data.data.chatRecordList;
         that.chatRecordList.forEach(item => {
@@ -82,9 +97,9 @@ function webSocket() {
         if (!that.isShow) {
           that.unreadCount++;
         }
-        break;
+        break;*/
     }
-  };*/
+  };
 //连接关闭的回调方法
   websocket.onclose = function() {
     clearInterval(heartBeat);

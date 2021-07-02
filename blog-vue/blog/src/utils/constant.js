@@ -7,6 +7,7 @@ export const requestMap = {
   CsChat: "CsChat"
 };
 
+
 export const resultMap = {
   Success: "Success",
   Fail: "Fail",

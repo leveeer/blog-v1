@@ -52,6 +52,7 @@ func init() {
 var Upgrader = &websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
+	//允许跨域
 	CheckOrigin: func(r *http.Request) bool {
 		return true
 	},
@@ -91,6 +92,7 @@ func HandleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	NewSession(conn)
+	NewClientManager()
 	//globalRouter.Lock()
 	//globalRouter.Sessions[session.Id] = session
 	//globalRouter.Unlock()

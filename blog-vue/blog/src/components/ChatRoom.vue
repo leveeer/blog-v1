@@ -158,6 +158,8 @@
   import EmojiList from "../assets/js/emoji";
   import { requestMap, wsURL } from "../utils/constant";
   import create, { sendMessage } from "../api/ws";
+  import { getReqValue } from "../utils/util";
+  import { protoObj } from "../api/https";
 
   export default {
     components: {
@@ -208,6 +210,8 @@
       },
       connect() {
         create();
+        console.log(this.$store.state.online);
+        this.count = this.$store.state.online;
       },
       saveMessage(e) {
         e.preventDefault();
@@ -237,8 +241,7 @@
         this.WebsocketMessage.type = 3;
         this.WebsocketMessage.data = socketMsg;
         sendMessage({
-          // cmdId: requestMap.CsChat,
-          cmdId: 5,
+          cmdId: getReqValue(requestMap.CsChat),
           csChatMessage: socketMsg
         });
         this.content = "";

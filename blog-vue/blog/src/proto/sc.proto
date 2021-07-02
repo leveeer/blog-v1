@@ -31,4 +31,10 @@ message ResponsePkg {
   Archives archiveInfo = 15;
   About about = 16;
   repeated Reply replyList = 17;
+  ScChat scChat = 18;
+}
+
+message ScChat{
+  uint32 type = 1;
+  uint32 online = 2;
 }

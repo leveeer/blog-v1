@@ -34,7 +34,6 @@ func init() {
 
 func main() {
 	var mem runtime.MemStats
-	//stop := make(chan os.Signal, 1)
 
 	ws := GetServerInfo()
 	if *cleanup {
@@ -58,7 +57,7 @@ func main() {
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	<-ctx.Done()
 	stop()
-	logging.Logger.Infof("Shutdown Server gracefully...")
+	logging.Logger.Infof("Shutdown Server gracefully by %s...")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
@@ -77,5 +76,4 @@ func main() {
 	logging.Logger.Println(mem.HeapAlloc)
 	logging.Logger.Println(mem.HeapSys)
 	logging.Logger.Infoln("ChatService gracefully stopped.")
-
 }

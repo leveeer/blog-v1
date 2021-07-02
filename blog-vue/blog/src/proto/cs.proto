@@ -12,7 +12,7 @@ enum CsId{
   CsGetArticleById = 2;
   CsGetBlogHomeInfo = 3;
   CsLogout = 4;
-  CsChatMessage = 5;
+  CsChat = 5;
 }
 
 
