@@ -30,7 +30,7 @@ func InitChatLogic() {
 	}
 	common.GracefulWorkerAdd(2)
 	go MessageDispatcher()
-	go router.OnlineManager.Start()
+	go router.OnlineManager.Register()
 }
 
 func MessageDispatcher() {

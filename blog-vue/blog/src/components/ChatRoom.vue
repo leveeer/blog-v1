@@ -210,7 +210,6 @@
       },
       connect() {
         create();
-        console.log(this.$store.state.online);
         this.count = this.$store.state.online;
       },
       saveMessage(e) {

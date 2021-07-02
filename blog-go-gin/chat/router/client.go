@@ -49,7 +49,7 @@ func NewClientManager() *ClientManager {
 	}
 }
 
-func (manager *ClientManager) Start() {
+func (manager *ClientManager) Register() {
 	for {
 		select {
 		//如果有新的连接接入,就通过channel把连接传递给conn
