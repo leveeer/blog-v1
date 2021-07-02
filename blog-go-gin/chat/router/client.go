@@ -72,6 +72,14 @@ func (manager *ClientManager) Register() {
 			if _, ok := manager.clients[session]; ok {
 				close(session.sendWs)
 				delete(manager.clients, session)
+				manager.send(&pb.ResponsePkg{
+					ServerTime: time.Now().Unix(),
+					ScChat: &pb.ScChat{
+						Type:   uint32(enum.OnlineCount.GetChatType()),
+						Online: uint32(len(manager.clients)),
+					},
+					Code: pb.ResultCode_SuccessOK,
+				})
 			}
 		//广播
 		case message := <-manager.broadcast:
@@ -293,6 +301,7 @@ func (p *Session) writePump() {
 func (p *Session) moderator() {
 	stoppedBy := <-p.toStopSendWs
 	logging.Logger.Infof("%v stop by %v", p.clientIP, stoppedBy)
+	ClientMgr.unregister <- p
 	WorldMessageChan <- &ClientMessage{
 		Conn: p,
 		Cmd:  &pb.RequestPkg{CmdId: pb.CsId_CsLogout},
