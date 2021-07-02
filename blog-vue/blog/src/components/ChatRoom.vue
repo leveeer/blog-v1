@@ -16,7 +16,7 @@
         />
         <div style="margin-left:12px">
           <div>聊天室</div>
-          <div style="font-size:12px">当前{{ count }}人在线</div>
+          <div style="font-size:12px">当前{{ this.onlineCount }}人在线</div>
         </div>
         <v-icon class="close" @click="isShow = false">
           mdi-close
@@ -210,7 +210,7 @@
       },
       connect() {
         create();
-        this.count = this.$store.state.online;
+        // this.count = this.$store.state.online;
       },
       saveMessage(e) {
         e.preventDefault();
@@ -377,6 +377,9 @@
       }
     },
     computed: {
+      onlineCount(){
+        return this.$store.state.online;
+      },
       isSelf() {
         return function(item) {
           return (

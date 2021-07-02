@@ -56,6 +56,7 @@ function webSocket() {
       case 1:
         // 在线人数
         context.$store.commit("updateOnline", data.scChat.online);
+        console.log(context.$store.state.online);
         break;
       /*case 2:
         // 历史记录
