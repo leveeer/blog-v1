@@ -92,7 +92,6 @@ func HandleWs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	NewSession(conn)
-	NewClientManager()
 	//globalRouter.Lock()
 	//globalRouter.Sessions[session.Id] = session
 	//globalRouter.Unlock()

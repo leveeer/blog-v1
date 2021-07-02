@@ -1,7 +1,7 @@
 import { wsURL } from "../utils/constant";
 import { protoObj } from "./https";
 import protobuf from "protobufjs";
-import context from '../main.js'
+import context from "../main.js";
 
 let websocket = null;
 let heartBeat = null;
@@ -28,7 +28,6 @@ function webSocket() {
   };
 // 连接成功建立的回调方法
   websocket.onopen = function(event) {
-    console.log(event);
     // // 发送心跳消息(废弃)  心跳包由服务端发送
     // heartBeat = setInterval(function() {
     //   const beatMessage = {
@@ -52,13 +51,11 @@ function webSocket() {
       objects: false,  // populates empty objects (map fields) even if defaults=false
       oneofs: true    // includes virtual oneof fields set to the present field's name
     });
-    console.log(data);
+    console.log("收到服务器的消息：", data);
     switch (data.scChat.type) {
-
       case 1:
         // 在线人数
         context.$store.commit("updateOnline", data.scChat.online);
-
         break;
       /*case 2:
         // 历史记录

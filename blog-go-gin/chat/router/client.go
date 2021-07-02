@@ -4,6 +4,7 @@ import (
 	"blog-go-gin/common"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
+	"blog-go-gin/models/enum"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
 	"github.com/segmentio/ksuid"
@@ -25,7 +26,7 @@ const (
 	maxMessageSize = 2046
 )
 
-const compressOn = true
+var OnlineManager = NewClientManager()
 
 // ClientManager 客户端管理
 type ClientManager struct {
@@ -48,14 +49,23 @@ func NewClientManager() *ClientManager {
 	}
 }
 
-func (manager *ClientManager) start() {
+func (manager *ClientManager) Start() {
 	for {
 		select {
 		//如果有新的连接接入,就通过channel把连接传递给conn
 		case session := <-manager.register:
+			logging.Logger.Debug("收到新的连接：", session)
 			//把客户端的连接设置为true
 			manager.clients[session] = true
-
+			logging.Logger.Debug(len(manager.clients))
+			manager.send(&pb.ResponsePkg{
+				ServerTime: time.Now().Unix(),
+				ScChat: &pb.ScChat{
+					Type:   uint32(enum.OnlineCount.GetChatType()),
+					Online: uint32(len(manager.clients)),
+				},
+				Code: pb.ResultCode_SuccessOK,
+			})
 		//如果连接断开了
 		case session := <-manager.unregister:
 			//判断连接的状态，如果是true,就关闭send，删除连接client的值
@@ -66,14 +76,7 @@ func (manager *ClientManager) start() {
 		//广播
 		case message := <-manager.broadcast:
 			//遍历已经连接的客户端，把消息发送给他们
-			for session := range manager.clients {
-				select {
-				case session.sendWs <- message:
-				default:
-					close(session.sendWs)
-					delete(manager.clients, session)
-				}
-			}
+			manager.send(message)
 		}
 	}
 }
@@ -81,8 +84,12 @@ func (manager *ClientManager) start() {
 //定义客户端管理的send方法
 func (manager *ClientManager) send(message *pb.ResponsePkg) {
 	for session := range manager.clients {
-		//不给屏蔽的连接发送消息
-		session.sendWs <- message
+		select {
+		case session.sendWs <- message:
+		default:
+			close(session.sendWs)
+			delete(manager.clients, session)
+		}
 	}
 }
 
@@ -127,7 +134,7 @@ func NewSession(conn *websocket.Conn) *Session {
 	go client.writePump()
 	go client.readPump()
 	logging.Logger.Infof("upgrade finish %v", client)
-	SessionChan <- client
+	OnlineManager.register <- client
 	return client
 }
 
@@ -300,7 +307,6 @@ type ClientMessage struct {
 
 var WorldMessageChan chan *ClientMessage
 var ClosedChan chan struct{}
-var SessionChan chan *Session
 
 func MessageHandler(p *Session, data []byte) {
 	//ClosedChan = make(chan struct{})
