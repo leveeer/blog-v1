@@ -6,6 +6,7 @@ import (
 	"blog-go-gin/common"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
+	"blog-go-gin/models/enum"
 	"blog-go-gin/models/model"
 	"errors"
 	"fmt"
@@ -66,8 +67,8 @@ var handlers = map[pb.CsId]func(session *router.Session, p *model.UserInfo, pkg 
 	pb.CsId_CsBeginIndex: func(session *router.Session, p *model.UserInfo, pkg *pb.RequestPkg) error {
 		return nil
 	},
-	pb.CsId_CsChat: func(session *router.Session, p *model.UserInfo, pkg *pb.RequestPkg) error {
-		return Chat(session, pkg.CsChatMessage)
+	pb.CsId_CsChatTextMessage: func(session *router.Session, p *model.UserInfo, pkg *pb.RequestPkg) error {
+		return ChatTextMessage(session, pkg.CsChatMessage)
 	},
 }
 
@@ -90,11 +91,26 @@ func CmdHandler(session *router.Session, pkg *pb.RequestPkg) (err error) {
 	return fmt.Errorf("CmdHandler missing %d", pkg.CmdId)
 }
 
-func Chat(session *router.Session, chatMessage *pb.CsChatMessage) error {
+func ChatTextMessage(session *router.Session, chatMessage *pb.CsChatMessage) error {
 	logging.Logger.Debug("处理聊天信息:", chatMessage)
-	session.Send(&pb.ResponsePkg{
-		Message: "收到聊天消息",
-	})
+	router.ClientMgr.Broadcast <- &pb.ResponsePkg{
+		ServerTime: time.Now().Unix(),
+		Code:       pb.ResultCode_SuccessOK,
+		ScChat: &pb.ScChat{
+			Type: uint32(enum.SendMessage.GetChatType()),
+			ScChatMessage: &pb.ScChatMessage{
+				Avatar:     chatMessage.Avatar,
+				Nickname:   chatMessage.Nickname,
+				Content:    chatMessage.Content,
+				UserId:     chatMessage.UserId,
+				Type:       chatMessage.Type,
+				IpAddr:     chatMessage.IpAddr,
+				IpSource:   chatMessage.IpSource,
+				CreateTime: time.Now().Unix(),
+			},
+		},
+	}
+	//TODO 入库
 	return nil
 }
 

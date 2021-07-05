@@ -36,5 +36,21 @@ message ResponsePkg {
 
 message ScChat{
   uint32 type = 1;
+  ScChatOnline scChatOnline = 2;
+  ScChatMessage scChatMessage = 3;
+}
+
+message ScChatOnline{
   uint32 online = 2;
+}
+
+message ScChatMessage{
+  string nickname = 1;
+  string avatar = 2;
+  string content = 3;
+  uint32 userId = 4;
+  uint32 type = 5;
+  string ipAddr = 6;
+  string ipSource = 7;
+  int64 createTime = 8;
 }

@@ -32,8 +32,8 @@ var ClientMgr = NewClientManager()
 type ClientManager struct {
 	//客户端 map 储存并管理所有的长连接client，在线的为true，不在的为false
 	clients map[*Session]bool
-	//web端发送来的的message我们用broadcast来接收，并最后分发给所有的client
-	broadcast chan *pb.ResponsePkg
+	//广播，web端发送来的的message我们用broadcast来接收，并最后分发给所有的client
+	Broadcast chan *pb.ResponsePkg
 	//新创建的长连接client
 	register chan *Session
 	//新注销的长连接client
@@ -43,7 +43,7 @@ type ClientManager struct {
 func NewClientManager() *ClientManager {
 	return &ClientManager{
 		clients:    make(map[*Session]bool),
-		broadcast:  make(chan *pb.ResponsePkg),
+		Broadcast:  make(chan *pb.ResponsePkg),
 		register:   make(chan *Session),
 		unregister: make(chan *Session),
 	}
@@ -60,11 +60,13 @@ func (manager *ClientManager) Register() {
 			logging.Logger.Debug(len(manager.clients))
 			manager.send(&pb.ResponsePkg{
 				ServerTime: time.Now().Unix(),
+				Code:       pb.ResultCode_SuccessOK,
 				ScChat: &pb.ScChat{
-					Type:   uint32(enum.OnlineCount.GetChatType()),
-					Online: uint32(len(manager.clients)),
+					Type: uint32(enum.OnlineCount.GetChatType()),
+					ScChatOnline: &pb.ScChatOnline{
+						Online: uint32(len(manager.clients)),
+					},
 				},
-				Code: pb.ResultCode_SuccessOK,
 			})
 		//如果连接断开了
 		case session := <-manager.unregister:
@@ -74,15 +76,17 @@ func (manager *ClientManager) Register() {
 				delete(manager.clients, session)
 				manager.send(&pb.ResponsePkg{
 					ServerTime: time.Now().Unix(),
+					Code:       pb.ResultCode_SuccessOK,
 					ScChat: &pb.ScChat{
-						Type:   uint32(enum.OnlineCount.GetChatType()),
-						Online: uint32(len(manager.clients)),
+						Type: uint32(enum.OnlineCount.GetChatType()),
+						ScChatOnline: &pb.ScChatOnline{
+							Online: uint32(len(manager.clients)),
+						},
 					},
-					Code: pb.ResultCode_SuccessOK,
 				})
 			}
 		//广播
-		case message := <-manager.broadcast:
+		case message := <-manager.Broadcast:
 			//遍历已经连接的客户端，把消息发送给他们
 			manager.send(message)
 		}
