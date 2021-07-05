@@ -4,7 +4,7 @@ export const requestMap = {
   CsGetArticleById: "CsGetArticleById ",
   CsGetBlogHomeInfo: "CsGetBlogHomeInfo",
   CsLogout: "CsLogout",
-  CsChat: "CsChat"
+  CsChatTextMessage: "CsChatTextMessage"
 };
 
 
@@ -14,4 +14,4 @@ export const resultMap = {
   SuccessOK: "SuccessOK"
 };
 
-export const wsURL = "ws://127.0.0.1:33000";
+export const wsURL = "ws://localhost:33000";

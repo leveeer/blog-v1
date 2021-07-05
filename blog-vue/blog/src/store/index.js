@@ -23,7 +23,10 @@ export default new Vuex.Store({
     articleLikeSet: [],
     commentLikeSet: [],
     blogInfo: {},
-    online: 0
+    online: 0,
+    chatRecordList: [],
+    isShow: false,
+    unreadCount: 0
   },
   mutations: {
     login(state, user) {
@@ -50,6 +53,17 @@ export default new Vuex.Store({
     },
     updateOnline(state, online) {
       state.online = online;
+    },
+
+    updateChat(state, chatRecordList) {
+      state.chatRecordList.push(chatRecordList);
+      if (!state.isShow) {
+        state.unreadCount++;
+      }
+    },
+    updateUnreadTip(state, unreadTip) {
+      state.unreadCount = unreadTip.unreadCount;
+      state.isShow = unreadTip.isShow;
     },
     saveLoginUrl(state, url) {
       state.loginUrl = url;

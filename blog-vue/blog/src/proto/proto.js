@@ -17,7 +17,8 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           CsGetArticleById: 2,
           CsGetBlogHomeInfo: 3,
           CsLogout: 4,
-          CsChat: 5
+          CsChatTextMessage: 5,
+          CsChatRecall: 6
         }
       },
       RequestPkg: {
@@ -777,9 +778,57 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             type: "uint32",
             id: 1
           },
+          scChatOnline: {
+            type: "ScChatOnline",
+            id: 2
+          },
+          scChatMessage: {
+            type: "ScChatMessage",
+            id: 3
+          }
+        }
+      },
+      ScChatOnline: {
+        fields: {
           online: {
             type: "uint32",
             id: 2
+          }
+        }
+      },
+      ScChatMessage: {
+        fields: {
+          nickname: {
+            type: "string",
+            id: 1
+          },
+          avatar: {
+            type: "string",
+            id: 2
+          },
+          content: {
+            type: "string",
+            id: 3
+          },
+          userId: {
+            type: "uint32",
+            id: 4
+          },
+          type: {
+            type: "uint32",
+            id: 5
+          },
+          ipAddr: {
+            type: "string",
+            id: 6
+          },
+          ipSource: {
+            type: "string",
+            id: 7
+          },
+          createTime: {
+            type: "int64",
+            id: 8
           }
         }
       }

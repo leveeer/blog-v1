@@ -55,47 +55,43 @@ function webSocket() {
     switch (data.scChat.type) {
       case 1:
         // 在线人数
-        context.$store.commit("updateOnline", data.scChat.online);
-        console.log(context.$store.state.online);
+        context.$store.commit("updateOnline", data.scChat.scChatOnline.online);
         break;
-      /*case 2:
-        // 历史记录
-        that.chatRecordList = data.data.chatRecordList;
-        that.chatRecordList.forEach(item => {
-          if (item.type === 5) {
-            that.voiceList.push(item.id);
-          }
-        });
-        that.ipAddr = data.data.ipAddr;
-        that.ipSource = data.data.ipSource;
-        break;
+      // case 2:
+      //   // 历史记录
+      //   that.chatRecordList = data.data.chatRecordList;
+      //   that.chatRecordList.forEach(item => {
+      //     if (item.type === 5) {
+      //       that.voiceList.push(item.id);
+      //     }
+      //   });
+      //   that.ipAddr = data.data.ipAddr;
+      //   that.ipSource = data.data.ipSource;
+      //   break;
       case 3:
         // 文字消息
-        that.chatRecordList.push(data.data);
-        if (!that.isShow) {
-          that.unreadCount++;
-        }
+        context.$store.commit("updateChat", data.scChat.scChatMessage);
         break;
-      case 4:
-        // 撤回
-        if (data.data.isVoice) {
-          that.voiceList.splice(that.voiceList.indexOf(data.data.id), 1);
-        }
-        for (let i = 0; i < that.chatRecordList.length; i++) {
-          if (that.chatRecordList[i].id === data.data.id) {
-            that.chatRecordList.splice(i, 1);
-            i--;
-          }
-        }
-        break;
-      case 5:
-        // 语音消息
-        that.voiceList.push(data.data.id);
-        that.chatRecordList.push(data.data);
-        if (!that.isShow) {
-          that.unreadCount++;
-        }
-        break;*/
+      // case 4:
+      //   // 撤回
+      //   if (data.data.isVoice) {
+      //     that.voiceList.splice(that.voiceList.indexOf(data.data.id), 1);
+      //   }
+      //   for (let i = 0; i < that.chatRecordList.length; i++) {
+      //     if (that.chatRecordList[i].id === data.data.id) {
+      //       that.chatRecordList.splice(i, 1);
+      //       i--;
+      //     }
+      //   }
+      //   break;
+      // case 5:
+      //   // 语音消息
+      //   that.voiceList.push(data.data.id);
+      //   that.chatRecordList.push(data.data);
+      //   if (!that.isShow) {
+      //     that.unreadCount++;
+      //   }
+      //   break;
     }
   };
 //连接关闭的回调方法

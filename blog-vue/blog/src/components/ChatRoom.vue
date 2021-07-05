@@ -39,7 +39,7 @@
           :key="index"
         >
           <!-- 头像 -->
-          <img :src="item.avatar" :class="isleft(item)" />
+          <img :src="item.avatar" :class="isLeft(item)" />
           <div>
             <div class="nickname" v-if="!isSelf(item)">
               {{ item.nickname }}
@@ -176,15 +176,12 @@
       return {
         isConnect: false,
         isEmoji: false,
-        isShow: false,
         content: "",
-        chatRecordList: [],
         voiceList: [],
         rc: null,
         ipAddr: "",
         ipSource: "",
         count: 0,
-        unreadCount: 0,
         isVoice: false,
         voiceActive: false,
         startVoiceTime: null,
@@ -194,6 +191,12 @@
         },
       };
     },
+    mounted() {
+      //获取客户端ip 
+      this.ipAddr = localStorage.getItem('ip');
+      //在控制台打印客户端ip 
+      console.info(this.ipAddr)
+    },
     methods: {
 
       open() {
@@ -201,8 +204,11 @@
           this.connect();
           this.isConnect = !this.isConnect;
         }
-        this.unreadCount = 0;
-        this.isShow = !this.isShow;
+        const unreadTip = {
+          unreadCount: 0,
+          isShow: !this.isShow
+        };
+        this.$store.commit("updateUnreadTip", unreadTip);
       },
       openEmoji() {
         this.isEmoji = !this.isEmoji;
@@ -210,7 +216,6 @@
       },
       connect() {
         create();
-        // this.count = this.$store.state.online;
       },
       saveMessage(e) {
         e.preventDefault();
@@ -240,7 +245,7 @@
         this.WebsocketMessage.type = 3;
         this.WebsocketMessage.data = socketMsg;
         sendMessage({
-          cmdId: getReqValue(requestMap.CsChat),
+          cmdId: getReqValue(requestMap.CsChatTextMessage),
           csChatMessage: socketMsg
         });
         this.content = "";
@@ -377,8 +382,17 @@
       }
     },
     computed: {
-      onlineCount(){
+      onlineCount() {
         return this.$store.state.online;
+      },
+      chatRecordList() {
+        return this.$store.state.chatRecordList;
+      },
+      isShow() {
+        return this.$store.state.isShow;
+      },
+      unreadCount() {
+        return this.$store.state.unreadCount;
       },
       isSelf() {
         return function(item) {
@@ -388,7 +402,7 @@
           );
         };
       },
-      isleft() {
+      isLeft() {
         return function(item) {
           return this.isSelf(item)
             ? "user-avatar right-avatar"
@@ -419,7 +433,7 @@
         return this.$store.state.userId;
       },
       isInput() {
-        return this.content.trim() != ""
+        return this.content.trim() !== ""
           ? "iconfont iconzhifeiji submit-btn"
           : "iconfont iconzhifeiji";
       }
