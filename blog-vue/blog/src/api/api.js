@@ -3,7 +3,7 @@ import urls from "../utils/urls";
 
 
 export function getArticlesOnHome(params) {
-  return service.post(urls.articles, params);
+  return service.get(urls.articles, params);
 }
 
 export function getBlogInfo() {
@@ -15,7 +15,7 @@ export function getArticleById(routePath) {
 }
 
 export function getArchiveList(params) {
-  return service.post(urls.archive, params);
+  return service.get(urls.archive, params);
 }
 
 export function getCategories() {

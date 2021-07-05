@@ -13,7 +13,7 @@ export function generaMenu() {
         if (item.icon != null) {
           item.icon = "iconfont " + item.icon;
         }
-        if (item.component == "Layout") {
+        if (item.component === "Layout") {
           item.component = Layout;
         }
         if (item.children && item.children.length > 0) {

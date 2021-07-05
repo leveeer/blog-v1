@@ -281,8 +281,10 @@
       infiniteHandler($state) {
         let md = require("markdown-it")();
         getArticlesOnHome({
+          params:{
             cmdId: 1,
             currentPage: this.current,
+          }
         })
           .then((data) => {
             console.log(data);

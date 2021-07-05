@@ -54,8 +54,10 @@
     methods: {
       listArchives() {
         getArchiveList({
-          cmdId: 2,
-          currentPage: this.current,
+          params: {
+            cmdId: 2,
+            currentPage: this.current,
+          }
         })
           .then((data) => {
             console.log(data)
@@ -67,8 +69,10 @@
     watch: {
       current(value) {
         getArchiveList({
-          cmdId: 2,
-          current: value
+          params: {
+            cmdId: 2,
+            current: value
+          }
         })
           .then((data) => {
             this.archiveList = data.archiveInfo.archiveList;
