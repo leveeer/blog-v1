@@ -39,6 +39,7 @@ cmake-build-debug/
 /game
 /log/*
 /config.json
+config/app.yaml
 /tests/config.json
 /dist/
 /prof/*
