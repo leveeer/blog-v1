@@ -9,8 +9,6 @@ import (
 	"blog-go-gin/service"
 	"blog-go-gin/service/impl"
 	"github.com/gin-gonic/gin"
-	"github.com/golang/protobuf/proto"
-	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
@@ -29,24 +27,13 @@ func NewArticleRestApi() *ArticleRestApi {
 }
 
 func (c *ArticleRestApi) GetArticleList(ctx *gin.Context) {
-	body, err := ioutil.ReadAll(ctx.Request.Body)
+	currentPage, err := strconv.Atoi(ctx.Query("currentPage"))
 	if err != nil {
 		logging.Logger.Error(err)
 		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
 		return
 	}
-	//ctx.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
-	request := &pb.RequestPkg{}
-	err = proto.Unmarshal(body, request)
-	if err != nil {
-		logging.Logger.Error(err)
-		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
-		return
-	}
-	logging.Logger.Debug(request)
-	var ipage page.IPage
-	ipage.Current = int(request.CurrentPage)
-	articles, err := ArticleService.GetArticleList(ipage)
+	articles, err := ArticleService.GetArticleList(page.IPage{Current: currentPage})
 	if err != nil {
 		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticlesFail)
 		return
@@ -77,21 +64,13 @@ func (c *ArticleRestApi) GetArticleById(ctx *gin.Context) {
 }
 
 func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
-	body, err := ioutil.ReadAll(ctx.Request.Body)
+	currentPage, err := strconv.Atoi(ctx.Query("currentPage"))
 	if err != nil {
 		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
 	}
-	request := &pb.RequestPkg{}
-	err = proto.Unmarshal(body, request)
-	if err != nil {
-		logging.Logger.Error(err)
-	}
-	logging.Logger.Debug(request)
-
-	iPage := &page.IPage{
-		Current: int(request.CurrentPage),
-	}
-	archiveInfo, err := ArticleService.GetArchiveList(iPage)
+	archiveInfo, err := ArticleService.GetArchiveList(&page.IPage{Current: currentPage})
 	if err != nil {
 		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticleArchivesFail)
 		return
