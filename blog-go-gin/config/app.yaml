@@ -2,7 +2,7 @@
 appname: blog-go-gin
 httpport: 8088
 runmode: dev
-autorender: false
+autorender: true
 copyrequestbody: true
 EnableDocs: true
 sqlconn:
