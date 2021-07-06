@@ -58,4 +58,5 @@ const (
 	Login       = "/login"
 
 	AdminBaseUrl = "/admin"
+	UserMenu     = "/user/menus"
 )

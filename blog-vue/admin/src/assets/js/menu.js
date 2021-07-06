@@ -1,14 +1,16 @@
 import Layout from "@/layout/index.vue";
 import router from "../../router";
 import store from "../../store";
-import axios from "axios";
 import Vue from "vue";
+import {getUserMenu} from "../../api/api";
+import {getResultCode} from "../../utils/util";
+import {resultMap} from "../../utils/constant";
 
 export function generaMenu() {
   // 查询用户菜单
-  axios.get("/api/admin/user/menus").then(({ data }) => {
-    if (data.flag) {
-      var userMenuList = data.data;
+  getUserMenu().then((data) => {
+    if (data.code === getResultCode(resultMap.SuccessOK)) {
+      const userMenuList = data.userMenu;
       userMenuList.forEach(item => {
         if (item.icon != null) {
           item.icon = "iconfont " + item.icon;

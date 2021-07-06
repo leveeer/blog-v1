@@ -38,7 +38,7 @@
 
 <script>
 import { generaMenu } from "../../assets/js/menu";
-import { adminLogin } from "../../api/api";
+import {adminLogin, getUserMenu} from "../../api/api";
 import {getResultCode} from "../../utils/util";
 import {resultMap} from "../../utils/constant";
 

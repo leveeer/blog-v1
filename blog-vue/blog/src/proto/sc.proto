@@ -32,6 +32,7 @@ message ResponsePkg {
   About about = 16;
   repeated Reply replyList = 17;
   ScChat scChat = 18;
+  repeated ScUserMenuMessage userMenu = 19;
 }
 
 message ScChat{
@@ -53,4 +54,13 @@ message ScChatMessage{
   string ipAddr = 6;
   string ipSource = 7;
   int64 createTime = 8;
+}
+
+message ScUserMenuMessage{
+  string name = 1;
+  string path = 2;
+  string component = 3;
+  string icon = 4;
+  bool isHidden = 5;
+  ScUserMenuMessage children = 6;
 }
