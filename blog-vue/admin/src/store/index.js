@@ -7,14 +7,16 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     collapse: false,
-    tabList: [{ name: "首页", path: "/" }],
+    tabList: [{name: "首页", path: "/"}],
     userId: null,
     roleList: null,
     avatar: null,
     nickname: null,
     intro: null,
     webSite: null,
-    userMenuList: []
+    userMenuList: [],
+    username: "",
+    token: "",
   },
   mutations: {
     saveTab(state, tab) {
@@ -33,12 +35,14 @@ export default new Vuex.Store({
       state.collapse = !state.collapse;
     },
     login(state, user) {
-      state.userId = user.userInfoId;
+      state.userId = user.userId;
       state.roleList = user.roleList;
       state.avatar = user.avatar;
       state.nickname = user.nickname;
+      state.username = user.username;
       state.intro = user.intro;
       state.webSite = user.webSite;
+      state.token = user.token;
     },
     saveUserMenuList(state, userMenuList) {
       state.userMenuList = userMenuList;

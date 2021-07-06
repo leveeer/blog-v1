@@ -3,13 +3,12 @@ package middleware
 import (
 	"blog-go-gin/common"
 	pb "blog-go-gin/go_proto"
-	"blog-go-gin/helper"
+	jwt "blog-go-gin/helper"
 	"blog-go-gin/logging"
+	"blog-go-gin/models/enum"
 	"blog-go-gin/service"
 	"blog-go-gin/service/impl"
-	"encoding/json"
 	"errors"
-	jwt "github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
 	"io/ioutil"
@@ -30,6 +29,11 @@ type JWT struct {
 	UserRoleService service.IUserRoleService `inject:""`
 }
 
+type CustomClaims struct {
+	Username string `json:"username"`
+	Role     string `json:"role"`
+}
+
 func NewJWT() *JWT {
 	return &JWT{
 		UserAuthService: impl.NewUserAuthServiceImpl(),
@@ -42,50 +46,41 @@ var (
 )
 
 //GinJWTMiddlewareInit 初始化中间件
-func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator helper.IAuthorizator) (authMiddleware *jwt.GinJWTMiddleware) {
+func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte("secret key"),
-		Timeout:     time.Minute * 5,
+		Timeout:     time.Minute * 30,
 		MaxRefresh:  time.Hour,
 		IdentityKey: common.IdentityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			logging.Logger.Debug("执行PayloadFunc")
-			if v, ok := data.(*pb.UserRole); ok {
-				//get roles from username
-				logging.Logger.Debug(data)
-				userAuth, err := j.UserAuthService.GetUserAuthByUsername(v.Username)
-				if err != nil {
-					logging.Logger.Error("get user auth err:", err)
-				}
-				role, err := j.UserRoleService.GetUserRoleAndUsername(int(userAuth.UserInfoId))
-				if err != nil {
-					logging.Logger.Error("get user role err:", err)
-				}
-				jsonRole, _ := json.Marshal(role)
-				//maps the claims in the JWT
+			logging.Logger.Debug(data)
+			if v, ok := data.(map[string]interface{}); ok {
+				u, ok := v["user"].(*pb.UserAuth)
+				logging.Logger.Debug(ok)
+				r, _ := v["role"].(*pb.UserRole)
+				logging.Logger.Debug(u)
+				logging.Logger.Debug(r)
 				return jwt.MapClaims{
-					"username": v.Username,
-					"userRole": jsonRole,
+					jwt.IdentityKey: u.UserInfoId,
+					jwt.RoleIdKey:   r.RoleId,
+					jwt.RoleKey:     enum.GetRoleKey(int(r.RoleId)).GetRoleZh(),
+					jwt.UsernameKey: u.Username,
+					jwt.RoleNameKey: enum.GetRoleKey(int(r.RoleId)).GetRoleCh(),
 				}
 			}
 			return jwt.MapClaims{}
 		},
 		IdentityHandler: func(c *gin.Context) interface{} {
 			logging.Logger.Debug("执行IdentityHandler")
-			roles := jwt.ExtractClaims(c)
-			//extracts identity from roles
-			role := roles["userRole"].(string)
-			var userRole *pb.UserRole
-			err := json.Unmarshal([]byte(role), &userRole)
-			if err != nil {
-				logging.Logger.Error(errors.New("IdentityHandler,json.Unmarshal err:"), err)
-			}
-			//Set the identity
-			return &pb.UserRole{
-				UserId:   userRole.GetUserId(),
-				RoleId:   userRole.GetRoleId(),
-				Username: userRole.GetUsername(),
+			claims := jwt.ExtractClaims(c)
+			return map[string]interface{}{
+				"IdentityKey": claims["identity"],
+				"Username":    claims["username"],
+				"RoleKey":     claims["rolekey"],
+				"UserId":      claims["identity"],
+				"RoleIds":     claims["roleid"],
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
@@ -111,15 +106,25 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator helper.IAuthorizator) (authMi
 				if err != nil {
 					return nil, errors.New(common.GetMsg(common.GetUserInfoFail))
 				}
-				return &pb.UserRole{
-					Username: request.User.Username,
-				}, nil
+				user, err := j.UserAuthService.GetUserAuthByUsername(request.User.Username)
+				if err != nil {
+					return nil, errors.New(common.GetMsg(common.GetUserInfoFail))
+				}
+				role := &pb.UserRole{
+					RoleId:   user.RoleId,
+					UserId:   user.UserInfoId,
+					Username: user.Username,
+				}
+				m := map[string]interface{}{"user": user, "role": role}
+				logging.Logger.Debug("m:", m)
+				return m, nil
 			}
 			return nil, jwt.ErrFailedAuthentication
 		},
 
 		LoginResponse: func(c *gin.Context, code int, token string, t time.Time) {
 			loginResponse.Token = token
+			c.Set("token", token)
 			logging.Logger.Debug(loginResponse)
 			data := &pb.ResponsePkg{
 				Code:          pb.ResultCode_SuccessOK,
@@ -130,7 +135,19 @@ func (j *JWT) GinJWTMiddlewareInit(jwtAuthorizator helper.IAuthorizator) (authMi
 			c.ProtoBuf(code, data)
 		},
 		//receives identity and handles authorization logic
-		Authorizator: jwtAuthorizator.HandleAuthorizator,
+		Authorizator: func(data interface{}, c *gin.Context) bool {
+			logging.Logger.Debug("执行Authorizator")
+			if v, ok := data.(map[string]interface{}); ok {
+				u, _ := v["user"].(*pb.UserAuth)
+				r, _ := v["role"].(*pb.UserRole)
+				c.Set("role", enum.GetRoleKey(int(r.RoleId)).GetRoleZh())
+				c.Set("roleIds", r.RoleId)
+				c.Set("userId", u.UserInfoId)
+				c.Set("username", u.Username)
+				return true
+			}
+			return false
+		},
 		//handles unauthorized logic
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			data := &pb.ResponsePkg{

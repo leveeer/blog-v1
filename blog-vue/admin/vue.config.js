@@ -13,7 +13,8 @@ module.exports = {
   },
   chainWebpack: config => {
     config.resolve.alias.set("@", resolve("src"));
-  }
+  },
+  lintOnSave: false //关闭eslint检查
 };
 
 const path = require("path");

@@ -56,4 +56,6 @@ const (
 	VerifyCode  = "/code"
 	Register    = "/register"
 	Login       = "/login"
+
+	AdminBaseUrl = "/admin"
 )

@@ -101,7 +101,7 @@ var Error = map[ErrorCode]error{
 	InvalidUserNameLength: errors.New("非法邮箱"),
 	InvalidUserEmail:      errors.New("非法邮箱格式"),
 	UserNotFound:          errors.New("用户不存在"),
-	AdminPrivilegeNeeded:  errors.New("需要管理员权限"),
+	AdminPrivilegeNeeded:  errors.New("权限不足"),
 	ContactAdmin:          errors.New("系统错误，请联系客服"),
 	GetRoomIdFail:         errors.New("获取房间失败或该房间不是公开房间"),
 	GetUserMatchGroupFail: errors.New("获取用户匹配倾向失败"),

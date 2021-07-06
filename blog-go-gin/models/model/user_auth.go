@@ -15,6 +15,7 @@ type UserAuth struct {
 	Password      string `gorm:"column:password;not null"`
 	UserInfoID    int    `gorm:"column:user_info_id;not null"`
 	Username      string `gorm:"column:username;unique;not null"`
+	RoleId        int    `json:"role_id" gorm:"->"`
 	NickName      string `gorm:"->"`
 	Avatar        string `gorm:"->"`
 	Intro         string `gorm:"->"`
@@ -59,7 +60,11 @@ func GetUserAuthByID(id int) (*UserAuth, error) {
 
 func GetUserAuthByUsername(username string) (*UserAuth, error) {
 	var m UserAuth
-	if err := dao.Db.Debug().Where("username = ?", username).First(&m).Error; err != nil {
+	if err := dao.Db.Debug().Select("tb_user_auth.*,tui.nickname,tui.avatar,tui.intro,tui.web_site,tui.is_disable,tur.role_id").
+		Where("username = ?", username).
+		Joins("JOIN tb_user_info as tui on tui.id = tb_user_auth.user_info_id").
+		Joins("JOIN tb_user_role as tur on tur.user_id = tb_user_auth.user_info_id").
+		Find(&m).Error; err != nil {
 		return nil, err
 	}
 	return &m, nil

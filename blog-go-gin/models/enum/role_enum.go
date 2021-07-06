@@ -24,6 +24,11 @@ var (
 		User:  2,
 		Test:  3,
 	}
+	RoleKey = map[int]RoleEnum{
+		1: Admin,
+		2: User,
+		3: Test,
+	}
 )
 
 func (r RoleEnum) GetRoleCh() string {
@@ -36,4 +41,8 @@ func (r RoleEnum) GetRoleZh() string {
 
 func (r RoleEnum) GetRoleId() int {
 	return RoleID[r]
+}
+
+func GetRoleKey(id int) RoleEnum {
+	return RoleKey[id]
 }

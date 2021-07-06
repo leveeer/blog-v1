@@ -46,11 +46,20 @@ func (u *UserAuthServiceImpl) GetUserAuthByUsername(username string) (*pb.UserAu
 		return nil, err
 	}
 	return &pb.UserAuth{
-		Id:         int32(userAuth.ID),
-		UserInfoId: int32(userAuth.UserInfoID),
-		Username:   userAuth.Username,
-		LoginType:  int32(userAuth.LoginType),
-		CreateTime: userAuth.CreateTime,
+		Id:            int32(userAuth.ID),
+		UserInfoId:    int32(userAuth.UserInfoID),
+		Username:      userAuth.Username,
+		LoginType:     int32(userAuth.LoginType),
+		CreateTime:    userAuth.CreateTime,
+		IpAddr:        userAuth.IPAddr,
+		IpSource:      userAuth.IPSource,
+		LastLoginTime: userAuth.LastLoginTime,
+		RoleId:        int32(userAuth.RoleId),
+		NickName:      userAuth.NickName,
+		Avatar:        userAuth.Avatar,
+		WebSite:       userAuth.WebSite,
+		Intro:         userAuth.Intro,
+		IsDisable:     userAuth.IsDisable,
 	}, nil
 
 }

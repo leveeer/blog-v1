@@ -4,6 +4,7 @@ import (
 	"blog-go-gin/config"
 	"blog-go-gin/crons"
 	"blog-go-gin/dao"
+	"blog-go-gin/helper"
 	"blog-go-gin/logging"
 	"blog-go-gin/routers"
 	"context"
@@ -22,6 +23,7 @@ func main() {
 	var router *gin.Engine
 	dao.InitMysql()
 	router = routers.InitWebRouter()
+	helper.Setup()
 	//注册定时任务
 	crons.RegisterCron()
 	srv := &http.Server{

@@ -14,11 +14,6 @@ import (
 func InitWebRouter() *gin.Engine {
 	config := conf.GetConf()
 	r := gin.New()
-	// 创建基于cookie的存储引擎，secret 参数是用于加密的密钥
-	store := cookie.NewStore([]byte("secret"))
-	// 设置session中间件，参数session，指的是session的名字，也是cookie的名字
-	// store是前面创建的存储引擎，可以替换成其他存储引擎
-	r.Use(middleware.LoggerMiddleware(), middleware.AppRecoveryMiddleware(), sessions.Sessions("session", store), middleware.StatisticalViews())
 	if config.RunMode == "dev" {
 		gin.SetMode(gin.DebugMode)
 		corsConfig := cors.DefaultConfig()
@@ -35,7 +30,13 @@ func InitWebRouter() *gin.Engine {
 		})
 		gin.SetMode(gin.ReleaseMode)
 	}
+	// 创建基于cookie的存储引擎，secret 参数是用于加密的密钥
+	store := cookie.NewStore([]byte("secret"))
+	// 设置session中间件，参数session，指的是session的名字，也是cookie的名字
+	// store是前面创建的存储引擎，可以替换成其他存储引擎
+	r.Use(middleware.LoggerMiddleware(), middleware.AppRecoveryMiddleware(), sessions.Sessions("session", store), middleware.StatisticalViews())
 	blogRouters(r)
 	userRouters(r)
+	adminRouters(r)
 	return r
 }

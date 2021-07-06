@@ -157,6 +157,15 @@ message UserAuth {
   string username = 3;
   int32 loginType = 4;
   int64 createTime = 5;
+  string ipAddr = 6;
+  string ipSource = 7;
+  int64 lastLoginTime = 8;
+  int32  roleId = 9;
+  string nickName = 10;
+  string avatar = 11;
+  string webSite = 12;
+  string intro = 13;
+  bool isDisable = 14;
 }
 
 message LoginResponse {

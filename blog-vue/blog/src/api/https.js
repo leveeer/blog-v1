@@ -48,7 +48,7 @@ service.interceptors.request.use(
       case "get":
         break;
       default:
-        console.log("unKnown method type");
+        console.log("unknown method type");
         break;
     }
     return config;

@@ -1,0 +1,57 @@
+syntax = "proto3";
+option go_package = "../go_proto;proto";
+package proto;
+import "data.proto";
+
+// enum，message 统一使用驼峰式(首字母大写） 例：MessageName
+// message属性名 统一使用驼峰式(首字母小写） 例：propName
+
+enum CsId{
+  CsBeginIndex = 0;
+  CsGetArticles = 1;
+  CsGetArticleById = 2;
+  CsGetBlogHomeInfo = 3;
+  CsLogout = 4;
+  CsChatTextMessage = 5;
+  CsChatRecall = 6;
+}
+
+
+message RequestPkg{
+  CsId cmdId = 1; // 协议ID
+  uint32 currentPage = 2;
+  uint32 articleId = 3;
+  Message message = 4;
+  User user = 5;
+  CsComment csComment = 6;
+  CsBeatMessage csBeatMessage = 7;
+  CsChatMessage csChatMessage = 8;
+}
+
+message CsComment{
+  uint32 articleId = 1;
+  uint32 userId = 2;
+  string commentContent = 3;
+  int64 createTime = 4;
+  uint32 replyId = 5;
+  uint32 parentId = 6;
+  uint32 isDelete = 7;
+}
+
+message CsBeatMessage{
+  uint32 type = 1;
+  string data = 2;
+}
+
+message CsChatMessage{
+  string nickname = 1;
+  string avatar = 2;
+  string content = 3;
+  uint32 userId = 4;
+  uint32 type = 5;
+  string ipAddr = 6;
+  string ipSource = 7;
+  int64 createTime = 8;
+}
+
+
