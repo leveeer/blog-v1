@@ -71,7 +71,6 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 		IdentityHandler: func(c *gin.Context) interface{} {
 			logging.Logger.Debug("执行IdentityHandler")
 			claims := jwt.ExtractClaims(c)
-			logging.Logger.Debug(claims)
 			return map[string]interface{}{
 				"IdentityKey": claims["identity"],
 				"Username":    claims["username"],
@@ -136,7 +135,6 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			logging.Logger.Debug("执行Authorizator")
 			if v, ok := data.(map[string]interface{}); ok {
-				logging.Logger.Debug(ok)
 				c.Set("role", v["RoleKey"])
 				c.Set("roleIds", v["RoleIds"])
 				c.Set("userId", v["UserId"])

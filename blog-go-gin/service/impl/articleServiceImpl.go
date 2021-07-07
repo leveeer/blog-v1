@@ -13,6 +13,22 @@ type ArticleServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func (b *ArticleServiceImpl) GetAdminHomeData() (*pb.ScAdminHomeData, error) {
+	// 查询访问量
+	// 查询留言量
+	// 查询用户量
+	// 查询文章量
+	// 查询一周用户量
+	// 查询分类数据
+	// 查询redis访问量前五的文章
+	// 将文章进行倒序排序
+	// 提取前五篇文章
+	// 文章为空直接返回
+	// 查询文章标题
+	// 封装浏览量
+	return nil, nil
+}
+
 func NewArticleServiceImpl() *ArticleServiceImpl {
 	return &ArticleServiceImpl{}
 }

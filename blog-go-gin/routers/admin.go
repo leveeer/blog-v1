@@ -19,5 +19,6 @@ func adminRouters(r *gin.Engine) {
 	admin.Use(authMiddleware.MiddlewareFunc(), middleware.AuthCheckRole())
 	{
 		admin.GET(common.UserMenu, MenuApi.GetUserMenus)
+		admin.GET(common.AdminHomeData, ArticleApi.GetAdminHomeData)
 	}
 }

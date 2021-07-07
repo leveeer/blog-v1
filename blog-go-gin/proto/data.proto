@@ -181,3 +181,13 @@ message LoginResponse {
   int32 loginType = 10;
   string token = 11;
 }
+
+message UniqueView{
+  string day = 1;
+  int64 viewsCount = 2;
+}
+
+message ArticleRank{
+  string articleTitle = 1;
+  int64 viewsCount = 2;
+}

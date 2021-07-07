@@ -83,3 +83,8 @@ func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
 	}
 	c.ProtoBuf(ctx, http.StatusOK, data)
 }
+
+func (c *ArticleRestApi) GetAdminHomeData(ctx *gin.Context) {
+	ArticleService.GetAdminHomeData()
+
+}

@@ -718,6 +718,30 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      UniqueView: {
+        fields: {
+          day: {
+            type: "string",
+            id: 1
+          },
+          viewsCount: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      ArticleRank: {
+        fields: {
+          articleTitle: {
+            type: "string",
+            id: 1
+          },
+          viewsCount: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -727,7 +751,8 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
         values: {
           Success: 0,
           Fail: 1,
-          SuccessOK: 10000
+          SuccessOK: 10000,
+          Forbidden: 403
         }
       },
       ResponsePkg: {
@@ -814,6 +839,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "ScUserMenuMessage",
             id: 19
+          },
+          adminHomeData: {
+            type: "ScAdminHomeData",
+            id: 20
           }
         }
       },
@@ -903,6 +932,41 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "ScUserMenuMessage",
             id: 6
+          }
+        }
+      },
+      ScAdminHomeData: {
+        fields: {
+          viewsCount: {
+            type: "int64",
+            id: 1
+          },
+          messageCount: {
+            type: "int64",
+            id: 2
+          },
+          userCount: {
+            type: "int64",
+            id: 3
+          },
+          articleCount: {
+            type: "int64",
+            id: 4
+          },
+          categoryList: {
+            rule: "repeated",
+            type: "Category",
+            id: 5
+          },
+          uniqueViewList: {
+            rule: "repeated",
+            type: "UniqueView",
+            id: 6
+          },
+          articleRankList: {
+            rule: "repeated",
+            type: "ArticleRank",
+            id: 7
           }
         }
       }

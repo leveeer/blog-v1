@@ -9,11 +9,10 @@ import {resultMap} from "../../utils/constant";
 export function generaMenu() {
   // 查询用户菜单
   getUserMenu().then((data) => {
-    console.log(data)
+    console.log(data);
     if (data.code === getResultCode(resultMap.SuccessOK)) {
       const userMenuList = data.userMenu;
       userMenuList.forEach(item => {
-        console.log(item)
         if (item.icon != null) {
           item.icon = "iconfont " + item.icon;
         }
@@ -29,12 +28,11 @@ export function generaMenu() {
       });
       // 添加侧边栏菜单
       store.commit("saveUserMenuList", userMenuList);
-      console.log(store.state.userMenuList)
       // 添加菜单到路由
       router.addRoutes(userMenuList);
     } else {
       Vue.prototype.$message.error(data.message);
-      Vue.prototype.router.push({path: "/login"})
+      router.push({path: "/login"})
     }
   });
 }

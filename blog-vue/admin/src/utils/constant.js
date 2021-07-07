@@ -7,7 +7,8 @@ export const requestMap = {
 export const resultMap = {
   Success: "Success",
   Fail: "Fail",
-  SuccessOK: "SuccessOK"
+  SuccessOK: "SuccessOK",
+  Forbidden: "Forbidden",
 };
 
 export const wsURL = "ws://localhost:33000";

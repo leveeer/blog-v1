@@ -24,7 +24,7 @@ func AuthCheckRole() gin.HandlerFunc {
 		fmt.Printf("[INFO] %s %s %s \r\n", c.Request.Method, c.Request.URL.Path, v["rolekey"])
 		if !ok {
 			data := &pb.ResponsePkg{
-				Code:       pb.ResultCode_Fail,
+				Code:       pb.ResultCode_Forbidden,
 				ServerTime: time.Now().Unix(),
 				Message:    common.GetMsg(common.AdminPrivilegeNeeded),
 			}

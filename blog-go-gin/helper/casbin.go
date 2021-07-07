@@ -23,8 +23,10 @@ p = sub, obj, act
 e = some(where (p.eft == allow))
 
 [matchers]
-m = r.sub == p.sub && (keyMatch2(r.obj, p.obj) || keyMatch(r.obj, p.obj)) && (r.act == p.act || p.act == "*")
+m = r.sub == p.sub && (keyMatch2(r.obj, p.obj) || keyMatch(r.obj, p.obj) || regexMatch(r.obj, p.obj)) && (r.act == p.act || p.act == "*")
 `
+
+//m = r.sub == p.sub && (keyMatch2(r.obj, p.obj) || keyMatch(r.obj, p.obj)) && (r.act == p.act || p.act == "*")
 
 func Setup() {
 	Apter, err := gormAdapter.NewAdapterByDBUseTableName(dao.Db, "tb", "casbin")

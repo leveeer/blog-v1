@@ -2,20 +2,22 @@ import axios from "axios";
 import Vue from "vue";
 import protobuf from "protobufjs";
 import protoRoot from "@/proto/proto";
+import {getResultCode} from "../utils/util";
+import {resultMap} from "../utils/constant";
 
 
 // 创建 axios 实例
 let service;
 if (process.env.NODE_ENV === "development") {
-  service = axios.create({
-    baseURL: "/api", // api 的 base_url
-    timeout: 5000, // 请求超时时间
-    responseType: "arraybuffer",
-    headers: {
-      "X-Requested-With": "XMLHttpRequest",
-      "Content-Type": "application/x-protobuf"
-    }
-  });
+    service = axios.create({
+        baseURL: "/api", // api 的 base_url
+        timeout: 5000, // 请求超时时间
+        responseType: "arraybuffer",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/x-protobuf"
+        }
+    });
 } else {
   // 生产环境下
   service = axios.create({
@@ -62,22 +64,24 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     function (response) {
       try {
-        protoObj.ResponsePkg.verify(response.data);
-        const message = protoObj.ResponsePkg.decode(new Uint8Array(response.data));
-        const resp = protoObj.ResponsePkg.toObject(message, {
-          enums: Number,  // enums as string names
-          longs: Number,  // longs as strings (requires long.js)
-          bytes: Number,  // bytes as base64 encoded strings
-          defaults: false, // includes default values
-          arrays: false,   // populates empty arrays (repeated fields) even if defaults=false
-          objects: false,  // populates empty objects (map fields) even if defaults=false
-          oneofs: true    // includes virtual oneof fields set to the present field's name
-        });
-        // console.log(resp);
-        if (resp.code === 1) {
-          Vue.prototype.$message({type: "error", message: "系统异常"});
-        }
-        return resp;
+          protoObj.ResponsePkg.verify(response.data);
+          const message = protoObj.ResponsePkg.decode(new Uint8Array(response.data));
+          const resp = protoObj.ResponsePkg.toObject(message, {
+              enums: Number,  // enums as string names
+              longs: Number,  // longs as strings (requires long.js)
+              bytes: Number,  // bytes as base64 encoded strings
+              defaults: false, // includes default values
+              arrays: false,   // populates empty arrays (repeated fields) even if defaults=false
+              objects: false,  // populates empty objects (map fields) even if defaults=false
+              oneofs: true    // includes virtual oneof fields set to the present field's name
+          });
+          // console.log(resp);
+          if (resp.code === getResultCode(resultMap.Fail)) {
+              Vue.prototype.$message({type: "error", message: "系统异常"});
+          } else if (resp.code === getResultCode(resultMap.Forbidden)) {
+              Vue.prototype.$message({type: "error", message: resp.message});
+          }
+          return resp;
       } catch (err) {
         console.log(err);
       }

@@ -11,6 +11,7 @@ enum ResultCode {
   Success = 0; //协议请求成功，其余失败
   Fail = 1;
   SuccessOK = 10000;
+  Forbidden = 403;
 }
 
 message ResponsePkg {
@@ -33,6 +34,7 @@ message ResponsePkg {
   repeated Reply replyList = 17;
   ScChat scChat = 18;
   repeated ScUserMenuMessage userMenu = 19;
+  ScAdminHomeData adminHomeData = 20;
 }
 
 message ScChat{
@@ -63,4 +65,14 @@ message ScUserMenuMessage{
   string icon = 4;
   bool isHidden = 5;
   repeated ScUserMenuMessage children = 6;
+}
+
+message ScAdminHomeData{
+  int64 viewsCount = 1;
+  int64 messageCount = 2;
+  int64 userCount = 3;
+  int64 articleCount = 4;
+  repeated Category categoryList = 5;
+  repeated UniqueView uniqueViewList = 6;
+  repeated ArticleRank articleRankList = 7;
 }

@@ -1745,6 +1745,116 @@ func (x *LoginResponse) GetToken() string {
 	return ""
 }
 
+type UniqueView struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Day        string `protobuf:"bytes,1,opt,name=day,proto3" json:"day,omitempty"`
+	ViewsCount int64  `protobuf:"varint,2,opt,name=viewsCount,proto3" json:"viewsCount,omitempty"`
+}
+
+func (x *UniqueView) Reset() {
+	*x = UniqueView{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_data_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UniqueView) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UniqueView) ProtoMessage() {}
+
+func (x *UniqueView) ProtoReflect() protoreflect.Message {
+	mi := &file_data_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UniqueView.ProtoReflect.Descriptor instead.
+func (*UniqueView) Descriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *UniqueView) GetDay() string {
+	if x != nil {
+		return x.Day
+	}
+	return ""
+}
+
+func (x *UniqueView) GetViewsCount() int64 {
+	if x != nil {
+		return x.ViewsCount
+	}
+	return 0
+}
+
+type ArticleRank struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	ArticleTitle string `protobuf:"bytes,1,opt,name=articleTitle,proto3" json:"articleTitle,omitempty"`
+	ViewsCount   int64  `protobuf:"varint,2,opt,name=viewsCount,proto3" json:"viewsCount,omitempty"`
+}
+
+func (x *ArticleRank) Reset() {
+	*x = ArticleRank{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_data_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ArticleRank) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ArticleRank) ProtoMessage() {}
+
+func (x *ArticleRank) ProtoReflect() protoreflect.Message {
+	mi := &file_data_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ArticleRank.ProtoReflect.Descriptor instead.
+func (*ArticleRank) Descriptor() ([]byte, []int) {
+	return file_data_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *ArticleRank) GetArticleTitle() string {
+	if x != nil {
+		return x.ArticleTitle
+	}
+	return ""
+}
+
+func (x *ArticleRank) GetViewsCount() int64 {
+	if x != nil {
+		return x.ViewsCount
+	}
+	return 0
+}
+
 var File_data_proto protoreflect.FileDescriptor
 
 var file_data_proto_rawDesc = []byte{
@@ -1995,9 +2105,18 @@ var file_data_proto_rawDesc = []byte{
 	0x61, 0x62, 0x6c, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x54, 0x79, 0x70,
 	0x65, 0x18, 0x0a, 0x20, 0x01, 0x28, 0x05, 0x52, 0x09, 0x6c, 0x6f, 0x67, 0x69, 0x6e, 0x54, 0x79,
 	0x70, 0x65, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x0b, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x42, 0x13, 0x5a, 0x11, 0x2e, 0x2e, 0x2f, 0x67,
-	0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x22, 0x3e, 0x0a, 0x0a, 0x55, 0x6e, 0x69, 0x71,
+	0x75, 0x65, 0x56, 0x69, 0x65, 0x77, 0x12, 0x10, 0x0a, 0x03, 0x64, 0x61, 0x79, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x03, 0x64, 0x61, 0x79, 0x12, 0x1e, 0x0a, 0x0a, 0x76, 0x69, 0x65, 0x77,
+	0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x76, 0x69,
+	0x65, 0x77, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22, 0x51, 0x0a, 0x0b, 0x41, 0x72, 0x74, 0x69,
+	0x63, 0x6c, 0x65, 0x52, 0x61, 0x6e, 0x6b, 0x12, 0x22, 0x0a, 0x0c, 0x61, 0x72, 0x74, 0x69, 0x63,
+	0x6c, 0x65, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x61,
+	0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x1e, 0x0a, 0x0a, 0x76,
+	0x69, 0x65, 0x77, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52,
+	0x0a, 0x76, 0x69, 0x65, 0x77, 0x73, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x42, 0x13, 0x5a, 0x11, 0x2e,
+	0x2e, 0x2f, 0x67, 0x6f, 0x5f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -2012,7 +2131,7 @@ func file_data_proto_rawDescGZIP() []byte {
 	return file_data_proto_rawDescData
 }
 
-var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_data_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_data_proto_goTypes = []interface{}{
 	(*Article)(nil),                 // 0: proto.Article
 	(*Tag)(nil),                     // 1: proto.Tag
@@ -2033,6 +2152,8 @@ var file_data_proto_goTypes = []interface{}{
 	(*UserRole)(nil),                // 16: proto.UserRole
 	(*UserAuth)(nil),                // 17: proto.UserAuth
 	(*LoginResponse)(nil),           // 18: proto.LoginResponse
+	(*UniqueView)(nil),              // 19: proto.UniqueView
+	(*ArticleRank)(nil),             // 20: proto.ArticleRank
 }
 var file_data_proto_depIdxs = []int32{
 	1,  // 0: proto.Article.tags:type_name -> proto.Tag
@@ -2287,6 +2408,30 @@ func file_data_proto_init() {
 				return nil
 			}
 		}
+		file_data_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UniqueView); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_data_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ArticleRank); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -2294,7 +2439,7 @@ func file_data_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_data_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   19,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

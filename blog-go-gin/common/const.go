@@ -58,6 +58,7 @@ const (
 	Register    = "/register"
 	Login       = "/login"
 
-	AdminBaseUrl = "/admin"
-	UserMenu     = "/user/menus"
+	AdminBaseUrl  = "/admin"
+	UserMenu      = "/user/menus"
+	AdminHomeData = ""
 )
