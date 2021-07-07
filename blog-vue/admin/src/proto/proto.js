@@ -900,6 +900,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             id: 5
           },
           children: {
+            rule: "repeated",
             type: "ScUserMenuMessage",
             id: 6
           }

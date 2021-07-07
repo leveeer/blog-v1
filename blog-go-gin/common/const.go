@@ -28,6 +28,7 @@ const (
 	NOTICE            = "notice"              //公告
 	IpSet             = "ip_set"              //ip集合
 	ChatServer        = "chat_server"         //聊天服
+	Component         = "Layout"              //前端组件名
 )
 
 //code status

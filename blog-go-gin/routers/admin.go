@@ -18,6 +18,6 @@ func adminRouters(r *gin.Engine) {
 	admin.POST(common.Login, authMiddleware.LoginHandler)
 	admin.Use(authMiddleware.MiddlewareFunc(), middleware.AuthCheckRole())
 	{
-		admin.GET(common.UserMenu, MenuApi.GetUserMenu)
+		admin.GET(common.UserMenu, MenuApi.GetUserMenus)
 	}
 }

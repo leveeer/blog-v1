@@ -62,5 +62,5 @@ message ScUserMenuMessage{
   string component = 3;
   string icon = 4;
   bool isHidden = 5;
-  ScUserMenuMessage children = 6;
+  repeated ScUserMenuMessage children = 6;
 }

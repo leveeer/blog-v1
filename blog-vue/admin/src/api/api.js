@@ -1,6 +1,6 @@
 import service from "./https";
 import urls from "../utils/urls";
-import context from "../main.js";
+import store from "../store";
 
 
 export function adminLogin(params) {
@@ -9,7 +9,7 @@ export function adminLogin(params) {
 
 export function getUserMenu() {
   return service.get(urls.user_menu, {
-        params: {token: context.$store.state.token}
+        params: {token: store.state.token}
       }
   )
 }

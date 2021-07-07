@@ -26,6 +26,7 @@ message RequestPkg{
   CsComment csComment = 6;
   CsBeatMessage csBeatMessage = 7;
   CsChatMessage csChatMessage = 8;
+  string token = 9;
 }
 
 message CsComment{

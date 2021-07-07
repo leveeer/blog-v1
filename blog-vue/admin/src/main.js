@@ -49,7 +49,7 @@ NProgress.configure({
 
 router.beforeEach((to, from, next) => {
   NProgress.start();
-  if (to.path == "/login") {
+  if (to.path === "/login") {
     next();
   } else if (!store.state.userId) {
     next({ path: "/login" });
@@ -63,31 +63,31 @@ router.afterEach(() => {
 });
 
 // 响应拦截器
-axios.interceptors.response.use(
-  function(response) {
-    switch (response.data.code) {
-      case 40001:
-        Vue.prototype.$message({
-          type: "error",
-          message: response.data.message
-        });
-        router.push({ path: "/login" });
-        break;
-      case 50000:
-        Vue.prototype.$message({
-          type: "error",
-          message: response.data.message
-        });
-        break;
-    }
-    return response;
-  },
-  function(error) {
-    return Promise.reject(error);
-  }
-);
+// axios.interceptors.response.use(
+//   function(response) {
+//     switch (response.data.code) {
+//       case 40001:
+//         Vue.prototype.$message({
+//           type: "error",
+//           message: response.data.message
+//         });
+//         router.push({ path: "/login" });
+//         break;
+//       case 50000:
+//         Vue.prototype.$message({
+//           type: "error",
+//           message: response.data.message
+//         });
+//         break;
+//     }
+//     return response;
+//   },
+//   function(error) {
+//     return Promise.reject(error);
+//   }
+// );
 
-new Vue({
+const vue = new Vue({
   router,
   store,
   render: h => h(App),
@@ -98,3 +98,5 @@ new Vue({
     }
   }
 }).$mount("#app");
+
+export default vue
