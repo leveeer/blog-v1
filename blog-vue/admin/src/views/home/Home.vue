@@ -60,7 +60,7 @@
         <el-card>
           <div class="e-title">文章浏览量排行</div>
           <div style="height:350px">
-            <v-chart :options="ariticleRank" v-loading="loading" />
+            <v-chart :options="articleRank" v-loading="loading" />
           </div>
         </el-card>
       </el-col>
@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import {getHomeData} from "../../api/api";
+
 export default {
   created() {
     this.getData();
@@ -133,7 +135,7 @@ export default {
           }
         ]
       },
-      ariticleRank: {
+      articleRank: {
         tooltip: {
           trigger: "axis",
           axisPointer: {
@@ -188,21 +190,22 @@ export default {
   },
   methods: {
     getData() {
-      this.axios.get("/api/admin").then(({ data }) => {
-        this.viewsCount = data.data.viewsCount;
-        this.messageCount = data.data.messageCount;
-        this.userCount = data.data.userCount;
-        this.articleCount = data.data.articleCount;
+      getHomeData().then(( data ) => {
+        console.log(data)
+        this.viewsCount = data.adminHomeData.viewsCount;
+        this.messageCount = data.adminHomeData.messageCount;
+        this.userCount = data.adminHomeData.userCount;
+        this.articleCount = data.adminHomeData.articleCount;
 
-        if (data.data.uniqueViewDTOList != null) {
-          data.data.uniqueViewDTOList.forEach(item => {
+        if (data.adminHomeData.uniqueViewList != null) {
+          data.adminHomeData.uniqueViewList.forEach(item => {
             this.viewCount.xAxis.data.push(item.day);
             this.viewCount.series[0].data.push(item.viewsCount);
           });
         }
 
-        if (data.data.categoryDTOList != null) {
-          data.data.categoryDTOList.forEach(item => {
+        if (data.adminHomeData.categoryList != null) {
+          data.adminHomeData.categoryList.forEach(item => {
             this.category.series[0].data.push({
               value: item.articleCount,
               name: item.categoryName
@@ -211,10 +214,10 @@ export default {
           });
         }
 
-        if (data.data.articleRankDTOList != null) {
-          data.data.articleRankDTOList.forEach(item => {
-            this.ariticleRank.series[0].data.push(item.viewsCount);
-            this.ariticleRank.xAxis.data.push(item.articleTitle);
+        if (data.adminHomeData.articleRankList != null) {
+          data.adminHomeData.articleRankList.forEach(item => {
+            this.articleRank.series[0].data.push(item.viewsCount);
+            this.articleRank.xAxis.data.push(item.articleTitle);
           });
         }
 

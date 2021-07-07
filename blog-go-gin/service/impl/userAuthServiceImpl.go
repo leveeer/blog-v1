@@ -100,7 +100,7 @@ func (u *UserAuthServiceImpl) Register(user *pb.User) error {
 		//绑定用户角色
 		err = model.AddUserRole(tx, &model.UserRole{
 			UserID: userId,
-			RoleID: enum.Admin.GetRoleId(),
+			RoleID: enum.User.GetRoleId(),
 		})
 		if err != nil {
 			return err
