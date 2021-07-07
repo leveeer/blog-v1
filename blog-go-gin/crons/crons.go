@@ -8,7 +8,7 @@ import (
 )
 
 func ClearIpSet() {
-	members := common.GetRedisUtil().SMembers(common.IpSet)
+	members, _ := common.GetRedisUtil().SMembers(common.IpSet)
 	var slice []interface{}
 	for _, member := range members {
 		slice = append(slice, member)

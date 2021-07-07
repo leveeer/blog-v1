@@ -85,6 +85,16 @@ func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
 }
 
 func (c *ArticleRestApi) GetAdminHomeData(ctx *gin.Context) {
-	ArticleService.GetAdminHomeData()
-
+	adminHomeData, err := ArticleService.GetAdminHomeData()
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetHomeDataFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:         pb.Response_ResponseBeginIndex,
+		Code:          pb.ResultCode_SuccessOK,
+		ServerTime:    time.Now().Unix(),
+		AdminHomeData: adminHomeData,
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
 }

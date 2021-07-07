@@ -6,6 +6,7 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
+	"strconv"
 	"sync"
 )
 
@@ -15,6 +16,14 @@ type ArticleServiceImpl struct {
 
 func (b *ArticleServiceImpl) GetAdminHomeData() (*pb.ScAdminHomeData, error) {
 	// 查询访问量
+	blogViewsCountStr, err := common.GetRedisUtil().Get(common.BlogViewsCount)
+	if err != nil {
+		return nil, err
+	}
+	blogViewsCount, err := strconv.Atoi(blogViewsCountStr)
+	if err != nil {
+		return nil, err
+	}
 	// 查询留言量
 	// 查询用户量
 	// 查询文章量
@@ -26,7 +35,9 @@ func (b *ArticleServiceImpl) GetAdminHomeData() (*pb.ScAdminHomeData, error) {
 	// 文章为空直接返回
 	// 查询文章标题
 	// 封装浏览量
-	return nil, nil
+	return &pb.ScAdminHomeData{
+		ViewsCount: int64(blogViewsCount),
+	}, nil
 }
 
 func NewArticleServiceImpl() *ArticleServiceImpl {

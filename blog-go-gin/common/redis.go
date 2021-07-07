@@ -75,12 +75,20 @@ func (r *RedisUtil) SAdd(key string, member interface{}) {
 	r.redisClient.SAdd(ctx, key, member)
 }
 
-func (r *RedisUtil) SMembers(key string) []string {
+func (r *RedisUtil) SMembers(key string) ([]string, error) {
 	setList, err := r.redisClient.SMembers(ctx, key).Result()
 	if err != nil {
-		return []string{}
+		return []string{}, err
 	}
-	return setList
+	return setList, nil
+}
+
+func (r *RedisUtil) SIsMember(key, member string) (bool, error) {
+	isExist, err := r.redisClient.SIsMember(ctx, key, member).Result()
+	if err != nil {
+		return false, err
+	}
+	return isExist, nil
 }
 
 func (r *RedisUtil) SRems(key string, members ...interface{}) {
