@@ -9,6 +9,7 @@ import (
 	"log"
 	"math"
 	"math/rand"
+	"os"
 	"runtime"
 	"strconv"
 	"strings"
@@ -222,5 +223,13 @@ func HasError(err error, msg string, code ...int) {
 		_, file, line, _ := runtime.Caller(1)
 		log.Printf("%s:%v error: %#v", file, line, err)
 		panic("CustomError#" + strconv.Itoa(statusCode) + "#" + msg)
+	}
+}
+
+func MkDir(path string) {
+	dir, _ := os.Getwd()
+	err := os.MkdirAll(dir+"/"+path, os.ModePerm)
+	if err != nil {
+		panic(err)
 	}
 }

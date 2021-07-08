@@ -113,7 +113,6 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 					Username: user.Username,
 				}
 				m := map[string]interface{}{"user": user, "role": role}
-				logging.Logger.Debug("m:", m)
 				return m, nil
 			}
 			return nil, jwt.ErrFailedAuthentication
@@ -122,7 +121,6 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 		LoginResponse: func(c *gin.Context, code int, token string, t time.Time) {
 			loginResponse.Token = token
 			c.Set("token", token)
-			logging.Logger.Debug(loginResponse)
 			data := &pb.ResponsePkg{
 				Code:          pb.ResultCode_SuccessOK,
 				ServerTime:    time.Now().Unix(),

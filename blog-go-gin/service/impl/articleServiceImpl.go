@@ -13,6 +13,44 @@ type ArticleServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func (b *ArticleServiceImpl) UploadImage(filepath string) (string, error) {
+	key, err := common.GetQiNiuUtil().UploadQiNiu(filepath)
+	if err != nil {
+		return "", err
+	}
+	return key, nil
+}
+
+func (b *ArticleServiceImpl) GetArticleOptions() (*pb.ScArticleOptions, error) {
+	//TODO 可并行查询
+	categories, err := model.GetCategories("1 = 1")
+	if err != nil {
+		return nil, err
+	}
+	var categoryList []*pb.Category
+	for _, category := range categories {
+		categoryList = append(categoryList, &pb.Category{
+			Id:           int32(category.ID),
+			CategoryName: category.CategoryName,
+		})
+	}
+	tags, err := model.GetTags("status = ?", true)
+	if err != nil {
+		return nil, err
+	}
+	var tagList []*pb.Tag
+	for _, tag := range tags {
+		tagList = append(tagList, &pb.Tag{
+			Id:      int32(tag.ID),
+			TagName: tag.TagName,
+		})
+	}
+	return &pb.ScArticleOptions{
+		CategoryList: categoryList,
+		TagList:      tagList,
+	}, nil
+}
+
 func NewArticleServiceImpl() *ArticleServiceImpl {
 	return &ArticleServiceImpl{}
 }

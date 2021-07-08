@@ -4,6 +4,7 @@ import protobuf from "protobufjs";
 import protoRoot from "@/proto/proto";
 import {getResultCode} from "../utils/util";
 import {resultMap} from "../utils/constant";
+import store from "../store";
 
 
 // 创建 axios 实例
@@ -39,21 +40,22 @@ export const protoObj = {
 // request 拦截器 axios 的一些配置
 service.interceptors.request.use(
     config => {
-      let data;
-      let encode;
-      switch (config.method) {
-        case "post":
-          data = protoObj.RequestPkg.create(config.data);
-          encode = protoObj.RequestPkg.encode(data).finish();
-          config.data = protobuf.util.newBuffer(encode);
-          break;
-        case "get":
-          break;
-        default:
-          console.log("unKnown method type");
-          break;
-      }
-      return config;
+        config.headers.Authorization = "Bearer " + store.state.token;
+        let data;
+        let encode;
+        switch (config.method) {
+            case "post":
+                data = protoObj.RequestPkg.create(config.data);
+                encode = protoObj.RequestPkg.encode(data).finish();
+                config.data = protobuf.util.newBuffer(encode);
+                break;
+            case "get":
+                break;
+            default:
+                console.log("unKnown method type");
+                break;
+        }
+        return config;
     },
     error => {
       return Promise.reject(error);
@@ -76,9 +78,10 @@ service.interceptors.response.use(
               oneofs: true    // includes virtual oneof fields set to the present field's name
           });
           // console.log(resp);
-          if (resp.code === getResultCode(resultMap.Fail)) {
-              Vue.prototype.$message({type: "error", message: "系统异常"});
-          } else if (resp.code === getResultCode(resultMap.Forbidden)) {
+          // if (resp.code === getResultCode(resultMap.Fail)) {
+          //     Vue.prototype.$message({type: "error", message: "系统异常"});
+          // } else
+          if (resp.code === getResultCode(resultMap.Forbidden)) {
               Vue.prototype.$message({type: "error", message: resp.message});
           }
           return resp;

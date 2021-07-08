@@ -843,6 +843,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           adminHomeData: {
             type: "ScAdminHomeData",
             id: 20
+          },
+          articleOptions: {
+            type: "ScArticleOptions",
+            id: 21
           }
         }
       },
@@ -967,6 +971,20 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "ArticleRank",
             id: 7
+          }
+        }
+      },
+      ScArticleOptions: {
+        fields: {
+          tagList: {
+            rule: "repeated",
+            type: "Tag",
+            id: 1
+          },
+          categoryList: {
+            rule: "repeated",
+            type: "Category",
+            id: 2
           }
         }
       }

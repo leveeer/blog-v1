@@ -2,6 +2,7 @@ package blogApi
 
 import (
 	"blog-go-gin/common"
+	conf "blog-go-gin/config"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/handlers/base"
 	"blog-go-gin/logging"
@@ -10,6 +11,7 @@ import (
 	"blog-go-gin/service/impl"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"path"
 	"strconv"
 	"time"
 )
@@ -82,4 +84,45 @@ func (c *ArticleRestApi) GetArticleArchives(ctx *gin.Context) {
 		ArchiveInfo: archiveInfo,
 	}
 	c.ProtoBuf(ctx, http.StatusOK, data)
+}
+
+func (c *ArticleRestApi) GetArticleOptions(ctx *gin.Context) {
+	articleOptions, err := ArticleService.GetArticleOptions()
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticleOptionsFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:          pb.Response_ResponseBeginIndex,
+		Code:           pb.ResultCode_SuccessOK,
+		ServerTime:     time.Now().Unix(),
+		ArticleOptions: articleOptions,
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}
+
+func (c *ArticleRestApi) UploadImage(ctx *gin.Context) {
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		c.RespFailWithDesc(ctx, http.StatusBadRequest, common.InvalidRequestParams)
+		return
+	}
+	picExpandedName := path.Ext(file.Filename)
+	newFilename := strconv.FormatInt(time.Now().Unix(), 10) + picExpandedName
+	savePath := conf.GetConf().QiNiu.ImageSavePath
+	dst := path.Join(savePath, newFilename)
+	_ = ctx.SaveUploadedFile(file, dst)
+	key, err := ArticleService.UploadImage(dst)
+	logging.Logger.Debug(key)
+	if err != nil {
+		c.RespFailWithDesc(ctx, http.StatusBadRequest, common.UploadImageFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+		Message:    "上传成功",
+	}
+	c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, data)
 }

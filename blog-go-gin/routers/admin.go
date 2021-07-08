@@ -20,5 +20,7 @@ func adminRouters(r *gin.Engine) {
 	{
 		admin.GET(common.UserMenu, MenuApi.GetUserMenus)
 		admin.GET(common.AdminHomeData, BlogInfoApi.GetAdminHomeData)
+		admin.GET(common.ArticleOptions, ArticleApi.GetArticleOptions)
+		admin.POST(common.UploadImage, ArticleApi.UploadImage)
 	}
 }

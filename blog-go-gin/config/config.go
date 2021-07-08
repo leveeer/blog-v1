@@ -19,6 +19,7 @@ type Config struct {
 	Mysql Mysql `yaml:"mysql"`
 	Redis Redis `yaml:"redis"`
 	Ws    WS    `yaml:"ws"`
+	QiNiu QiNiu `yaml:"qiniu"`
 }
 
 type Mysql struct {
@@ -41,6 +42,14 @@ type WS struct {
 	Host  string `yaml:"host"`
 	Port  uint32 `yaml:"port"`
 	Debug bool   `yaml:"debug"`
+}
+
+type QiNiu struct {
+	ImageSavePath string `yaml:"imagesavepath"`
+	AccessKey     string `yaml:"accesskey"`
+	SecretKey     string `yaml:"secretkey"`
+	Bucket        string `yaml:"bucket"`
+	Area          string `yaml:"area"`
 }
 
 func (c *Config) loadConf() {

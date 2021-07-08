@@ -58,7 +58,9 @@ const (
 	Register    = "/register"
 	Login       = "/login"
 
-	AdminBaseUrl  = "/admin"
-	UserMenu      = "/user/menus"
-	AdminHomeData = ""
+	AdminBaseUrl   = "/admin"
+	UserMenu       = "/user/menus"
+	AdminHomeData  = ""
+	ArticleOptions = "/articles/options"
+	UploadImage    = "/articles/images"
 )

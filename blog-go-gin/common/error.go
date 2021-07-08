@@ -88,6 +88,8 @@ const (
 	GetRepliesFail
 	GetUserMenusFail
 	GetHomeDataFail
+	GetArticleOptionsFail
+	UploadImageFail
 )
 
 // unknown group
@@ -176,6 +178,8 @@ var Error = map[ErrorCode]error{
 	GetRepliesFail:             errors.New("获取回复列表失败"),
 	GetUserMenusFail:           errors.New("获取用户菜单失败"),
 	GetHomeDataFail:            errors.New("获取首页数据失败"),
+	GetArticleOptionsFail:      errors.New("获取文章相关数据失败"),
+	UploadImageFail:            errors.New("上传图片失败"),
 }
 
 func GetMsg(code ErrorCode) string {

@@ -9,7 +9,6 @@ require (
 	github.com/davecgh/go-spew v1.1.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-contrib/cors v1.3.1
-	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.7.1
 	github.com/go-redis/redis/v8 v8.8.3
 	github.com/go-sql-driver/mysql v1.5.0
@@ -18,7 +17,9 @@ require (
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/mattn/go-colorable v0.1.8
 	github.com/oklog/ulid/v2 v2.0.2
+	github.com/qiniu/api.v7/v7 v7.8.2
 	github.com/robfig/cron v1.2.0
+	github.com/rs/xid v1.2.1
 	github.com/segmentio/ksuid v1.0.3
 	github.com/sirupsen/logrus v1.8.1
 	github.com/tal-tech/go-zero v1.1.7
