@@ -20,6 +20,83 @@ func NewBlogInfoServiceImpl() *BlogInfoServiceImpl {
 	return &BlogInfoServiceImpl{}
 }
 
+func (b *BlogInfoServiceImpl) GetAdminHomeData() (*pb.ScAdminHomeData, error) {
+	//TODO 可并行查询
+
+	// 查询访问量
+	blogViewsCountStr, err := common.GetRedisUtil().Get(common.BlogViewsCount)
+	if err != nil {
+		return nil, err
+	}
+	blogViewsCount, err := strconv.Atoi(blogViewsCountStr)
+	if err != nil {
+		return nil, err
+	}
+	// 查询留言量
+	messagesCount, err := model.GetMessagesCount()
+	if err != nil {
+		return nil, err
+	}
+	// 查询用户量
+	userCount, err := model.GetUserInfoCount()
+	if err != nil {
+		return nil, err
+	}
+	// 查询文章量
+	condition := "is_delete = ? and is_publish = ?"
+	articleCount, err := model.GetArticlesCountByCondition(condition, common.False, common.True)
+	if err != nil {
+		return nil, err
+	}
+
+	// 查询一周用户量
+	uniqueViews, err := model.GetWeekUniqueViews()
+	if err != nil {
+		return nil, err
+	}
+	var uniqueViewList []*pb.UniqueView
+	for _, uniqueView := range uniqueViews {
+		uniqueViewList = append(uniqueViewList, &pb.UniqueView{
+			Day:        uniqueView.CreateTime,
+			ViewsCount: int64(uniqueView.ViewsCount),
+		})
+
+	}
+	// 查询分类数据
+	categorys, err := model.GetCategoryList()
+	if err != nil {
+		return nil, err
+	}
+	logging.Logger.Debug(categorys)
+	var categoryList []*pb.Category
+	for _, category := range categorys {
+		categoryList = append(categoryList, &pb.Category{
+			Id:           int32(category.ID),
+			CategoryName: category.CategoryName,
+			ArticleCount: int32(category.ArticleCount),
+		})
+
+	}
+	// 查询访问量前五的文章
+	articleRank, err := model.GetViewCountRank(5)
+	var articleRankList []*pb.ArticleRank
+	for _, article := range articleRank {
+		articleRankList = append(articleRankList, &pb.ArticleRank{
+			ArticleTitle: article.ArticleTitle,
+			ViewsCount:   int64(article.ClickCount),
+		})
+	}
+	return &pb.ScAdminHomeData{
+		ViewsCount:      int64(blogViewsCount),
+		MessageCount:    messagesCount,
+		UserCount:       userCount,
+		ArticleCount:    articleCount,
+		UniqueViewList:  uniqueViewList,
+		CategoryList:    categoryList,
+		ArticleRankList: articleRankList,
+	}, nil
+}
+
 func (b *BlogInfoServiceImpl) GetAbout() (*pb.About, error) {
 	about, err := common.GetRedisUtil().Get(common.ABOUT)
 	logging.Logger.Debug(about)

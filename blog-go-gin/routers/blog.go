@@ -3,6 +3,7 @@ package routers
 import (
 	"blog-go-gin/common"
 	"blog-go-gin/handlers/blogApi"
+	"blog-go-gin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +22,7 @@ func blogRouters(r *gin.Engine) {
 	{
 		blog.GET(common.BlogInfoUrl, BlogInfoApi.GetBlogInfo)
 		blog.GET(common.ArticleList, ArticleApi.GetArticleList)
-		blog.GET(common.ArticleById, ArticleApi.GetArticleById)
+		blog.GET(common.ArticleById, middleware.StatisticArticleViews(), ArticleApi.GetArticleById)
 		blog.GET(common.Archive, ArticleApi.GetArticleArchives)
 		blog.GET(common.Tags, TagApi.GetTags)
 		blog.GET(common.Categories, CategoryApi.GetCategories)
@@ -35,5 +36,4 @@ func blogRouters(r *gin.Engine) {
 		blog.POST(common.Comments, CommentApi.AddComment)
 		blog.GET(common.Replies, CommentApi.GetReplies)
 	}
-
 }

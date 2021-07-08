@@ -9,6 +9,7 @@ type Category struct {
 	CategoryName string `gorm:"column:category_name;not null" json:"category_name"`
 	CreateTime   int64  `gorm:"column:create_time" json:"create_time"`
 	UpdateTime   int64  `gorm:"column:update_time" json:"update_time"`
+	ArticleCount int64  `gorm:"->"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -64,8 +65,8 @@ func GetCategoryCount() (count int64, err error) {
 
 func GetCategoryList() ([]*Category, error) {
 	res := make([]*Category, 0)
-	if err := dao.Db.Debug().Table("tb_category").Select("id,category_name,COUNT(1) as ").
-		Joins("tb_article a ON tb_category.id = a.category_id").Group("category_id").Error; err != nil {
+	if err := dao.Db.Debug().Table("tb_category as c").Select("c.id,category_name,COUNT(1) as article_count").
+		Joins("JOIN tb_article a ON c.id = a.category_id").Group("a.category_id").Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

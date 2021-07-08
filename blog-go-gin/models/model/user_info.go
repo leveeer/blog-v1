@@ -63,3 +63,11 @@ func GetUserInfos(condition string, args ...interface{}) ([]*UserInfo, error) {
 	}
 	return res, nil
 }
+
+func GetUserInfoCount() (count int64, err error) {
+	var userCount int64
+	if err := dao.Db.Debug().Table("tb_user_info").Count(&userCount).Error; err != nil {
+		return 0, err
+	}
+	return userCount, nil
+}

@@ -28,7 +28,7 @@ func InitWebRouter() *gin.Engine {
 		})
 		gin.SetMode(gin.ReleaseMode)
 	}
-	r.Use(middleware.LoggerMiddleware(), middleware.AppRecoveryMiddleware(), middleware.StatisticalViews())
+	r.Use(middleware.LoggerMiddleware(), middleware.AppRecoveryMiddleware(), middleware.StatisticWebSiteViews())
 	blogRouters(r)
 	userRouters(r)
 	adminRouters(r)

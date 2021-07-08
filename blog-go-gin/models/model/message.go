@@ -58,3 +58,11 @@ func GetMessages(condition string, args ...interface{}) ([]*Message, error) {
 	}
 	return res, nil
 }
+
+func GetMessagesCount() (count int64, err error) {
+	var messageCount int64
+	if err := dao.Db.Debug().Table("tb_message").Count(&messageCount).Error; err != nil {
+		return 0, err
+	}
+	return messageCount, nil
+}

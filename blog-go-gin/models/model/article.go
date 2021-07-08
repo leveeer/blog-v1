@@ -4,6 +4,7 @@ import (
 	"blog-go-gin/common"
 	"blog-go-gin/dao"
 	"blog-go-gin/models/page"
+	"gorm.io/gorm"
 )
 
 type Article struct {
@@ -49,7 +50,11 @@ func DeleteArticle(condition string, args ...interface{}) (int64, error) {
 }
 
 func UpdateArticle(m *Article) error {
-	return dao.Db.Table("tb_article").Save(m).Error
+	return dao.Db.Table("tb_article").Select("click_count").Save(m).Error
+}
+
+func UpdateArticleClickCount(articleId int) error {
+	return dao.Db.Debug().Table("tb_article").Where("id = ?", articleId).Select("click_count").Update("click_count", gorm.Expr("click_count + ?", 1)).Error
 }
 
 func GetArticleByID(id int) (*Article, error) {
@@ -143,6 +148,14 @@ func GetArchives(iPage *page.IPage) ([]*Article, error) {
 	if err := dao.Db.Debug().Table("tb_article").Select("id,article_title,create_time").Scopes(page.Paginate(iPage)).
 		Where("is_delete = ? and is_publish = ?", false, true).Order("create_time DESC").
 		Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetViewCountRank(rankNo int) ([]*Article, error) {
+	res := make([]*Article, 0)
+	if err := dao.Db.Debug().Order("click_count DESC").Limit(rankNo).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

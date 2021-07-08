@@ -91,6 +91,14 @@ func (r *RedisUtil) SIsMember(key, member string) (bool, error) {
 	return isExist, nil
 }
 
+func (r *RedisUtil) SCard(key string) (int64, error) {
+	result, err := r.redisClient.SCard(ctx, key).Result()
+	if err != nil {
+		return 0, err
+	}
+	return result, nil
+}
+
 func (r *RedisUtil) SRems(key string, members ...interface{}) {
 	r.redisClient.SRem(ctx, key, members)
 }
@@ -202,6 +210,21 @@ func (r *RedisUtil) HashGetAll(key string) (map[string]string, error) {
 	if err != nil {
 		logging.Logger.Error("Redis HashGetAll Error:", err)
 		return nil, err
+	}
+	return result, nil
+}
+
+func (r *RedisUtil) PFAdd(key string, els ...interface{}) error {
+	if err := r.redisClient.PFAdd(ctx, key, els...).Err(); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *RedisUtil) PFCount(keys ...string) (int64, error) {
+	result, err := r.redisClient.PFCount(ctx, keys...).Result()
+	if err != nil {
+		return 0, err
 	}
 	return result, nil
 }

@@ -721,7 +721,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
       UniqueView: {
         fields: {
           day: {
-            type: "string",
+            type: "int64",
             id: 1
           },
           viewsCount: {

@@ -183,7 +183,7 @@ message LoginResponse {
 }
 
 message UniqueView{
-  string day = 1;
+  int64 day = 1;
   int64 viewsCount = 2;
 }
 
