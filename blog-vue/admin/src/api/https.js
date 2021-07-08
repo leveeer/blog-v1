@@ -3,7 +3,7 @@ import Vue from "vue";
 import protobuf from "protobufjs";
 import protoRoot from "@/proto/proto";
 import {getResultCode} from "../utils/util";
-import {resultMap} from "../utils/constant";
+import {resultMap, tokenPrefix} from "../utils/constant";
 import store from "../store";
 
 
@@ -40,11 +40,12 @@ export const protoObj = {
 // request 拦截器 axios 的一些配置
 service.interceptors.request.use(
     config => {
-        config.headers.Authorization = "Bearer " + store.state.token;
+        config.headers.Authorization = tokenPrefix + store.state.token;
         let data;
         let encode;
         switch (config.method) {
             case "post":
+                console.log(config.headers.Authorization);
                 data = protoObj.RequestPkg.create(config.data);
                 encode = protoObj.RequestPkg.encode(data).finish();
                 config.data = protobuf.util.newBuffer(encode);

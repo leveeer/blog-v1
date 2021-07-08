@@ -1,6 +1,5 @@
 export const requestMap = {
   CsBeginIndex: "CsBeginIndex",
-
 };
 
 
@@ -12,3 +11,5 @@ export const resultMap = {
 };
 
 export const wsURL = "ws://localhost:33000";
+
+export const tokenPrefix = "Bearer ";

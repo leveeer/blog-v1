@@ -107,6 +107,7 @@ func (c *ArticleRestApi) UploadImage(ctx *gin.Context) {
 		c.RespFailWithDesc(ctx, http.StatusBadRequest, common.InvalidRequestParams)
 		return
 	}
+	logging.Logger.Debug(file.Filename)
 	picExpandedName := path.Ext(file.Filename)
 	newFilename := strconv.FormatInt(time.Now().Unix(), 10) + picExpandedName
 	savePath := conf.GetConf().QiNiu.ImageSavePath

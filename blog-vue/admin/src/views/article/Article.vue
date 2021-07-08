@@ -13,7 +13,7 @@
               size="medium"
               class="save-btn"
               @click="saveArticleDraft"
-              v-if="article.isDraft !== 0"
+              v-if="article.isDraft != 0"
       >
         保存草稿
       </el-button>
@@ -70,10 +70,11 @@
                   drag
                   action="/api/admin/articles/images"
                   multiple
+                  :headers="heads"
                   :on-success="uploadCover"
           >
-            <i class="el-icon-upload" v-if="article.articleCover === ''"/>
-            <div class="el-upload__text" v-if="article.articleCover === ''">
+            <i class="el-icon-upload" v-if="article.articleCover == ''"/>
+            <div class="el-upload__text" v-if="article.articleCover == ''">
               将文件拖到此处，或<em>点击上传</em>
             </div>
             <img
@@ -105,7 +106,8 @@
 </template>
 
 <script>
-  import {getArticleOptions, uploadImage} from "../../api/api";
+  import {getArticleOptions} from "../../api/api";
+  import {tokenPrefix} from "../../utils/constant";
 
   export default {
     created() {
@@ -138,119 +140,126 @@
           tagIdList: [],
           isTop: 0,
           isDraft: null
-      }
-    };
-  },
-  methods: {
-    listArticleOptions() {
-      getArticleOptions().then((data) => {
-        console.log(data);
-        this.categoryList = data.articleOptions.categoryList;
-        this.tagList = data.articleOptions.tagList;
-      });
-    },
-    uploadCover(response) {
-      this.article.articleCover = response.data;
-    },
-    uploadImg(pos, file) {
-      uploadImage(file)
-              .then((data) => {
-                console.log(data)
-                this.$refs.md.$img2Url(pos, data.data);
-              });
-    },
-    saveArticleDraft() {
-      if (this.article.articleTitle.trim() === "") {
-        this.$message.error("文章标题不能为空");
-        return false;
-      }
-      if (this.article.articleContent.trim() === "") {
-        this.$message.error("文章内容不能为空");
-        return false;
-      }
-      this.article.isDraft = 1;
-      this.axios.post("/api/admin/articles", this.article).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: "保存草稿成功"
-          });
-        } else {
-          this.$notify.error({
-            title: "失败",
-            message: "保存草稿失败"
-          });
+        },
+        heads: {
+          Authorization: tokenPrefix + this.$store.state.token,
         }
-      });
-      //关闭自动保存功能
-      this.autoSave = false;
+      };
     },
-    saveOrUpdateArticle() {
-      if (this.article.articleTitle.trim() === "") {
-        this.$message.error("文章标题不能为空");
-        return false;
-      }
-      if (this.article.articleContent.trim() === "") {
-        this.$message.error("文章内容不能为空");
-        return false;
-      }
-      if (!this.article.categoryId) {
-        this.$message.error("文章分类不能为空");
-        return false;
-      }
-      if (this.article.tagIdList.length === 0) {
-        this.$message.error("文章标签不能为空");
-        return false;
-      }
-      if (this.article.articleCover.trim() === "") {
-        this.$message.error("文章封面不能为空");
-        return false;
-      }
-      this.article.isDraft = 0;
-      this.axios.post("/api/admin/articles", this.article).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-        } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
-        }
-        this.addOrEdit = false;
-      });
-      //关闭自动保存功能
-      this.autoSave = false;
-    },
-    autoSaveArticle() {
-      if (
-              this.autoSave &&
-              this.article.articleTitle.trim() !== "" &&
-              this.article.articleContent.trim() !== ""
-      ) {
-        this.article.isDraft =
-                this.article.isDraft === 0 ? this.article.isDraft : 1;
+    methods: {
+      listArticleOptions() {
+        getArticleOptions().then((data) => {
+          // console.log(data);
+          this.categoryList = data.articleOptions.categoryList;
+          this.tagList = data.articleOptions.tagList;
+        });
+      },
+      uploadCover(response) {
+        console.log(response);
+        this.article.articleCover = response.data;
+      },
+
+      uploadImg(pos, file) {
+        var formdata = new FormData();
+        formdata.append("file", file);
         this.axios
-                .post("/api/admin/articles", this.article)
+                .post("/api/admin/articles/images", formdata)
                 .then(({data}) => {
-                  if (data.flag) {
-                    this.$notify.success({
-                      title: "成功",
-                      message: "自动保存成功"
-                    });
-                  } else {
-                    this.$notify.error({
-                      title: "失败",
-                      message: "自动保存失败"
-                    });
-                  }
+                  this.$refs.md.$img2Url(pos, data.data);
                 });
+      },
+      saveArticleDraft() {
+        if (this.article.articleTitle.trim() === "") {
+          this.$message.error("文章标题不能为空");
+          return false;
+        }
+        if (this.article.articleContent.trim() == "") {
+          this.$message.error("文章内容不能为空");
+          return false;
+        }
+        this.article.isDraft = 1;
+        this.axios.post("/api/admin/articles", this.article).then(({data}) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: "保存草稿成功"
+            });
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: "保存草稿失败"
+            });
+          }
+        });
+        //关闭自动保存功能
+        this.autoSave = false;
+      },
+      saveOrUpdateArticle() {
+        if (this.article.articleTitle.trim() == "") {
+          this.$message.error("文章标题不能为空");
+          return false;
+        }
+        if (this.article.articleContent.trim() == "") {
+          this.$message.error("文章内容不能为空");
+          return false;
+        }
+        if (!this.article.categoryId) {
+          this.$message.error("文章分类不能为空");
+          return false;
+        }
+        if (this.article.tagIdList.length == 0) {
+          this.$message.error("文章标签不能为空");
+          return false;
+        }
+        if (this.article.articleCover.trim() == "") {
+          this.$message.error("文章封面不能为空");
+          return false;
+        }
+        this.article.isDraft = 0;
+        this.axios.post("/api/admin/articles", this.article).then(({data}) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+          this.addOrEdit = false;
+        });
+        //关闭自动保存功能
+        this.autoSave = false;
+      },
+      autoSaveArticle() {
+        if (
+                this.autoSave &&
+                this.article.articleTitle.trim() != "" &&
+                this.article.articleContent.trim() != ""
+        ) {
+          this.article.isDraft =
+                  this.article.isDraft == 0 ? this.article.isDraft : 1;
+          this.axios
+                  .post("/api/admin/articles", this.article)
+                  .then(({data}) => {
+                    if (data.flag) {
+                      this.$notify.success({
+                        title: "成功",
+                        message: "自动保存成功"
+                      });
+                    } else {
+                      this.$notify.error({
+                        title: "失败",
+                        message: "自动保存失败"
+                      });
+                    }
+                  });
+        }
       }
-    }
-  }
-};
+    },
+  };
 </script>
 
 <style scoped>
