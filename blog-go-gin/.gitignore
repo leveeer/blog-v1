@@ -43,3 +43,4 @@ config/app.yaml
 /tests/config.json
 /dist/
 /prof/*
+/images/*
