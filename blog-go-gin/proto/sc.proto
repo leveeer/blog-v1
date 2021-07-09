@@ -36,6 +36,11 @@ message ResponsePkg {
   repeated ScUserMenuMessage userMenu = 19;
   ScAdminHomeData adminHomeData = 20;
   ScArticleOptions articleOptions = 21;
+  ScImage uploadImage = 22;
+}
+
+message ScImage{
+  string key = 1;
 }
 
 message ScChat{

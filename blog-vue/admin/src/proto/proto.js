@@ -847,6 +847,18 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           articleOptions: {
             type: "ScArticleOptions",
             id: 21
+          },
+          uploadImage: {
+            type: "ScImage",
+            id: 22
+          }
+        }
+      },
+      ScImage: {
+        fields: {
+          key: {
+            type: "string",
+            id: 1
           }
         }
       },

@@ -4,6 +4,7 @@ import (
 	"blog-go-gin/common"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/helper"
+	"blog-go-gin/logging"
 	"fmt"
 	"net/http"
 	"time"
@@ -22,6 +23,7 @@ func AuthCheckRole() gin.HandlerFunc {
 		ok, err := e.Enforce(v["rolekey"], c.Request.URL.Path, c.Request.Method)
 		common.HasError(err, "", 500)
 		fmt.Printf("[INFO] %s %s %s \r\n", c.Request.Method, c.Request.URL.Path, v["rolekey"])
+		logging.Logger.Debug(ok)
 		if !ok {
 			data := &pb.ResponsePkg{
 				Code:       pb.ResultCode_Forbidden,

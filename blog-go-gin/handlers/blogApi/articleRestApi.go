@@ -11,6 +11,7 @@ import (
 	"blog-go-gin/service/impl"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 	"path"
 	"strconv"
 	"time"
@@ -111,19 +112,26 @@ func (c *ArticleRestApi) UploadImage(ctx *gin.Context) {
 	picExpandedName := path.Ext(file.Filename)
 	newFilename := strconv.FormatInt(time.Now().Unix(), 10) + picExpandedName
 	savePath := conf.GetConf().QiNiu.ImageSavePath
+	_, err = os.Stat(savePath)
+	if !os.IsExist(err) {
+		if err := os.MkdirAll(savePath, os.ModePerm); err != nil {
+			panic(err)
+		}
+	}
 	dst := path.Join(savePath, newFilename)
 	_ = ctx.SaveUploadedFile(file, dst)
 	key, err := ArticleService.UploadImage(dst)
-	logging.Logger.Debug(key)
 	if err != nil {
 		c.RespFailWithDesc(ctx, http.StatusBadRequest, common.UploadImageFail)
 		return
 	}
 	data := &pb.ResponsePkg{
-		CmdId:      pb.Response_ResponseBeginIndex,
-		Code:       pb.ResultCode_SuccessOK,
-		ServerTime: time.Now().Unix(),
-		Message:    "上传成功",
+		CmdId:       pb.Response_ResponseBeginIndex,
+		Code:        pb.ResultCode_SuccessOK,
+		ServerTime:  time.Now().Unix(),
+		Message:     "上传成功",
+		UploadImage: &pb.ScImage{Key: key},
 	}
+
 	c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, data)
 }

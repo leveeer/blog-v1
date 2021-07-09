@@ -13,3 +13,5 @@ export const resultMap = {
 export const wsURL = "ws://localhost:33000";
 
 export const tokenPrefix = "Bearer ";
+
+export const imagePrefix = "http://qiniu.drunkery.cn/";

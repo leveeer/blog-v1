@@ -82,7 +82,7 @@
                     :src="article.articleCover"
                     width="360px"
                     height="180px"
-            />
+             alt=""/>
           </el-upload>
         </el-form-item>
         <el-form-item label="置顶">
@@ -107,7 +107,7 @@
 
 <script>
   import {getArticleOptions} from "../../api/api";
-  import {tokenPrefix} from "../../utils/constant";
+  import {imagePrefix, tokenPrefix} from "../../utils/constant";
 
   export default {
     created() {
@@ -155,8 +155,8 @@
         });
       },
       uploadCover(response) {
-        console.log(response);
-        this.article.articleCover = response.data;
+        console.log(response.data);
+        this.article.articleCover = imagePrefix + response.data.uploadImage.key;
       },
 
       uploadImg(pos, file) {
