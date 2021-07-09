@@ -216,6 +216,7 @@
         }
         this.article.isDraft = 0;
         addArticle({article: this.article}).then((data) => {
+          console.log(data)
           if (data.code === getResultCode(resultMap.SuccessOK)) {
             this.$notify.success({
               title: "成功",

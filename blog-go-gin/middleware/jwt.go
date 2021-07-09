@@ -146,7 +146,29 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 			data := &pb.ResponsePkg{
 				Code:       pb.ResultCode_Fail,
 				ServerTime: time.Now().Unix(),
-				Message:    common.GetMsg(common.LoginFail),
+				Message:    message,
+			}
+			c.ProtoBuf(http.StatusOK, data)
+		},
+
+		RefreshResponse: func(c *gin.Context, code int, message string, t time.Time) {
+			tokenString, expire, err := authMiddleware.RefreshToken(c)
+			if err != nil {
+				data := &pb.ResponsePkg{
+					Code:       pb.ResultCode_SuccessOK,
+					ServerTime: time.Now().Unix(),
+					Message:    common.GetMsg(common.TokenHasExpired),
+				}
+				c.ProtoBuf(http.StatusOK, data)
+				return
+			}
+			loginResponse.Token = tokenString
+			c.Set("token", tokenString)
+			c.Set("expire", expire)
+			data := &pb.ResponsePkg{
+				Code:          pb.ResultCode_SuccessOK,
+				ServerTime:    time.Now().Unix(),
+				LoginResponse: loginResponse,
 			}
 			c.ProtoBuf(http.StatusOK, data)
 		},
