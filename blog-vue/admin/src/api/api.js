@@ -30,3 +30,7 @@ export function uploadImage(file) {
         }
     })
 }
+
+export function addArticle(params) {
+    return service.post(urls.articles, params)
+}

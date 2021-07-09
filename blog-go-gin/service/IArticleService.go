@@ -13,4 +13,5 @@ type IArticleService interface {
 	GetArticleByTagID(tagId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error)
 	GetArticleOptions() (*pb.ScArticleOptions, error)
 	UploadImage(filepath string) (string, error)
+	AddArticle(article *pb.CsArticle) error
 }

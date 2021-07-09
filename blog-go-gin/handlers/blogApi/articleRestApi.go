@@ -10,6 +10,8 @@ import (
 	"blog-go-gin/service"
 	"blog-go-gin/service/impl"
 	"github.com/gin-gonic/gin"
+	"github.com/golang/protobuf/proto"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -137,4 +139,34 @@ func (c *ArticleRestApi) UploadImage(ctx *gin.Context) {
 	} else {
 		c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, data)
 	}
+}
+
+func (c *ArticleRestApi) AddArticle(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request)
+	err = ArticleService.AddArticle(request.Article)
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.AddArticleFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+		Message:    "添加成功",
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+
 }

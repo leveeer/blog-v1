@@ -90,6 +90,7 @@ const (
 	GetHomeDataFail
 	GetArticleOptionsFail
 	UploadImageFail
+	AddArticleFail
 )
 
 // unknown group
@@ -180,6 +181,7 @@ var Error = map[ErrorCode]error{
 	GetHomeDataFail:            errors.New("获取首页数据失败"),
 	GetArticleOptionsFail:      errors.New("获取文章相关数据失败"),
 	UploadImageFail:            errors.New("上传图片失败"),
+	AddArticleFail:             errors.New("添加文章失败"),
 }
 
 func GetMsg(code ErrorCode) string {

@@ -13,6 +13,12 @@ type ArticleServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func (b *ArticleServiceImpl) AddArticle(csArticle *pb.CsArticle) error {
+	//文章表
+	//标签表
+	return nil
+}
+
 func (b *ArticleServiceImpl) UploadImage(filepath string) (string, error) {
 	key, err := common.GetQiNiuUtil().UploadQiNiu(filepath)
 	if err != nil {

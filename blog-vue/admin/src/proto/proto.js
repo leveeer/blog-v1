@@ -58,6 +58,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           token: {
             type: "string",
             id: 9
+          },
+          article: {
+            type: "CsArticle",
+            id: 10
           }
         }
       },
@@ -137,6 +141,43 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           },
           createTime: {
             type: "int64",
+            id: 8
+          }
+        }
+      },
+      CsArticle: {
+        fields: {
+          id: {
+            type: "uint32",
+            id: 1
+          },
+          articleTitle: {
+            type: "string",
+            id: 2
+          },
+          articleContent: {
+            type: "string",
+            id: 3
+          },
+          articleCover: {
+            type: "string",
+            id: 4
+          },
+          categoryId: {
+            type: "uint32",
+            id: 5
+          },
+          tagIdList: {
+            rule: "repeated",
+            type: "uint32",
+            id: 6
+          },
+          isTop: {
+            type: "bool",
+            id: 7
+          },
+          isPublish: {
+            type: "bool",
             id: 8
           }
         }

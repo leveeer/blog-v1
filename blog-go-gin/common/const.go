@@ -63,4 +63,5 @@ const (
 	AdminHomeData  = ""
 	ArticleOptions = "/articles/options"
 	UploadImage    = "/articles/images"
+	Articles       = "/articles"
 )

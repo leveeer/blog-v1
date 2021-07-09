@@ -106,9 +106,9 @@
 </template>
 
 <script>
-  import {getArticleOptions, uploadImage} from "../../api/api";
-  import {imagePrefix, tokenPrefix} from "../../utils/constant";
-  import {protoObj} from "../../api/https";
+  import {addArticle, getArticleOptions, uploadImage} from "../../api/api";
+  import {imagePrefix, resultMap, tokenPrefix} from "../../utils/constant";
+  import {getResultCode} from "../../utils/util";
 
   export default {
     created() {
@@ -134,7 +134,8 @@
         tagList: [],
         article: {
           id: null,
-          articleTitle: this.$moment(new Date()).format("YYYY-MM-DD"),
+          // articleTitle: this.$moment(new Date()).format("YYYY-MM-DD"),
+          articleTitle: "",
           articleContent: "",
           articleCover: "",
           categoryId: null,
@@ -193,11 +194,11 @@
         this.autoSave = false;
       },
       saveOrUpdateArticle() {
-        if (this.article.articleTitle.trim() == "") {
+        if (this.article.articleTitle.trim() === "") {
           this.$message.error("文章标题不能为空");
           return false;
         }
-        if (this.article.articleContent.trim() == "") {
+        if (this.article.articleContent.trim() === "") {
           this.$message.error("文章内容不能为空");
           return false;
         }
@@ -205,17 +206,17 @@
           this.$message.error("文章分类不能为空");
           return false;
         }
-        if (this.article.tagIdList.length == 0) {
+        if (this.article.tagIdList.length === 0) {
           this.$message.error("文章标签不能为空");
           return false;
         }
-        if (this.article.articleCover.trim() == "") {
+        if (this.article.articleCover.trim() === "") {
           this.$message.error("文章封面不能为空");
           return false;
         }
         this.article.isDraft = 0;
-        this.axios.post("/api/admin/articles", this.article).then(({data}) => {
-          if (data.flag) {
+        addArticle({article: this.article}).then((data) => {
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
             this.$notify.success({
               title: "成功",
               message: data.message
@@ -234,11 +235,11 @@
       autoSaveArticle() {
         if (
                 this.autoSave &&
-                this.article.articleTitle.trim() != "" &&
-                this.article.articleContent.trim() != ""
+                this.article.articleTitle.trim() !== "" &&
+                this.article.articleContent.trim() !== ""
         ) {
           this.article.isDraft =
-                  this.article.isDraft == 0 ? this.article.isDraft : 1;
+                  this.article.isDraft === 0 ? this.article.isDraft : 1;
           this.axios
                   .post("/api/admin/articles", this.article)
                   .then(({data}) => {
