@@ -18,7 +18,15 @@ export function getArticleOptions() {
 }
 
 export function uploadImage(file) {
-    const formdata = new FormData();
+    var formdata = new FormData();
     formdata.append("file", file);
-    return service.post(urls.upload_image, formdata)
+    let params = {
+        index: 1,
+    };
+    formdata.append("index", params.index);
+    return service.post(urls.upload_image, formdata, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
 }

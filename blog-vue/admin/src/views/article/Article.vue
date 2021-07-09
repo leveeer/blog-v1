@@ -106,8 +106,9 @@
 </template>
 
 <script>
-  import {getArticleOptions} from "../../api/api";
+  import {getArticleOptions, uploadImage} from "../../api/api";
   import {imagePrefix, tokenPrefix} from "../../utils/constant";
+  import {protoObj} from "../../api/https";
 
   export default {
     created() {
@@ -155,25 +156,22 @@
         });
       },
       uploadCover(response) {
-        console.log(response.data);
+        console.log(response);
         this.article.articleCover = imagePrefix + response.data.uploadImage.key;
       },
 
       uploadImg(pos, file) {
-        var formdata = new FormData();
-        formdata.append("file", file);
-        this.axios
-                .post("/api/admin/articles/images", formdata)
-                .then(({data}) => {
-                  this.$refs.md.$img2Url(pos, data.data);
-                });
+        uploadImage(file).then((data) => {
+          console.log(data);
+          this.$refs.md.$img2Url(pos, imagePrefix + data.uploadImage.key);
+        });
       },
       saveArticleDraft() {
         if (this.article.articleTitle.trim() === "") {
           this.$message.error("文章标题不能为空");
           return false;
         }
-        if (this.article.articleContent.trim() == "") {
+        if (this.article.articleContent.trim() === "") {
           this.$message.error("文章内容不能为空");
           return false;
         }

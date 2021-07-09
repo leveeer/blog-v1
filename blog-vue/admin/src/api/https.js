@@ -15,15 +15,18 @@ if (process.env.NODE_ENV === "development") {
         timeout: 5000, // 请求超时时间
         responseType: "arraybuffer",
         headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            "Content-Type": "application/x-protobuf"
+            "Authorization": tokenPrefix + store.state.token,
         }
     });
 } else {
   // 生产环境下
   service = axios.create({
-    baseURL: "/api",
-    timeout: 5000
+      baseURL: "/api", // api 的 base_url
+      timeout: 2000, // 请求超时时间
+      responseType: "arraybuffer",
+      headers: {
+          "Authorization": tokenPrefix + store.state.token,
+      }
   });
 }
 
@@ -40,12 +43,11 @@ export const protoObj = {
 // request 拦截器 axios 的一些配置
 service.interceptors.request.use(
     config => {
-        config.headers.Authorization = tokenPrefix + store.state.token;
         let data;
         let encode;
         switch (config.method) {
             case "post":
-                console.log(config.headers.Authorization);
+                if (config.headers['Content-Type'] === 'multipart/form-data') return config;
                 data = protoObj.RequestPkg.create(config.data);
                 encode = protoObj.RequestPkg.encode(data).finish();
                 config.data = protobuf.util.newBuffer(encode);

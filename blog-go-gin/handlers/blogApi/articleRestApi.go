@@ -104,11 +104,11 @@ func (c *ArticleRestApi) GetArticleOptions(ctx *gin.Context) {
 
 func (c *ArticleRestApi) UploadImage(ctx *gin.Context) {
 	file, err := ctx.FormFile("file")
+	_, ok := ctx.GetPostForm("index")
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusBadRequest, common.InvalidRequestParams)
+		c.ProtoBufFail(ctx, http.StatusBadRequest, common.InvalidRequestParams)
 		return
 	}
-	logging.Logger.Debug(file.Filename)
 	picExpandedName := path.Ext(file.Filename)
 	newFilename := strconv.FormatInt(time.Now().Unix(), 10) + picExpandedName
 	savePath := conf.GetConf().QiNiu.ImageSavePath
@@ -122,7 +122,7 @@ func (c *ArticleRestApi) UploadImage(ctx *gin.Context) {
 	_ = ctx.SaveUploadedFile(file, dst)
 	key, err := ArticleService.UploadImage(dst)
 	if err != nil {
-		c.RespFailWithDesc(ctx, http.StatusBadRequest, common.UploadImageFail)
+		c.ProtoBufFail(ctx, http.StatusBadRequest, common.UploadImageFail)
 		return
 	}
 	data := &pb.ResponsePkg{
@@ -132,6 +132,9 @@ func (c *ArticleRestApi) UploadImage(ctx *gin.Context) {
 		Message:     "上传成功",
 		UploadImage: &pb.ScImage{Key: key},
 	}
-
-	c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, data)
+	if ok {
+		c.ProtoBuf(ctx, http.StatusOK, data)
+	} else {
+		c.RespSuccess(ctx, http.StatusOK, common.SuccessOK, data)
+	}
 }
