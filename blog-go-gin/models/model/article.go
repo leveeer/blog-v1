@@ -159,7 +159,8 @@ func GetArchives(iPage *page.IPage) ([]*Article, error) {
 
 func GetViewCountRank(rankNo int) ([]*Article, error) {
 	res := make([]*Article, 0)
-	if err := dao.Db.Debug().Order("click_count DESC").Limit(rankNo).Find(&res).Error; err != nil {
+	if err := dao.Db.Debug().Where("is_delete = ? and is_publish = ?", false, true).
+		Order("click_count DESC").Limit(rankNo).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

@@ -200,7 +200,7 @@
 
         if (data.adminHomeData.uniqueViewList != null) {
           data.adminHomeData.uniqueViewList.forEach(item => {
-            this.viewCount.xAxis.data.push(dateFormat(item.day));
+            this.viewCount.xAxis.data.push(dateFormat(item.day - 24 * 60));
             this.viewCount.series[0].data.push(item.viewsCount == null ? 0 : item.viewsCount);
           });
         }
