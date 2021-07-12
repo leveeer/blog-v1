@@ -17,7 +17,7 @@ require (
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/mattn/go-colorable v0.1.8
 	github.com/oklog/ulid/v2 v2.0.2
-	github.com/qiniu/api.v7/v7 v7.8.2
+	github.com/qiniu/go-sdk/v7 v7.9.7
 	github.com/robfig/cron v1.2.0
 	github.com/rs/xid v1.2.1
 	github.com/segmentio/ksuid v1.0.3

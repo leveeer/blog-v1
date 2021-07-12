@@ -3,8 +3,8 @@ package common
 import (
 	conf "blog-go-gin/config"
 	"fmt"
-	"github.com/qiniu/api.v7/v7/auth/qbox"
-	"github.com/qiniu/api.v7/v7/storage"
+	"github.com/qiniu/go-sdk/v7/auth/qbox"
+	"github.com/qiniu/go-sdk/v7/storage"
 	"github.com/rs/xid"
 )
 

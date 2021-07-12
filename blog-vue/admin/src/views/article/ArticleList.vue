@@ -287,6 +287,7 @@ export default {
       });
     },
     editArticle(id) {
+      console.log(id)
       this.$router.push({ path: "/articles/" + id });
     },
     updateArticleStatus(id) {
@@ -296,7 +297,7 @@ export default {
       } else {
         param.append("idList", this.articleIdList);
       }
-      param.append("isDelete", this.isDelete == 0 ? 1 : 0);
+      param.append("isDelete", (this.isDelete === 0 ? 1 : 0).toString());
       this.axios.put("/api/admin/articles", param).then(({ data }) => {
         if (data.flag) {
           this.$notify.success({
