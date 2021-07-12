@@ -286,7 +286,7 @@ func (b *ArticleServiceImpl) GetArchiveList(ipage *page.IPage) (*pb.Archives, er
 
 func (b *ArticleServiceImpl) GetArticleByCategoryID(categoryId int, iPage *page.IPage) (*pb.ArticlesByCategoryOrTag, error) {
 	var articleSlice []*pb.Article
-	articles, err := model.GetArticlesByConditionWithPage("category_id = ?", iPage, categoryId)
+	articles, err := model.GetArticlesByConditionWithPage("category_id = ? AND is_delete = 0 AND is_publish = 1", iPage, categoryId)
 	if err != nil {
 		return nil, err
 	}

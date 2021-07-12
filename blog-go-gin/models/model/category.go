@@ -66,7 +66,8 @@ func GetCategoryCount() (count int64, err error) {
 func GetCategoryList() ([]*Category, error) {
 	res := make([]*Category, 0)
 	if err := dao.Db.Debug().Table("tb_category as c").Select("c.id,category_name,COUNT(1) as article_count").
-		Joins("JOIN tb_article a ON c.id = a.category_id").Group("a.category_id").Find(&res).Error; err != nil {
+		Joins("JOIN tb_article a ON c.id = a.category_id where a.is_delete = 0 AND a.is_publish = 1").
+		Group("a.category_id").Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

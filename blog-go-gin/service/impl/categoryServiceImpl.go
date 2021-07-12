@@ -23,7 +23,7 @@ func (receiver *CategoryServiceImpl) GetCategories() ([]*pb.Category, error) {
 	}
 	var categorySlice []*pb.Category
 	for _, category := range categories {
-		count, err := model.GetArticlesCountByCondition("category_id = ?", category.ID)
+		count, err := model.GetArticlesCountByCondition("category_id = ? AND is_delete = 0 AND is_publish = 1", category.ID)
 		logging.Logger.Debug(count)
 		if err != nil {
 			return nil, err
