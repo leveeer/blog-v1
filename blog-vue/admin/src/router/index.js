@@ -25,7 +25,7 @@ export function resetRouter() {
   router.matcher = newRouter.matcher;
 }
 
-const originalPush = router.push
+const originalPush = router.push;
 router.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 };

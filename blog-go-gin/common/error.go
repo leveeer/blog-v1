@@ -183,7 +183,7 @@ var Error = map[ErrorCode]error{
 	GetArticleOptionsFail:      errors.New("获取文章相关数据失败"),
 	UploadImageFail:            errors.New("上传图片失败"),
 	AddArticleFail:             errors.New("添加文章失败"),
-	TokenHasExpired:            errors.New("token已过期"),
+	TokenHasExpired:            errors.New("token is "),
 }
 
 func GetMsg(code ErrorCode) string {

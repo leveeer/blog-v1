@@ -50,8 +50,8 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
 		Key:         []byte("secret key"),
-		Timeout:     time.Minute * 30,
-		MaxRefresh:  time.Hour,
+		Timeout:     time.Second * 30,
+		MaxRefresh:  time.Second * 120,
 		IdentityKey: common.IdentityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			logging.Logger.Debug("执行PayloadFunc")
@@ -144,7 +144,7 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 		//handles unauthorized logic
 		Unauthorized: func(c *gin.Context, code int, message string) {
 			data := &pb.ResponsePkg{
-				Code:       pb.ResultCode_Fail,
+				Code:       pb.ResultCode(code),
 				ServerTime: time.Now().Unix(),
 				Message:    message,
 			}
@@ -152,6 +152,7 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 		},
 
 		RefreshResponse: func(c *gin.Context, code int, message string, t time.Time) {
+			logging.Logger.Debugf("code: %d,message: %s, time: %v", code, message, t)
 			tokenString, expire, err := authMiddleware.RefreshToken(c)
 			if err != nil {
 				data := &pb.ResponsePkg{
@@ -162,13 +163,12 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 				c.ProtoBuf(http.StatusOK, data)
 				return
 			}
-			loginResponse.Token = tokenString
 			c.Set("token", tokenString)
 			c.Set("expire", expire)
 			data := &pb.ResponsePkg{
 				Code:          pb.ResultCode_SuccessOK,
 				ServerTime:    time.Now().Unix(),
-				LoginResponse: loginResponse,
+				LoginResponse: &pb.LoginResponse{Token: tokenString},
 			}
 			c.ProtoBuf(http.StatusOK, data)
 		},

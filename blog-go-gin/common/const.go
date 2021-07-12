@@ -64,4 +64,5 @@ const (
 	ArticleOptions = "/articles/options"
 	UploadImage    = "/articles/images"
 	Articles       = "/articles"
+	RefreshToken   = "/refresh_token"
 )

@@ -55,7 +55,7 @@ func GetUniqueViews(condition string, args ...interface{}) ([]*UniqueView, error
 
 func GetWeekUniqueViews() ([]*UniqueView, error) {
 	res := make([]*UniqueView, 0)
-	if err := dao.Db.Debug().Order("create_time DESC").Limit(7).Find(&res).Error; err != nil {
+	if err := dao.Db.Debug().Order("create_time ASC").Limit(7).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil

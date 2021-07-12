@@ -793,6 +793,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           Success: 0,
           Fail: 1,
           SuccessOK: 10000,
+          TokenExpired: 401,
           Forbidden: 403
         }
       },

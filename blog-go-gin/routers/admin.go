@@ -16,7 +16,7 @@ func adminRouters(r *gin.Engine) {
 	authMiddleware := jwtMiddleware.GinJWTMiddlewareInit()
 	admin := r.Group(common.AdminBaseUrl)
 	admin.POST(common.Login, authMiddleware.LoginHandler)
-	admin.GET("/refresh_token", authMiddleware.RefreshHandler) //刷新token
+	admin.GET(common.RefreshToken, authMiddleware.RefreshHandler) //刷新token
 	admin.Use(authMiddleware.MiddlewareFunc(), middleware.AuthCheckRole())
 	{
 		admin.GET(common.UserMenu, MenuApi.GetUserMenus)

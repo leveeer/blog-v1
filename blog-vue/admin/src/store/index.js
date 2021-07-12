@@ -47,6 +47,10 @@ export default new Vuex.Store({
     saveUserMenuList(state, userMenuList) {
       state.userMenuList = userMenuList;
     },
+
+    refreshToken(state, token) {
+      state.token = token;
+    },
     logout(state) {
       state.userId = null;
       state.roleList = null;
@@ -55,6 +59,7 @@ export default new Vuex.Store({
       state.intro = null;
       state.webSite = null;
       state.userMenuList = [];
+      state.token = null;
     },
     updateAvatar(state, avatar) {
       state.avatar = avatar;

@@ -5,6 +5,7 @@ export const urls = {
   article_options: "/admin/articles/options",
   upload_image: "/admin/articles/images",
   articles: "/admin/articles",
+  refresh_token: "/admin/refresh_token",
 };
 
 export default urls;

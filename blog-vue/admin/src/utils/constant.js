@@ -8,6 +8,7 @@ export const resultMap = {
   Fail: "Fail",
   SuccessOK: "SuccessOK",
   Forbidden: "Forbidden",
+  TokenExpired: "TokenExpired",
 };
 
 export const wsURL = "ws://localhost:33000";

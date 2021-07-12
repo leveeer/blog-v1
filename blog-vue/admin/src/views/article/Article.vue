@@ -234,28 +234,21 @@
         this.autoSave = false;
       },
       autoSaveArticle() {
-        if (
-                this.autoSave &&
-                this.article.articleTitle.trim() !== "" &&
-                this.article.articleContent.trim() !== ""
-        ) {
-          this.article.isDraft =
-                  this.article.isDraft === 0 ? this.article.isDraft : 1;
-          this.axios
-                  .post("/api/admin/articles", this.article)
-                  .then(({data}) => {
-                    if (data.flag) {
-                      this.$notify.success({
-                        title: "成功",
-                        message: "自动保存成功"
-                      });
-                    } else {
-                      this.$notify.error({
-                        title: "失败",
-                        message: "自动保存失败"
-                      });
-                    }
-                  });
+        if (this.autoSave && this.article.articleTitle.trim() !== "" && this.article.articleContent.trim() !== "") {
+          this.article.isDraft = this.article.isDraft === 0 ? this.article.isDraft : 1;
+          this.axios.post("/api/admin/articles", this.article).then(({data}) => {
+            if (data.flag) {
+              this.$notify.success({
+                title: "成功",
+                message: "自动保存成功"
+              });
+            } else {
+              this.$notify.error({
+                title: "失败",
+                message: "自动保存失败"
+              });
+            }
+          });
         }
       }
     },

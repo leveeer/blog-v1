@@ -37,32 +37,32 @@
 </template>
 
 <script>
-import { generaMenu } from "../../assets/js/menu";
-import {adminLogin, getUserMenu} from "../../api/api";
-import {getResultCode} from "../../utils/util";
-import {resultMap} from "../../utils/constant";
+  import {generaMenu} from "../../assets/js/menu";
+  import {adminLogin} from "../../api/api";
+  import {getResultCode} from "../../utils/util";
+  import {resultMap} from "../../utils/constant";
 
-export default {
-  data: function() {
-    return {
-      loginForm: {
-        username: "",
-        password: ""
-      },
-      rules: {
-        username: [
-          { required: true, message: "用户名不能为空", trigger: "blur" }
-        ],
-        password: [{ required: true, message: "密码不能为空", trigger: "blur" }]
-      }
-    };
-  },
-  methods: {
-    login() {
-      this.$refs.ruleForm.validate(valid => {
-        if (valid) {
-          const that = this;
-          // eslint-disable-next-line no-undef
+  export default {
+    data: function () {
+      return {
+        loginForm: {
+          username: "",
+          password: ""
+        },
+        rules: {
+          username: [
+            {required: true, message: "用户名不能为空", trigger: "blur"}
+          ],
+          password: [{required: true, message: "密码不能为空", trigger: "blur"}]
+        }
+      };
+    },
+    methods: {
+      login() {
+        this.$refs.ruleForm.validate(valid => {
+          if (valid) {
+            const that = this;
+            // eslint-disable-next-line no-undef
           const captcha = new TencentCaptcha(this.config.TENCENT_CAPTCHA, function(res) {
               if (res.ret === 0) {
                 //发送登录请求
@@ -72,14 +72,15 @@ export default {
                     password: that.loginForm.password
                   }
                 }).then(( data ) => {
-                  console.log(data)
+                  console.log(data);
                   if (data.code === getResultCode(resultMap.SuccessOK)) {
                     // 登录后保存用户信息
                     that.$store.commit("login", data.loginResponse);
+                    sessionStorage.setItem("token",data.loginResponse.token);
                     // 加载用户菜单
                     generaMenu();
                     that.$message.success("登录成功");
-                    that.$router.push({ path: "/" });
+                    that.$router.push({path: "/"});
                   } else {
                     that.$message.error(data.message);
                   }

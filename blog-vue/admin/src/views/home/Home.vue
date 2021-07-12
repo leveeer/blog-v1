@@ -78,29 +78,30 @@
 </template>
 
 <script>
-import {getHomeData} from "../../api/api";
+  import {getHomeData} from "../../api/api";
+  import {dateFormat} from "../../utils/util";
 
-export default {
-  created() {
-    this.getData();
-  },
-  data: function() {
-    return {
-      loading: true,
-      viewsCount: 0,
-      messageCount: 0,
-      userCount: 0,
-      articleCount: 0,
-      viewCount: {
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross"
-          }
-        },
-        color: ["#3888fa"],
-        legend: {
-          data: ["访问量"]
+  export default {
+    created() {
+      this.getData();
+    },
+    data: function () {
+      return {
+        loading: true,
+        viewsCount: 0,
+        messageCount: 0,
+        userCount: 0,
+        articleCount: 0,
+        viewCount: {
+          tooltip: {
+            trigger: "axis",
+            axisPointer: {
+              type: "cross"
+            }
+          },
+          color: ["#3888fa"],
+          legend: {
+            data: ["访问量"]
         },
         grid: {
           left: "0%",
@@ -191,7 +192,7 @@ export default {
   methods: {
     getData() {
       getHomeData().then(( data ) => {
-        console.log(data)
+        console.log(data);
         this.viewsCount = data.adminHomeData.viewsCount;
         this.messageCount = data.adminHomeData.messageCount;
         this.userCount = data.adminHomeData.userCount;
@@ -199,8 +200,8 @@ export default {
 
         if (data.adminHomeData.uniqueViewList != null) {
           data.adminHomeData.uniqueViewList.forEach(item => {
-            this.viewCount.xAxis.data.push(item.day);
-            this.viewCount.series[0].data.push(item.viewsCount);
+            this.viewCount.xAxis.data.push(dateFormat(item.day));
+            this.viewCount.series[0].data.push(item.viewsCount == null ? 0 : item.viewsCount);
           });
         }
 
@@ -216,7 +217,7 @@ export default {
 
         if (data.adminHomeData.articleRankList != null) {
           data.adminHomeData.articleRankList.forEach(item => {
-            this.articleRank.series[0].data.push(item.viewsCount);
+            this.articleRank.series[0].data.push(item.viewsCount == null ? 0 : item.viewsCount);
             this.articleRank.xAxis.data.push(item.articleTitle);
           });
         }
