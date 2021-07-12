@@ -2,6 +2,7 @@ package model
 
 import (
 	"blog-go-gin/dao"
+	"gorm.io/gorm"
 	_ "gorm.io/gorm"
 )
 
@@ -19,8 +20,8 @@ func (model *Tag) TableName() string {
 	return "tb_tag"
 }
 
-func AddTag(m *Tag) error {
-	return dao.Db.Save(m).Error
+func AddTag(tx *gorm.DB, m *Tag) error {
+	return tx.Debug().Save(m).Error
 }
 
 func DeleteTagByID(id int) (bool, error) {

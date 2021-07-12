@@ -31,8 +31,11 @@ func (model *Article) TableName() string {
 	return "tb_article"
 }
 
-func AddArticle(m *Article) error {
-	return dao.Db.Table("tb_article").Save(m).Error
+func AddArticle(tx *gorm.DB, m *Article) (int, error) {
+	if err := tx.Debug().Table("tb_article").Create(m).Error; err != nil {
+		return 0, err
+	}
+	return m.ID, nil
 }
 
 func DeleteArticleByID(id int) (bool, error) {
@@ -107,6 +110,7 @@ func GetArticlesOnHome(iPage page.IPage) ([]*Article, error) {
 	res := make([]*Article, 0)
 	if err := dao.Db.Debug().Table("tb_article").
 		Select("tb_article.*,tb_category.category_name").
+		Where("is_delete = 0 AND is_publish = 1").
 		Joins("left join tb_category on tb_category.id = tb_article.category_id").
 		Scopes(page.Paginate(&iPage)).Find(&res).Error; err != nil {
 		return nil, err

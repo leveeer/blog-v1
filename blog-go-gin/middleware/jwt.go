@@ -48,10 +48,10 @@ var (
 //GinJWTMiddlewareInit 初始化中间件
 func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 	authMiddleware, err := jwt.New(&jwt.GinJWTMiddleware{
-		Realm:       "test zone",
+		Realm:       "blog-go",
 		Key:         []byte("secret key"),
-		Timeout:     time.Second * 30,
-		MaxRefresh:  time.Second * 120,
+		Timeout:     time.Hour * 24,
+		MaxRefresh:  time.Hour * 32,
 		IdentityKey: common.IdentityKey,
 		PayloadFunc: func(data interface{}) jwt.MapClaims {
 			logging.Logger.Debug("执行PayloadFunc")

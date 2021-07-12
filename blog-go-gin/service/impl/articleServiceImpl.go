@@ -2,11 +2,14 @@ package impl
 
 import (
 	"blog-go-gin/common"
+	"blog-go-gin/dao"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
+	"gorm.io/gorm"
 	"sync"
+	"time"
 )
 
 type ArticleServiceImpl struct {
@@ -14,8 +17,46 @@ type ArticleServiceImpl struct {
 }
 
 func (b *ArticleServiceImpl) AddArticle(csArticle *pb.CsArticle) error {
-	//文章表
-	//标签表
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		//文章表
+		var isTop int8
+		if csArticle.IsTop {
+			isTop = 1
+		}
+		var isPublish int8
+		if csArticle.IsPublish {
+			isPublish = 1
+		}
+		articleID, err := model.AddArticle(tx, &model.Article{
+			ArticleTitle:   csArticle.ArticleTitle,
+			ArticleContent: csArticle.ArticleContent,
+			ArticleCover:   csArticle.ArticleCover,
+			CategoryID:     int(csArticle.CategoryId),
+			CreateTime:     time.Now().Unix(),
+			UserID:         common.BloggerId,
+			IsTop:          isTop,
+			IsPublish:      isPublish,
+			IsOriginal:     common.True,
+		})
+		if err != nil {
+			return err
+		}
+		//文章-标签表
+		for _, tagId := range csArticle.TagIdList {
+			err := model.AddArticleTags(tx, &model.ArticleTags{
+				ArticleID:  articleID,
+				TagID:      int(tagId),
+				CreateTime: time.Now().Unix(),
+			})
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
 	return nil
 }
 

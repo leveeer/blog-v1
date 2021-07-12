@@ -13,7 +13,7 @@
               size="medium"
               class="save-btn"
               @click="saveArticleDraft"
-              v-if="article.isDraft != 0"
+              v-if="article.isPublish !== 1"
       >
         保存草稿
       </el-button>
@@ -141,7 +141,7 @@
           categoryId: null,
           tagIdList: [],
           isTop: 0,
-          isDraft: null
+          isPublish: null
         },
         heads: {
           Authorization: tokenPrefix + this.$store.state.token,
@@ -176,9 +176,10 @@
           this.$message.error("文章内容不能为空");
           return false;
         }
-        this.article.isDraft = 1;
-        this.axios.post("/api/admin/articles", this.article).then(({data}) => {
-          if (data.flag) {
+        this.article.isPublish = 0;
+        addArticle({article: this.article}).then(data => {
+          console.log(data);
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
             this.$notify.success({
               title: "成功",
               message: "保存草稿成功"
@@ -214,9 +215,9 @@
           this.$message.error("文章封面不能为空");
           return false;
         }
-        this.article.isDraft = 0;
+        this.article.isPublish = 1;
         addArticle({article: this.article}).then((data) => {
-          console.log(data)
+          console.log(data);
           if (data.code === getResultCode(resultMap.SuccessOK)) {
             this.$notify.success({
               title: "成功",
@@ -235,9 +236,10 @@
       },
       autoSaveArticle() {
         if (this.autoSave && this.article.articleTitle.trim() !== "" && this.article.articleContent.trim() !== "") {
-          this.article.isDraft = this.article.isDraft === 0 ? this.article.isDraft : 1;
-          this.axios.post("/api/admin/articles", this.article).then(({data}) => {
-            if (data.flag) {
+          this.article.isPublish = this.article.isPublish === 0 ? this.article.isPublish : 1;
+          addArticle({article: this.article}).then((data) => {
+            console.log(data);
+            if (data.code === getResultCode(resultMap.SuccessOK)) {
               this.$notify.success({
                 title: "成功",
                 message: "自动保存成功"
