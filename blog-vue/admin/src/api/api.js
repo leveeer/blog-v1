@@ -35,10 +35,19 @@ export function addArticle(params) {
     return service.post(urls.articles, params)
 }
 
+export function updateArticle(params) {
+    console.log(params)
+    return service.put(urls.articles, params)
+}
+
 export function refreshToken() {
     return service.get(urls.refresh_token)
 }
 
 export function getArticleList(params) {
     return service.get(urls.articles, params)
+}
+
+export function getArticleByID(id) {
+    return service.get(urls.articles + "/" + id)
 }

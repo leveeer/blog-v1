@@ -39,6 +39,7 @@ message ResponsePkg {
   ScArticleOptions articleOptions = 21;
   ScImage uploadImage = 22;
   ScAdminArticle adminArticle = 23;
+  ScArticleInfo updateArticleInfo = 24;
 }
 
 message ScImage{
@@ -107,5 +108,9 @@ message ScAdminArticleList{
 message ScAdminArticle{
   repeated ScAdminArticleList articleList = 1;
   int32 count = 2;
+}
+
+message ScArticleInfo{
+  Article article = 1;
 }
 

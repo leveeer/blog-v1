@@ -92,6 +92,7 @@ const (
 	UploadImageFail
 	AddArticleFail
 	TokenHasExpired
+	UpdateArticleFail
 )
 
 // unknown group
@@ -184,6 +185,7 @@ var Error = map[ErrorCode]error{
 	UploadImageFail:            errors.New("上传图片失败"),
 	AddArticleFail:             errors.New("添加文章失败"),
 	TokenHasExpired:            errors.New("token is "),
+	UpdateArticleFail:          errors.New("更新文章失败"),
 }
 
 func GetMsg(code ErrorCode) string {

@@ -925,6 +925,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           adminArticle: {
             type: "ScAdminArticle",
             id: 23
+          },
+          updateArticleInfo: {
+            type: "ScArticleInfo",
+            id: 24
           }
         }
       },
@@ -1133,6 +1137,14 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           count: {
             type: "int32",
             id: 2
+          }
+        }
+      },
+      ScArticleInfo: {
+        fields: {
+          article: {
+            type: "Article",
+            id: 1
           }
         }
       }

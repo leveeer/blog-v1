@@ -17,6 +17,82 @@ type ArticleServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func (b *ArticleServiceImpl) UpdateArticle(csArticle *pb.CsArticle) error {
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		//更新文章表
+		var isTop int8
+		if csArticle.IsTop {
+			isTop = 1
+		}
+		var isPublish int8
+		if csArticle.IsPublish {
+			isPublish = 1
+		}
+		article := &model.Article{
+			ID:             int(csArticle.Id),
+			ArticleTitle:   csArticle.ArticleTitle,
+			ArticleContent: csArticle.ArticleContent,
+			ArticleCover:   csArticle.ArticleCover,
+			CategoryID:     int(csArticle.CategoryId),
+			IsTop:          isTop,
+			IsPublish:      isPublish,
+			UpdateTime:     time.Now().Unix(),
+		}
+		err := model.UpdateArticle(tx, article)
+		if err != nil {
+			return err
+		}
+		//更新文章-标签表
+		//先删除该文章所有标签，再添加新的标签
+		_, err = model.DeleteArticleTags(tx, "article_id = ?", csArticle.GetId())
+		if err != nil {
+			return err
+		}
+		for _, tagId := range csArticle.TagIdList {
+			err := model.AddArticleTags(tx, &model.ArticleTags{
+				ArticleID:  int(csArticle.GetId()),
+				TagID:      int(tagId),
+				CreateTime: time.Now().Unix(),
+			})
+			if err != nil {
+				return err
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *ArticleServiceImpl) GetUpdateArticleInfoById(id int) (*pb.ScArticleInfo, error) {
+	article, err := model.GetArticleByID(id)
+	if err != nil {
+		return nil, err
+	}
+	currentArticle := &pb.Article{
+		Id:             int32(article.ID),
+		UserId:         int32(article.UserID),
+		CategoryID:     int32(article.CategoryID),
+		ArticleCover:   article.ArticleCover,
+		ArticleTitle:   article.ArticleTitle,
+		ArticleContent: article.ArticleContent,
+		CreateTime:     article.CreateTime,
+		UpdateTime:     article.UpdateTime,
+		IsTop:          article.IsTop == 1,
+		IsPublish:      article.IsPublish == 1,
+		IsDelete:       article.IsDelete == 1,
+		IsOriginal:     article.IsOriginal == 1,
+		ClickCount:     int64(article.ClickCount),
+		CollectCount:   int64(article.CollectCount),
+		CategoryName:   article.CategoryName,
+	}
+	return &pb.ScArticleInfo{
+		Article: currentArticle,
+	}, nil
+}
+
 func (b *ArticleServiceImpl) GetAdminArticle(csAdminArticle *pb.CsAdminArticles) (*pb.ScAdminArticle, error) {
 	condition := "is_delete = ? AND is_publish = ? "
 	if csAdminArticle.GetKeywords() != "" {

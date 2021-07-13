@@ -49,6 +49,7 @@ service.interceptors.request.use(
         let encode;
         switch (config.method) {
             case "post":
+            case "put":
                 if (config.headers['Content-Type'] === 'multipart/form-data') return config;
                 data = protoObj.RequestPkg.create(config.data);
                 encode = protoObj.RequestPkg.encode(data).finish();

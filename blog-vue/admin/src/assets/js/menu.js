@@ -20,9 +20,6 @@ export function generaMenu() {
           item.component = Layout;
         }
         if (item.children && item.children.length > 0) {
-          item.children = item.children.filter(children => {
-            return children.isHidden === false || children.isHidden == null
-          });
           item.children.forEach(route => {
             route.icon = "iconfont " + route.icon;
             route.component = loadView(route.component);

@@ -25,5 +25,7 @@ func adminRouters(r *gin.Engine) {
 		admin.POST(common.UploadImage, ArticleApi.UploadImage)
 		admin.POST(common.Articles, ArticleApi.AddArticle)
 		admin.GET(common.Articles, ArticleApi.GetAdminArticles)
+		admin.PUT(common.Articles, ArticleApi.UpdateArticle)
+		admin.GET(common.ArticlesByID, ArticleApi.GetArticleInfoById)
 	}
 }

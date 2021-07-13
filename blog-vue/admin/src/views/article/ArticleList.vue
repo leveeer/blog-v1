@@ -289,7 +289,6 @@
         });
       },
       editArticle(id) {
-        console.log(id)
         this.$router.push({path: "/articles/" + id});
       },
       updateArticleStatus(id) {

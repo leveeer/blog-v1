@@ -65,4 +65,5 @@ const (
 	UploadImage    = "/articles/images"
 	Articles       = "/articles"
 	RefreshToken   = "/refresh_token"
+	ArticlesByID   = "/articles/:id"
 )

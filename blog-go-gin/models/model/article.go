@@ -52,8 +52,8 @@ func DeleteArticle(condition string, args ...interface{}) (int64, error) {
 	return dao.Db.RowsAffected, nil
 }
 
-func UpdateArticle(m *Article) error {
-	return dao.Db.Table("tb_article").Select("click_count").Save(m).Error
+func UpdateArticle(tx *gorm.DB, m *Article) error {
+	return tx.Debug().Table("tb_article").Save(m).Error
 }
 
 func UpdateArticleClickCount(articleId int) error {

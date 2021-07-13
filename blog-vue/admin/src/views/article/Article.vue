@@ -106,7 +106,7 @@
 </template>
 
 <script>
-  import {addArticle, getArticleOptions, uploadImage} from "../../api/api";
+  import {addArticle, getArticleByID, getArticleOptions, updateArticle, uploadImage} from "../../api/api";
   import {imagePrefix, resultMap, tokenPrefix} from "../../utils/constant";
   import {getResultCode} from "../../utils/util";
 
@@ -116,18 +116,24 @@
       const arr = path.split("/");
       const articleId = arr[2];
       if (articleId) {
-        this.axios.get("/api/admin/articles/" + articleId).then(({data}) => {
-          this.article = data.data;
+        getArticleByID(articleId).then((data) => {
+          console.log(data)
+          this.article = data.updateArticleInfo.article;
+          this.path = this.$route.path;
         });
       }
       this.listArticleOptions();
     },
     destroyed() {
       //文章自动保存功能
-      this.autoSaveArticle();
+      const arr = this.path.split("/");
+      const articleId = arr[2];
+      console.log(this.path);
+      this.autoSaveArticle(articleId);
     },
     data: function () {
       return {
+        path: "",
         addOrEdit: false,
         autoSave: true,
         categoryList: [],
@@ -215,42 +221,74 @@
           this.$message.error("文章封面不能为空");
           return false;
         }
-        this.article.isPublish = 1;
-        addArticle({article: this.article}).then((data) => {
-          console.log(data);
-          if (data.code === getResultCode(resultMap.SuccessOK)) {
-            this.$notify.success({
-              title: "成功",
-              message: data.message
-            });
-          } else {
-            this.$notify.error({
-              title: "失败",
-              message: data.message
-            });
-          }
-          this.addOrEdit = false;
-        });
+        const arr = this.path.split("/");
+        const articleId = arr[2];
+        if (articleId) {
+          console.log("更新");
+          updateArticle({article: this.article}).then(data => {
+            console.log(data);
+            this.notify(data)
+          });
+        } else {
+          this.article.isPublish = 1;
+          addArticle({article: this.article}).then((data) => {
+            console.log(data);
+            this.notify(data)
+          });
+        }
         //关闭自动保存功能
         this.autoSave = false;
       },
-      autoSaveArticle() {
+
+      notify(data) {
+        if (data.code === getResultCode(resultMap.SuccessOK)) {
+          this.$notify.success({
+            title: "成功",
+            message: data.message
+          });
+        } else {
+          this.$notify.error({
+            title: "失败",
+            message: data.message
+          });
+        }
+        this.addOrEdit = false;
+      },
+
+      autoSaveArticle(articleId) {
         if (this.autoSave && this.article.articleTitle.trim() !== "" && this.article.articleContent.trim() !== "") {
           this.article.isPublish = this.article.isPublish === 0 ? this.article.isPublish : 1;
-          addArticle({article: this.article}).then((data) => {
-            console.log(data);
-            if (data.code === getResultCode(resultMap.SuccessOK)) {
-              this.$notify.success({
-                title: "成功",
-                message: "自动保存成功"
-              });
-            } else {
-              this.$notify.error({
-                title: "失败",
-                message: "自动保存失败"
-              });
-            }
-          });
+          if (articleId) {
+            console.log("更新");
+            updateArticle({article: this.article}).then(data => {
+              if (data.code === getResultCode(resultMap.SuccessOK)) {
+                this.$notify.success({
+                  title: "成功",
+                  message: "自动保存成功"
+                });
+              } else {
+                this.$notify.error({
+                  title: "失败",
+                  message: "自动保存失败"
+                });
+              }
+            })
+          } else {
+            addArticle({article: this.article}).then((data) => {
+              console.log(data);
+              if (data.code === getResultCode(resultMap.SuccessOK)) {
+                this.$notify.success({
+                  title: "成功",
+                  message: "自动保存成功"
+                });
+              } else {
+                this.$notify.error({
+                  title: "失败",
+                  message: "自动保存失败"
+                });
+              }
+            });
+          }
         }
       }
     },

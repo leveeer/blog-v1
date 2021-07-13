@@ -30,11 +30,11 @@ func DeleteArticleTagsByID(id int) (bool, error) {
 	return dao.Db.RowsAffected > 0, nil
 }
 
-func DeleteArticleTags(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Where(condition, args...).Delete(&ArticleTags{}).Error; err != nil {
+func DeleteArticleTags(tx *gorm.DB, condition string, args ...interface{}) (int64, error) {
+	if err := tx.Debug().Where(condition, args...).Delete(&ArticleTags{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.RowsAffected, nil
+	return tx.RowsAffected, nil
 }
 
 func UpdateArticleTags(m *ArticleTags) error {
