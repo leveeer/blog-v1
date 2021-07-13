@@ -71,25 +71,26 @@ func (b *ArticleServiceImpl) GetUpdateArticleInfoById(id int) (*pb.ScArticleInfo
 	if err != nil {
 		return nil, err
 	}
-	currentArticle := &pb.Article{
-		Id:             int32(article.ID),
-		UserId:         int32(article.UserID),
-		CategoryID:     int32(article.CategoryID),
-		ArticleCover:   article.ArticleCover,
+
+	tags, err := model.GetArticleTagsList("article_id = ?", article.ID)
+	if err != nil {
+		return nil, err
+	}
+	var tagIdList []int64
+	for _, tag := range tags {
+		tagIdList = append(tagIdList, int64(tag.TagID))
+	}
+
+	logging.Logger.Debug(tagIdList)
+	return &pb.ScArticleInfo{
+		Id:             int64(article.ID),
 		ArticleTitle:   article.ArticleTitle,
 		ArticleContent: article.ArticleContent,
-		CreateTime:     article.CreateTime,
-		UpdateTime:     article.UpdateTime,
-		IsTop:          article.IsTop == 1,
-		IsPublish:      article.IsPublish == 1,
-		IsDelete:       article.IsDelete == 1,
-		IsOriginal:     article.IsOriginal == 1,
-		ClickCount:     int64(article.ClickCount),
-		CollectCount:   int64(article.CollectCount),
-		CategoryName:   article.CategoryName,
-	}
-	return &pb.ScArticleInfo{
-		Article: currentArticle,
+		ArticleCover:   article.ArticleCover,
+		CategoryId:     int64(article.CategoryID),
+		IsTop:          int32(article.IsTop),
+		IsPublish:      int32(article.IsPublish),
+		TagIdList:      tagIdList,
 	}, nil
 }
 

@@ -111,6 +111,13 @@ message ScAdminArticle{
 }
 
 message ScArticleInfo{
-  Article article = 1;
+  int64 id = 1;
+  string articleTitle = 2;
+  string articleContent = 3;
+  string articleCover = 4;
+  int64 categoryId = 5;
+  repeated int64 tagIdList = 6;
+  int32 isTop = 7;
+  int32 isPublish = 8;
 }
 

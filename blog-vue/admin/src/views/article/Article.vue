@@ -117,8 +117,8 @@
       const articleId = arr[2];
       if (articleId) {
         getArticleByID(articleId).then((data) => {
-          console.log(data)
-          this.article = data.updateArticleInfo.article;
+          console.log(data);
+          this.article = data.updateArticleInfo;
           this.path = this.$route.path;
         });
       }
@@ -128,7 +128,6 @@
       //文章自动保存功能
       const arr = this.path.split("/");
       const articleId = arr[2];
-      console.log(this.path);
       this.autoSaveArticle(articleId);
     },
     data: function () {
@@ -139,15 +138,15 @@
         categoryList: [],
         tagList: [],
         article: {
-          id: null,
+          id: 0,
           // articleTitle: this.$moment(new Date()).format("YYYY-MM-DD"),
           articleTitle: "",
           articleContent: "",
           articleCover: "",
-          categoryId: null,
+          categoryId: 0,
           tagIdList: [],
-          isTop: 0,
-          isPublish: null
+          isTop: false,
+          isPublish: false
         },
         heads: {
           Authorization: tokenPrefix + this.$store.state.token,
@@ -157,7 +156,7 @@
     methods: {
       listArticleOptions() {
         getArticleOptions().then((data) => {
-          // console.log(data);
+          console.log(data);
           this.categoryList = data.articleOptions.categoryList;
           this.tagList = data.articleOptions.tagList;
         });

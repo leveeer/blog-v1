@@ -1142,9 +1142,38 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
       },
       ScArticleInfo: {
         fields: {
-          article: {
-            type: "Article",
+          id: {
+            type: "int64",
             id: 1
+          },
+          articleTitle: {
+            type: "string",
+            id: 2
+          },
+          articleContent: {
+            type: "string",
+            id: 3
+          },
+          articleCover: {
+            type: "string",
+            id: 4
+          },
+          categoryId: {
+            type: "int64",
+            id: 5
+          },
+          tagIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 6
+          },
+          isTop: {
+            type: "int32",
+            id: 7
+          },
+          isPublish: {
+            type: "int32",
+            id: 8
           }
         }
       }
