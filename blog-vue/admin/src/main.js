@@ -21,7 +21,7 @@ import "mavon-editor/dist/css/index.css";
 import moment from "moment";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
-import { generaMenu } from "./assets/js/menu";
+import {generaMenu} from "./assets/js/menu";
 
 Vue.prototype.config = config;
 Vue.use(mavonEditor);
@@ -32,7 +32,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$moment = moment;
 
 Vue.filter("date", function(value, formatStr = "YYYY-MM-DD") {
-  return moment(value).format(formatStr);
+  return moment(value * 1000).format(formatStr);
 });
 
 Vue.filter("dateTime", function(value, formatStr = "YYYY-MM-DD hh:mm:ss") {

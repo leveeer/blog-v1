@@ -170,3 +170,40 @@ func (c *ArticleRestApi) AddArticle(ctx *gin.Context) {
 	c.ProtoBuf(ctx, http.StatusOK, data)
 
 }
+
+func (c *ArticleRestApi) GetAdminArticles(ctx *gin.Context) {
+	type CsAdminArticle struct {
+		Current   int64  `json:"current" form:"current"`
+		Size      int32  `json:"size" form:"size"`
+		Keywords  string `json:"keywords" form:"keywords"`
+		IsDelete  int32  `json:"isDelete" form:"isDelete"`
+		IsPublish int32  `json:"isPublish" form:"isPublish"`
+	}
+	var csAdminArticle CsAdminArticle
+	err := ctx.ShouldBind(&csAdminArticle)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(csAdminArticle)
+
+	adminArticle, err := ArticleService.GetAdminArticle(&pb.CsAdminArticles{
+		Current:   csAdminArticle.Current,
+		Size:      csAdminArticle.Size,
+		Keywords:  csAdminArticle.Keywords,
+		IsDelete:  csAdminArticle.IsDelete,
+		IsPublish: csAdminArticle.IsPublish,
+	})
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetArticlesFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:        pb.Response_ResponseBeginIndex,
+		Code:         pb.ResultCode_SuccessOK,
+		ServerTime:   time.Now().Unix(),
+		AdminArticle: adminArticle,
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}

@@ -62,6 +62,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           article: {
             type: "CsArticle",
             id: 10
+          },
+          csAdminArticles: {
+            type: "CsAdminArticles",
+            id: 11
           }
         }
       },
@@ -179,6 +183,30 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           isPublish: {
             type: "bool",
             id: 8
+          }
+        }
+      },
+      CsAdminArticles: {
+        fields: {
+          current: {
+            type: "int64",
+            id: 1
+          },
+          size: {
+            type: "int32",
+            id: 2
+          },
+          keywords: {
+            type: "string",
+            id: 3
+          },
+          isDelete: {
+            type: "int32",
+            id: 4
+          },
+          isPublish: {
+            type: "int32",
+            id: 5
           }
         }
       },
@@ -893,6 +921,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           uploadImage: {
             type: "ScImage",
             id: 22
+          },
+          adminArticle: {
+            type: "ScAdminArticle",
+            id: 23
           }
         }
       },
@@ -1038,6 +1070,68 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           categoryList: {
             rule: "repeated",
             type: "Category",
+            id: 2
+          }
+        }
+      },
+      ScAdminArticleList: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 1
+          },
+          articleTitle: {
+            type: "string",
+            id: 2
+          },
+          createTime: {
+            type: "int64",
+            id: 3
+          },
+          updateTime: {
+            type: "int64",
+            id: 4
+          },
+          likeCount: {
+            type: "int64",
+            id: 5
+          },
+          viewsCount: {
+            type: "int64",
+            id: 6
+          },
+          categoryName: {
+            type: "string",
+            id: 7
+          },
+          tagList: {
+            rule: "repeated",
+            type: "Tag",
+            id: 8
+          },
+          isTop: {
+            type: "int32",
+            id: 9
+          },
+          isPublish: {
+            type: "int32",
+            id: 10
+          },
+          isDelete: {
+            type: "int32",
+            id: 11
+          }
+        }
+      },
+      ScAdminArticle: {
+        fields: {
+          articleList: {
+            rule: "repeated",
+            type: "ScAdminArticleList",
+            id: 1
+          },
+          count: {
+            type: "int32",
             id: 2
           }
         }

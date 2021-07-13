@@ -18,7 +18,7 @@ export function getArticleOptions() {
 }
 
 export function uploadImage(file) {
-    var formdata = new FormData();
+    const formdata = new FormData();
     formdata.append("file", file);
     let params = {
         index: 1,
@@ -37,4 +37,8 @@ export function addArticle(params) {
 
 export function refreshToken() {
     return service.get(urls.refresh_token)
+}
+
+export function getArticleList(params) {
+    return service.get(urls.articles, params)
 }

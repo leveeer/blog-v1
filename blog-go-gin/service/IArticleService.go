@@ -14,4 +14,5 @@ type IArticleService interface {
 	GetArticleOptions() (*pb.ScArticleOptions, error)
 	UploadImage(filepath string) (string, error)
 	AddArticle(article *pb.CsArticle) error
+	GetAdminArticle(csAdminArticle *pb.CsAdminArticles) (*pb.ScAdminArticle, error)
 }

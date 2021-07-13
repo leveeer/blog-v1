@@ -4,22 +4,22 @@
     <!-- 表格操作 -->
     <div class="operation-container">
       <el-button
-        v-if="isDelete == 0"
-        type="danger"
-        size="small"
-        icon="el-icon-deleteItem"
-        :disabled="articleIdList.length == 0"
-        @click="updateIsDelete = true"
+              v-if="isDelete === 0"
+              type="danger"
+              size="small"
+              icon="el-icon-deleteItem"
+              :disabled="articleIdList.length === 0"
+              @click="updateIsDelete = true"
       >
         批量删除
       </el-button>
       <el-button
-        v-else
-        type="danger"
-        size="small"
-        icon="el-icon-deleteItem"
-        :disabled="articleIdList.length == 0"
-        @click="remove = true"
+              v-else
+              type="danger"
+              size="small"
+              icon="el-icon-deleteItem"
+              :disabled="articleIdList.length === 0"
+              @click="remove = true"
       >
         批量删除
       </el-button>
@@ -83,9 +83,9 @@
       >
         <template slot-scope="scope">
           <el-tag
-            v-for="item of scope.row.tagDTOList"
-            :key="item.tagId"
-            style="margin-right:0.2rem;margin-top:0.2rem"
+                  v-for="item of scope.row.tagList"
+                  :key="item.id"
+                  style="margin-right:0.2rem;margin-top:0.2rem"
           >
             {{ item.tagName }}
           </el-tag>
@@ -150,13 +150,13 @@
       <el-table-column prop="isTop" label="置顶" width="100" align="center">
         <template slot-scope="scope">
           <el-switch
-            v-model="scope.row.isTop"
-            active-color="#13ce66"
-            inactive-color="#F4F4F5"
-            :disabled="scope.row.isDelete == 1 || scope.row.isDraft == 1"
-            :active-value="1"
-            :inactive-value="0"
-            @change="changeTop(scope.row)"
+                  v-model="scope.row.isTop"
+                  active-color="#13ce66"
+                  inactive-color="#F4F4F5"
+                  :disabled="(scope.row.isDelete === 1 || scope.row.isPublish === 0) || (scope.row.isDelete === 1 || scope.row.isPublish == null)"
+                  :active-value="1"
+                  :inactive-value="0"
+                  @change="changeTop(scope.row)"
           />
         </template>
       </el-table-column>
@@ -164,37 +164,37 @@
       <el-table-column label="操作" align="center" width="160">
         <template slot-scope="scope">
           <el-button
-            type="primary"
-            size="mini"
-            @click="editArticle(scope.row.id)"
-            v-if="scope.row.isDelete == 0"
+                  type="primary"
+                  size="mini"
+                  @click="editArticle(scope.row.id)"
+                  v-if="scope.row.isDelete === 0 || scope.row.isDelete == null "
           >
             编辑
           </el-button>
           <el-popconfirm
-            title="确定删除吗？"
-            style="margin-left:10px"
-            @onConfirm="updateArticleStatus(scope.row.id)"
-            v-if="scope.row.isDelete == 0"
+                  title="确定删除吗？"
+                  style="margin-left:10px"
+                  @onConfirm="updateArticleStatus(scope.row.id)"
+                  v-if="scope.row.isDelete === 0 || scope.row.isDelete == null"
           >
             <el-button size="mini" type="danger" slot="reference">
               删除
             </el-button>
           </el-popconfirm>
           <el-popconfirm
-            title="确定恢复吗？"
-            v-if="scope.row.isDelete == 1"
-            @onConfirm="updateArticleStatus(scope.row.id)"
+                  title="确定恢复吗？"
+                  v-if="scope.row.isDelete === 1"
+                  @onConfirm="updateArticleStatus(scope.row.id)"
           >
             <el-button size="mini" type="success" slot="reference">
               恢复
             </el-button>
           </el-popconfirm>
           <el-popconfirm
-            style="margin-left:10px"
-            v-if="scope.row.isDelete == 1"
-            title="确定彻底删除吗？"
-            @onConfirm="deleteArticles(scope.row.id)"
+                  style="margin-left:10px"
+                  v-if="scope.row.isDelete === 1"
+                  title="确定彻底删除吗？"
+                  @onConfirm="deleteArticles(scope.row.id)"
           >
             <el-button size="mini" type="danger" slot="reference">
               删除
@@ -245,79 +245,81 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.listArticles();
-  },
-  data: function() {
-    return {
-      loading: true,
-      updateIsDelete: false,
-      remove: false,
-      options: [
-        {
-          value: '{"isDelete":0,"isDraft":0}',
-          label: "已发布"
-        },
-        {
-          value: '{"isDelete":1,"isDraft":null}',
-          label: "回收站"
-        },
-        {
-          value: '{"isDelete":0,"isDraft":1}',
-          label: "草稿箱"
-        }
-      ],
-      condition: '{"isDelete":0,"isDraft":0}',
-      articleList: [],
-      articleIdList: [],
-      keywords: null,
-      isDelete: 0,
-      isDraft: 0,
-      current: 1,
-      size: 10,
-      count: 0
-    };
-  },
-  methods: {
-    selectionChange(articleList) {
-      this.articleIdList = [];
-      articleList.forEach(item => {
-        this.articleIdList.push(item.id);
-      });
+  import {getArticleList} from "../../api/api";
+
+  export default {
+    created() {
+      this.listArticles();
     },
-    editArticle(id) {
-      console.log(id)
-      this.$router.push({ path: "/articles/" + id });
+    data: function () {
+      return {
+        loading: true,
+        updateIsDelete: false,
+        remove: false,
+        options: [
+          {
+            value: '{"isDelete":0,"isPublish":1}',
+            label: "已发布"
+          },
+          {
+            value: '{"isDelete":1,"isPublish":null}',
+            label: "回收站"
+          },
+          {
+            value: '{"isDelete":0,"isPublish":0}',
+            label: "草稿箱"
+          }
+        ],
+        condition: '{"isDelete":0,"isPublish":1}',
+        articleList: [],
+        articleIdList: [],
+        keywords: "",
+        isDelete: 0,
+        isPublish: 1,
+        current: 1,
+        size: 10,
+        count: 0
+      };
     },
-    updateArticleStatus(id) {
-      let param = new URLSearchParams();
-      if (id != null) {
-        param.append("idList", [id]);
-      } else {
-        param.append("idList", this.articleIdList);
-      }
-      param.append("isDelete", (this.isDelete === 0 ? 1 : 0).toString());
-      this.axios.put("/api/admin/articles", param).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-          this.listArticles();
+    methods: {
+      selectionChange(articleList) {
+        this.articleIdList = [];
+        articleList.forEach(item => {
+          this.articleIdList.push(item.id);
+        });
+      },
+      editArticle(id) {
+        console.log(id)
+        this.$router.push({path: "/articles/" + id});
+      },
+      updateArticleStatus(id) {
+        let param = new URLSearchParams();
+        if (id != null) {
+          param.append("idList", [id]);
         } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
+          param.append("idList", this.articleIdList);
         }
-        this.updateIsDelete = false;
-      });
-    },
-    deleteArticles(id) {
-      var param = {};
-      if (id == null) {
-        param = { data: this.articleIdList };
+        param.append("isDelete", (this.isDelete === 0 ? 1 : 0).toString());
+        this.axios.put("/api/admin/articles", param).then(({data}) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+            this.listArticles();
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+          this.updateIsDelete = false;
+        });
+      },
+      deleteArticles(id) {
+        var param = {};
+        if (id == null) {
+          param = {data: this.articleIdList};
       } else {
         param = { data: [id] };
       }
@@ -351,28 +353,27 @@ export default {
       this.axios.put("/api/admin/articles/top/" + article.id, param);
     },
     listArticles() {
-      this.axios
-        .get("/api/admin/articles", {
-          params: {
-            current: this.current,
-            size: this.size,
-            keywords: this.keywords,
-            isDelete: this.isDelete,
-            isDraft: this.isDraft
-          }
-        })
-        .then(({ data }) => {
-          this.articleList = data.data.recordList;
-          this.count = data.data.count;
-          this.loading = false;
-        });
+      getArticleList({
+        params: {
+          current: this.current,
+          size: this.size,
+          keywords: this.keywords,
+          isDelete: this.isDelete,
+          isPublish: this.isPublish
+        }
+      }).then((data) => {
+        console.log(data);
+        this.articleList = data.adminArticle.articleList;
+        this.count = data.adminArticle.count;
+        this.loading = false;
+      });
     }
   },
   watch: {
     condition() {
       const condition = JSON.parse(this.condition);
       this.isDelete = condition.isDelete;
-      this.isDraft = condition.isDraft;
+      this.isPublish = condition.isPublish;
       this.listArticles();
     }
   }

@@ -58,6 +58,14 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           token: {
             type: "string",
             id: 9
+          },
+          article: {
+            type: "CsArticle",
+            id: 10
+          },
+          csAdminArticles: {
+            type: "CsAdminArticles",
+            id: 11
           }
         }
       },
@@ -138,6 +146,67 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           createTime: {
             type: "int64",
             id: 8
+          }
+        }
+      },
+      CsArticle: {
+        fields: {
+          id: {
+            type: "uint32",
+            id: 1
+          },
+          articleTitle: {
+            type: "string",
+            id: 2
+          },
+          articleContent: {
+            type: "string",
+            id: 3
+          },
+          articleCover: {
+            type: "string",
+            id: 4
+          },
+          categoryId: {
+            type: "uint32",
+            id: 5
+          },
+          tagIdList: {
+            rule: "repeated",
+            type: "uint32",
+            id: 6
+          },
+          isTop: {
+            type: "bool",
+            id: 7
+          },
+          isPublish: {
+            type: "bool",
+            id: 8
+          }
+        }
+      },
+      CsAdminArticles: {
+        fields: {
+          current: {
+            type: "int64",
+            id: 1
+          },
+          size: {
+            type: "int32",
+            id: 2
+          },
+          keywords: {
+            type: "string",
+            id: 3
+          },
+          isDelete: {
+            type: "int32",
+            id: 4
+          },
+          isPublish: {
+            type: "int32",
+            id: 5
           }
         }
       },
@@ -752,6 +821,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           Success: 0,
           Fail: 1,
           SuccessOK: 10000,
+          TokenExpired: 401,
           Forbidden: 403
         }
       },
@@ -851,6 +921,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           uploadImage: {
             type: "ScImage",
             id: 22
+          },
+          adminArticle: {
+            type: "ScAdminArticle",
+            id: 23
           }
         }
       },
@@ -996,6 +1070,68 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           categoryList: {
             rule: "repeated",
             type: "Category",
+            id: 2
+          }
+        }
+      },
+      ScAdminArticleList: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 1
+          },
+          articleTitle: {
+            type: "string",
+            id: 2
+          },
+          createTime: {
+            type: "int64",
+            id: 3
+          },
+          updateTime: {
+            type: "int64",
+            id: 4
+          },
+          likeCount: {
+            type: "int64",
+            id: 5
+          },
+          viewsCount: {
+            type: "int64",
+            id: 6
+          },
+          categoryName: {
+            type: "string",
+            id: 7
+          },
+          tagList: {
+            rule: "repeated",
+            type: "Tag",
+            id: 8
+          },
+          isTop: {
+            type: "int32",
+            id: 9
+          },
+          isPublish: {
+            type: "int32",
+            id: 10
+          },
+          isDelete: {
+            type: "int32",
+            id: 11
+          }
+        }
+      },
+      ScAdminArticle: {
+        fields: {
+          articleList: {
+            rule: "repeated",
+            type: "ScAdminArticleList",
+            id: 1
+          },
+          count: {
+            type: "int32",
             id: 2
           }
         }

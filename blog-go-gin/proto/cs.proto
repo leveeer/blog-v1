@@ -28,6 +28,7 @@ message RequestPkg{
   CsChatMessage csChatMessage = 8;
   string token = 9;
   CsArticle article = 10;
+  CsAdminArticles csAdminArticles = 11;
 }
 
 message CsComment{
@@ -65,6 +66,14 @@ message CsArticle{
   repeated uint32 tagIdList = 6;
   bool isTop = 7;
   bool isPublish = 8;
+}
+
+message CsAdminArticles{
+  int64 current = 1;
+  int32 size = 2;
+  string keywords = 3;
+  int32 isDelete = 4;
+  int32 isPublish = 5;
 }
 
 

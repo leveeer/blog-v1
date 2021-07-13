@@ -7,6 +7,7 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
+	"fmt"
 	"gorm.io/gorm"
 	"sync"
 	"time"
@@ -14,6 +15,64 @@ import (
 
 type ArticleServiceImpl struct {
 	wg sync.WaitGroup
+}
+
+func (b *ArticleServiceImpl) GetAdminArticle(csAdminArticle *pb.CsAdminArticles) (*pb.ScAdminArticle, error) {
+	condition := "is_delete = ? AND is_publish = ? "
+	if csAdminArticle.GetKeywords() != "" {
+		condition = fmt.Sprintf(condition+"%s", "AND article_title LIKE ?")
+	}
+	articles, err := model.GetArticlesByConditionWithPage(condition,
+		&page.IPage{Current: int(csAdminArticle.GetCurrent()), Size: int(csAdminArticle.GetSize())},
+		csAdminArticle.GetIsDelete(),
+		csAdminArticle.GetIsPublish(),
+		"%"+csAdminArticle.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+	var articleSlice []*pb.ScAdminArticleList
+	for _, article := range articles {
+		var tagSlice []*pb.Tag
+		tags, err := model.GetTagNameByArticleId(article.ID)
+		if err != nil {
+			return nil, err
+		}
+		for _, tag := range tags {
+			t := &pb.Tag{
+				Id:         int32(tag.ID),
+				TagName:    tag.TagName,
+				Status:     tag.Status == 1,
+				ClickCount: int64(tag.ClickCount),
+				CreateTime: tag.CreateTime,
+				UpdateTime: tag.UpdateTime,
+			}
+			tagSlice = append(tagSlice, t)
+		}
+		a := &pb.ScAdminArticleList{
+			Id:           int64(article.ID),
+			ArticleTitle: article.ArticleTitle,
+			CreateTime:   article.CreateTime,
+			UpdateTime:   article.UpdateTime,
+			IsTop:        int32(article.IsTop),
+			IsPublish:    int32(article.IsPublish),
+			IsDelete:     int32(article.IsDelete),
+			ViewsCount:   int64(article.ClickCount),
+			LikeCount:    int64(article.CollectCount),
+			TagList:      tagSlice,
+			CategoryName: article.CategoryName,
+		}
+		articleSlice = append(articleSlice, a)
+	}
+
+	articleCount, err := model.GetArticlesCountByCondition(condition, csAdminArticle.GetIsDelete(), csAdminArticle.GetIsPublish(), "%"+csAdminArticle.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.ScAdminArticle{
+		ArticleList: articleSlice,
+		Count:       int32(articleCount),
+	}, nil
 }
 
 func (b *ArticleServiceImpl) AddArticle(csArticle *pb.CsArticle) error {

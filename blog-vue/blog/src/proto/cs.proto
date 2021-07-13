@@ -27,6 +27,8 @@ message RequestPkg{
   CsBeatMessage csBeatMessage = 7;
   CsChatMessage csChatMessage = 8;
   string token = 9;
+  CsArticle article = 10;
+  CsAdminArticles csAdminArticles = 11;
 }
 
 message CsComment{
@@ -53,6 +55,25 @@ message CsChatMessage{
   string ipAddr = 6;
   string ipSource = 7;
   int64 createTime = 8;
+}
+
+message CsArticle{
+  uint32 id = 1;
+  string articleTitle = 2;
+  string articleContent = 3;
+  string articleCover = 4;
+  uint32 categoryId = 5;
+  repeated uint32 tagIdList = 6;
+  bool isTop = 7;
+  bool isPublish = 8;
+}
+
+message CsAdminArticles{
+  int64 current = 1;
+  int32 size = 2;
+  string keywords = 3;
+  int32 isDelete = 4;
+  int32 isPublish = 5;
 }
 
 

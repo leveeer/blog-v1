@@ -38,6 +38,7 @@ message ResponsePkg {
   ScAdminHomeData adminHomeData = 20;
   ScArticleOptions articleOptions = 21;
   ScImage uploadImage = 22;
+  ScAdminArticle adminArticle = 23;
 }
 
 message ScImage{
@@ -87,5 +88,24 @@ message ScAdminHomeData{
 message ScArticleOptions{
   repeated Tag tagList = 1;
   repeated Category categoryList = 2;
+}
+
+message ScAdminArticleList{
+  int64 id = 1;
+  string articleTitle = 2;
+  int64 createTime = 3;
+  int64 updateTime = 4;
+  int64 likeCount = 5;
+  int64 viewsCount = 6;
+  string categoryName = 7;
+  repeated Tag tagList = 8;
+  int32 isTop = 9;
+  int32 isPublish = 10;
+  int32 isDelete = 11;
+}
+
+message ScAdminArticle{
+  repeated ScAdminArticleList articleList = 1;
+  int32 count = 2;
 }
 
