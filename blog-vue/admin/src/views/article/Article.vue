@@ -256,7 +256,7 @@
 
       autoSaveArticle(articleId) {
         if (this.autoSave && this.article.articleTitle.trim() !== "" && this.article.articleContent.trim() !== "") {
-          this.article.isPublish = this.article.isPublish === 0 ? this.article.isPublish : 1;
+          this.article.isPublish = this.article.isPublish == null ? 0 : 1;
           if (articleId) {
             console.log("更新");
             updateArticle({article: this.article}).then(data => {
