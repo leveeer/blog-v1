@@ -30,5 +30,6 @@ func adminRouters(r *gin.Engine) {
 		admin.GET(common.ArticlesByID, ArticleApi.GetArticleInfoById)
 		admin.PUT(common.ArticlesStatus, ArticleApi.UpdateArticleStatus)
 		admin.PUT(common.ArticleTop, ArticleApi.UpdateArticleTop)
+		admin.GET(common.AdminCategories, CategoryApi.GetAdminCategories)
 	}
 }

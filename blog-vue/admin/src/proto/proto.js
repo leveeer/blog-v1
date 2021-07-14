@@ -252,6 +252,22 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      CsCondition: {
+        fields: {
+          current: {
+            type: "int64",
+            id: 1
+          },
+          size: {
+            type: "int32",
+            id: 2
+          },
+          keywords: {
+            type: "string",
+            id: 3
+          }
+        }
+      },
       Article: {
         fields: {
           id: {
@@ -485,6 +501,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           articleCount: {
             type: "int32",
             id: 3
+          },
+          createTIme: {
+            type: "int64",
+            id: 4
           }
         }
       },
@@ -971,6 +991,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           updateArticleInfo: {
             type: "ScArticleInfo",
             id: 24
+          },
+          adminCategories: {
+            type: "ScAdminCategories",
+            id: 25
           }
         }
       },
@@ -1216,6 +1240,19 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           isPublish: {
             type: "int32",
             id: 8
+          }
+        }
+      },
+      ScAdminCategories: {
+        fields: {
+          categoryList: {
+            rule: "repeated",
+            type: "Category",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
           }
         }
       }

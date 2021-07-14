@@ -8,6 +8,7 @@ export const urls = {
   articles_status: "/admin/articles/status",
   articles_top: "admin/articles/top/",
   refresh_token: "/admin/refresh_token",
+  categories: "/admin/categories",
 };
 
 export default urls;

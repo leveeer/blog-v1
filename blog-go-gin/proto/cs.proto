@@ -92,4 +92,10 @@ message CsUpdateArticleTop{
   int32 isTop = 1;
 }
 
+message CsCondition{
+  int64 current = 1;
+  int32 size = 2;
+  string keywords = 3;
+}
+
 

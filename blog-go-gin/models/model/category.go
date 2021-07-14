@@ -2,6 +2,8 @@ package model
 
 import (
 	"blog-go-gin/dao"
+	"blog-go-gin/logging"
+	"blog-go-gin/models/page"
 )
 
 type Category struct {
@@ -71,4 +73,22 @@ func GetCategoryList() ([]*Category, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+func GetCategoriesByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*Category, error) {
+	res := make([]*Category, 0)
+	logging.Logger.Debug(args)
+	if err := dao.Db.Where(condition, args...).Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetCategoriesCountByCondition(condition string, args ...interface{}) (int64, error) {
+	var m Category
+	var count int64
+	if err := dao.Db.Debug().Table("tb_category").Where(condition, args...).Find(&m).Count(&count).Error; err != nil {
+		return int64(0), err
+	}
+	return count, nil
 }

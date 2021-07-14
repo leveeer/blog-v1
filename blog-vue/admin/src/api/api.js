@@ -62,3 +62,7 @@ export function getArticleList(params) {
 export function getArticleByID(id) {
     return service.get(urls.articles + "/" + id)
 }
+
+export function getCategories(params) {
+    return service.get(urls.categories, params)
+}

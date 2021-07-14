@@ -4,11 +4,43 @@ import (
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
+	"blog-go-gin/models/page"
+	"fmt"
 	"sync"
 )
 
 type CategoryServiceImpl struct {
 	wg sync.WaitGroup
+}
+
+func (receiver *CategoryServiceImpl) GetAdminCategory(csCondition *pb.CsCondition) (*pb.ScAdminCategories, error) {
+	condition := "1 = 1"
+	if csCondition.GetKeywords() != "" {
+		condition = fmt.Sprintf(condition+"%s", "AND category_name LIKE ?")
+	}
+
+	//condition := "category_name LIKE ?"
+	logging.Logger.Debug(condition)
+	categories, err := model.GetCategoriesByConditionWithPage(condition, &page.IPage{Current: int(csCondition.GetCurrent()), Size: int(csCondition.GetSize())}, "%"+csCondition.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+	var categorySlice []*pb.Category
+	for _, category := range categories {
+		categorySlice = append(categorySlice, &pb.Category{
+			Id:           int32(category.ID),
+			CategoryName: category.CategoryName,
+			CreateTIme:   category.CreateTime,
+		})
+	}
+	categoryCount, err := model.GetCategoriesCountByCondition(condition, "%"+csCondition.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ScAdminCategories{
+		CategoryList: categorySlice,
+		Count:        categoryCount,
+	}, nil
 }
 
 func NewCategoryServiceImpl() *CategoryServiceImpl {
@@ -35,7 +67,5 @@ func (receiver *CategoryServiceImpl) GetCategories() ([]*pb.Category, error) {
 		}
 		categorySlice = append(categorySlice, c)
 	}
-
 	return categorySlice, err
-
 }

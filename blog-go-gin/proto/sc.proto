@@ -40,6 +40,7 @@ message ResponsePkg {
   ScImage uploadImage = 22;
   ScAdminArticle adminArticle = 23;
   ScArticleInfo updateArticleInfo = 24;
+  ScAdminCategories adminCategories = 25;
 }
 
 message ScImage{
@@ -119,5 +120,10 @@ message ScArticleInfo{
   repeated int64 tagIdList = 6;
   int32 isTop = 7;
   int32 isPublish = 8;
+}
+
+message ScAdminCategories{
+  repeated Category categoryList = 1;
+  int64 count = 2;
 }
 
