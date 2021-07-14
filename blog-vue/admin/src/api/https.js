@@ -50,6 +50,7 @@ service.interceptors.request.use(
         switch (config.method) {
             case "post":
             case "put":
+            case "delete":
                 if (config.headers['Content-Type'] === 'multipart/form-data') return config;
                 data = protoObj.RequestPkg.create(config.data);
                 encode = protoObj.RequestPkg.encode(data).finish();

@@ -245,7 +245,9 @@
 </template>
 
 <script>
-  import {getArticleList} from "../../api/api";
+  import {deleteArticles, getArticleList, updateArticleStatus, updateArticleTop} from "../../api/api";
+  import {getResultCode} from "../../utils/util";
+  import {resultMap} from "../../utils/constant";
 
   export default {
     created() {
@@ -262,7 +264,7 @@
             label: "已发布"
           },
           {
-            value: '{"isDelete":1,"isPublish":null}',
+            value: '{"isDelete":1}',
             label: "回收站"
           },
           {
@@ -291,90 +293,94 @@
       editArticle(id) {
         this.$router.push({path: "/articles/" + id});
       },
-      updateArticleStatus(id) {
-        let param = new URLSearchParams();
-        if (id != null) {
-          param.append("idList", [id]);
-        } else {
-          param.append("idList", this.articleIdList);
-        }
-        param.append("isDelete", (this.isDelete === 0 ? 1 : 0).toString());
-        this.axios.put("/api/admin/articles", param).then(({data}) => {
-          if (data.flag) {
-            this.$notify.success({
-              title: "成功",
-              message: data.message
-            });
-            this.listArticles();
-          } else {
-            this.$notify.error({
-              title: "失败",
-              message: data.message
-            });
-          }
-          this.updateIsDelete = false;
-        });
-      },
-      deleteArticles(id) {
-        var param = {};
-        if (id == null) {
-          param = {data: this.articleIdList};
-      } else {
-        param = { data: [id] };
-      }
-      this.axios.delete("/api/admin/articles", param).then(({ data }) => {
-        if (data.flag) {
+      notify(data) {
+        if (data.code === getResultCode(resultMap.SuccessOK)) {
           this.$notify.success({
             title: "成功",
             message: data.message
           });
-          this.listArticles();
         } else {
           this.$notify.error({
             title: "失败",
             message: data.message
           });
         }
-        this.remove = false;
-      });
-    },
-    sizeChange(size) {
-      this.size = size;
-      this.listArticles();
-    },
-    currentChange(current) {
-      this.current = current;
-      this.listArticles();
-    },
-    changeTop(article) {
-      let param = new URLSearchParams();
-      param.append("isTop", article.isTop);
-      this.axios.put("/api/admin/articles/top/" + article.id, param);
-    },
-    listArticles() {
-      getArticleList({
-        params: {
-          current: this.current,
-          size: this.size,
-          keywords: this.keywords,
-          isDelete: this.isDelete,
-          isPublish: this.isPublish
+        this.addOrEdit = false;
+      },
+      updateArticleStatus(id) {
+        if (id != null) {
+          this.articleIdList = [];
+          this.articleIdList.push(id)
         }
-      }).then((data) => {
-        console.log(data);
-        this.articleList = data.adminArticle.articleList;
-        this.count = data.adminArticle.count;
-        this.loading = false;
-      });
+        updateArticleStatus({
+          articleStatus: {
+            articleIdList: this.articleIdList,
+            isDelete: this.isDelete === 0 ? 1 : 0
+          }
+        }).then(data => {
+          this.articleIdList = [];
+          this.notify(data);
+          this.updateIsDelete = false;
+        });
+      },
+      deleteArticles(id) {
+        if (id != null) {
+          this.articleIdList = [];
+          this.articleIdList.push(id)
+        }
+        deleteArticles({
+          data: {
+            articleIds: {
+              articleIdList: this.articleIdList,
+            }
+          }
+        }).then(data => {
+          this.articleIdList = [];
+          this.notify(data);
+          this.remove = false;
+        });
+      },
+      sizeChange(size) {
+        this.size = size;
+        this.listArticles();
+      },
+      currentChange(current) {
+        this.current = current;
+        this.listArticles();
+      },
+      changeTop(article) {
+        updateArticleTop(article.id, {
+          articleTop: {
+            isTop: article.isTop
+          }
+        }).then(data =>{
+          this.notify(data)
+        })
+      },
+      listArticles() {
+        getArticleList({
+          params: {
+            current: this.current,
+            size: this.size,
+            keywords: this.keywords,
+            isDelete: this.isDelete,
+            isPublish: this.isPublish
+          }
+        }).then((data) => {
+          console.log(data);
+          this.articleList = data.adminArticle.articleList;
+          this.count = data.adminArticle.count;
+          this.loading = false;
+        });
+      }
+    },
+    watch: {
+      condition() {
+        const condition = JSON.parse(this.condition);
+        this.isDelete = condition.isDelete;
+        this.isPublish = condition.isPublish;
+        this.listArticles();
+      }
     }
-  },
-  watch: {
-    condition() {
-      const condition = JSON.parse(this.condition);
-      this.isDelete = condition.isDelete;
-      this.isPublish = condition.isPublish;
-      this.listArticles();
-    }
-  }
-};
+  };
 </script>

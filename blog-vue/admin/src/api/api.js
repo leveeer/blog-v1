@@ -36,8 +36,19 @@ export function addArticle(params) {
 }
 
 export function updateArticle(params) {
-    console.log(params)
     return service.put(urls.articles, params)
+}
+
+export function updateArticleStatus(params) {
+    return service.put(urls.articles_status, params)
+}
+
+export function updateArticleTop(id, params) {
+    return service.put(urls.articles_top + id, params)
+}
+
+export function deleteArticles(params) {
+    return service.delete(urls.articles, params)
 }
 
 export function refreshToken() {
