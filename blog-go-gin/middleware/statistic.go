@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"blog-go-gin/common"
+	"blog-go-gin/dao"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"github.com/gin-gonic/gin"
@@ -35,7 +36,7 @@ func StatisticArticleViews() gin.HandlerFunc {
 			logging.Logger.Debug(err)
 		}
 		id, _ := strconv.Atoi(articleID)
-		err = model.UpdateArticleClickCount(id)
+		err = model.UpdateArticleClickCount(dao.Db.Begin(), id)
 		if err != nil {
 			logging.Logger.Debug(err)
 		}

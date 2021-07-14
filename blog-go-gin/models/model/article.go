@@ -5,6 +5,7 @@ import (
 	"blog-go-gin/dao"
 	"blog-go-gin/models/page"
 	"gorm.io/gorm"
+	"time"
 )
 
 type Article struct {
@@ -32,32 +33,33 @@ func (model *Article) TableName() string {
 }
 
 func AddArticle(tx *gorm.DB, m *Article) (int, error) {
+	m.CreateTime = time.Now().Unix()
 	if err := tx.Debug().Table("tb_article").Create(m).Error; err != nil {
 		return 0, err
 	}
 	return m.ID, nil
 }
 
-func DeleteArticleByID(id int) (bool, error) {
-	if err := dao.Db.Table("tb_article").Delete(&Article{}, id).Error; err != nil {
+func DeleteArticleByID(tx *gorm.DB, id int) (bool, error) {
+	if err := tx.Debug().Table("tb_article").Delete(&Article{}, id).Error; err != nil {
 		return false, err
 	}
-	return dao.Db.RowsAffected > 0, nil
+	return tx.RowsAffected > 0, nil
 }
 
-func DeleteArticle(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Table("tb_article").Where(condition, args...).Delete(&Article{}).Error; err != nil {
+func DeleteArticle(tx *gorm.DB, condition string, args ...interface{}) (int64, error) {
+	if err := tx.Debug().Table("tb_article").Where(condition, args...).Delete(&Article{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.RowsAffected, nil
+	return tx.RowsAffected, nil
 }
 
 func UpdateArticle(tx *gorm.DB, m *Article) error {
-	return tx.Debug().Table("tb_article").Save(m).Error
+	return tx.Debug().Table("tb_article").Select("*").Omit("click_count", "collect_count").Updates(m).Error
 }
 
-func UpdateArticleClickCount(articleId int) error {
-	return dao.Db.Debug().Table("tb_article").Where("id = ?", articleId).Select("click_count").Update("click_count", gorm.Expr("click_count + ?", 1)).Error
+func UpdateArticleClickCount(tx *gorm.DB, articleId int) error {
+	return tx.Debug().Table("tb_article").Where("id = ?", articleId).Select("click_count").Update("click_count", gorm.Expr("click_count + ?", 1)).Error
 }
 
 func GetArticleByID(id int) (*Article, error) {
@@ -164,4 +166,12 @@ func GetViewCountRank(rankNo int) ([]*Article, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+func UpdateArticleStatus(tx *gorm.DB, condition string, status int8, args ...interface{}) error {
+	return tx.Debug().Table("tb_article").Where(condition, args...).Select("is_delete").Update("is_delete", status).Error
+}
+
+func UpdateArticleTop(tx *gorm.DB, condition string, isTop int8, args ...interface{}) error {
+	return tx.Debug().Table("tb_article").Where(condition, args...).Select("is_top").Update("is_top", isTop).Error
 }

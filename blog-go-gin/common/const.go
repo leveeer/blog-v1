@@ -66,4 +66,6 @@ const (
 	Articles       = "/articles"
 	RefreshToken   = "/refresh_token"
 	ArticlesByID   = "/articles/:id"
+	ArticlesStatus = "/articles/status"
+	ArticleTop     = "/articles/top/:id"
 )

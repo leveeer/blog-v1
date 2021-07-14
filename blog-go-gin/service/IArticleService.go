@@ -17,4 +17,7 @@ type IArticleService interface {
 	GetAdminArticle(csAdminArticle *pb.CsAdminArticles) (*pb.ScAdminArticle, error)
 	GetUpdateArticleInfoById(id int) (*pb.ScArticleInfo, error)
 	UpdateArticle(article *pb.CsArticle) error
+	UpdateArticleStatus(status *pb.CsUpdateArticleStatus) error
+	DeleteArticles(ids *pb.CsDeleteArticles) error
+	UpdateArticleTop(id int, isTop int8) error
 }

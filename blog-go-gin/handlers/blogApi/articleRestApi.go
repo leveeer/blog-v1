@@ -252,3 +252,91 @@ func (c *ArticleRestApi) UpdateArticle(ctx *gin.Context) {
 	}
 	c.ProtoBuf(ctx, http.StatusOK, data)
 }
+
+func (c *ArticleRestApi) UpdateArticleStatus(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request.ArticleStatus)
+	err = ArticleService.UpdateArticleStatus(request.ArticleStatus)
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.UpdateArticleFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+		Message:    "更新成功",
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}
+
+func (c *ArticleRestApi) DeleteArticles(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request.ArticleIds)
+	err = ArticleService.DeleteArticles(request.ArticleIds)
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.UpdateArticleFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+		Message:    "删除成功",
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}
+
+func (c *ArticleRestApi) UpdateArticleTop(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request.ArticleTop)
+	err = ArticleService.UpdateArticleTop(id, int8(request.ArticleTop.IsTop))
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.UpdateArticleFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+		Message:    "更新成功",
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}

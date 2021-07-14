@@ -17,6 +17,48 @@ type ArticleServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func (b *ArticleServiceImpl) UpdateArticleTop(id int, isTop int8) error {
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		err := model.UpdateArticleTop(tx, "id = ?", isTop, id)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *ArticleServiceImpl) DeleteArticles(ids *pb.CsDeleteArticles) error {
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		_, err := model.DeleteArticle(tx, "id in (?)", ids.ArticleIdList)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (b *ArticleServiceImpl) UpdateArticleStatus(status *pb.CsUpdateArticleStatus) error {
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		err := model.UpdateArticleStatus(tx, "id in (?)", int8(status.IsDelete), status.ArticleIdList)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (b *ArticleServiceImpl) UpdateArticle(csArticle *pb.CsArticle) error {
 	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
 		//更新文章表
@@ -96,6 +138,9 @@ func (b *ArticleServiceImpl) GetUpdateArticleInfoById(id int) (*pb.ScArticleInfo
 
 func (b *ArticleServiceImpl) GetAdminArticle(csAdminArticle *pb.CsAdminArticles) (*pb.ScAdminArticle, error) {
 	condition := "is_delete = ? AND is_publish = ? "
+	if csAdminArticle.GetIsDelete() == 1 {
+		condition = "is_delete = ?"
+	}
 	if csAdminArticle.GetKeywords() != "" {
 		condition = fmt.Sprintf(condition+"%s", "AND article_title LIKE ?")
 	}

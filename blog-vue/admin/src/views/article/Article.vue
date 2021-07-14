@@ -223,7 +223,6 @@
         const arr = this.path.split("/");
         const articleId = arr[2];
         if (articleId) {
-          console.log("更新");
           updateArticle({article: this.article}).then(data => {
             console.log(data);
             this.notify(data)
@@ -258,7 +257,6 @@
         if (this.autoSave && this.article.articleTitle.trim() !== "" && this.article.articleContent.trim() !== "") {
           this.article.isPublish = this.article.isPublish == null ? 0 : 1;
           if (articleId) {
-            console.log("更新");
             updateArticle({article: this.article}).then(data => {
               if (data.code === getResultCode(resultMap.SuccessOK)) {
                 this.$notify.success({

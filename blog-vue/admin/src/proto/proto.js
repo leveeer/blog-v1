@@ -66,6 +66,18 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           csAdminArticles: {
             type: "CsAdminArticles",
             id: 11
+          },
+          articleStatus: {
+            type: "CsUpdateArticleStatus",
+            id: 12
+          },
+          articleIds: {
+            type: "CsDeleteArticles",
+            id: 13
+          },
+          articleTop: {
+            type: "CsUpdateArticleTop",
+            id: 14
           }
         }
       },
@@ -207,6 +219,36 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           isPublish: {
             type: "int32",
             id: 5
+          }
+        }
+      },
+      CsUpdateArticleStatus: {
+        fields: {
+          articleIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          },
+          isDelete: {
+            type: "int32",
+            id: 2
+          }
+        }
+      },
+      CsDeleteArticles: {
+        fields: {
+          articleIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          }
+        }
+      },
+      CsUpdateArticleTop: {
+        fields: {
+          isTop: {
+            type: "int32",
+            id: 1
           }
         }
       },
