@@ -12,11 +12,11 @@
         新增
       </el-button>
       <el-button
-        type="danger"
-        size="small"
-        icon="el-icon-deleteItem"
-        :disabled="this.categoryIdList.length == 0"
-        @click="isDelete = true"
+              type="danger"
+              size="small"
+              icon="el-icon-deleteItem"
+              :disabled="this.categoryIdList.length === 0"
+              @click="isDelete = true"
       >
         批量删除
       </el-button>
@@ -120,99 +120,52 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.listCategories();
-  },
-  data: function() {
-    return {
-      isDelete: false,
-      loading: true,
-      addOrEdit: false,
-      keywords: null,
-      categoryIdList: [],
-      categoryList: [],
-      categoryForm: {
-        id: null,
-        categoryName: ""
-      },
-      current: 1,
-      size: 10,
-      count: 0
-    };
-  },
-  methods: {
-    selectionChange(categoryList) {
-      this.categoryIdList = [];
-      categoryList.forEach(item => {
-        this.categoryIdList.push(item.id);
-      });
-    },
-    sizeChange(size) {
-      this.size = size;
+  import {getCategories} from "../../api/api";
+
+  export default {
+    created() {
       this.listCategories();
     },
-    currentChange(current) {
-      this.current = current;
-      this.listCategories();
+    data: function () {
+      return {
+        isDelete: false,
+        loading: true,
+        addOrEdit: false,
+        keywords: "",
+        categoryIdList: [],
+        categoryList: [],
+        categoryForm: {
+          id: 0,
+          categoryName: ""
+        },
+        current: 1,
+        size: 10,
+        count: 0
+      };
     },
-    deleteCategory(id) {
-      var param = {};
-      if (id == null) {
-        param = { data: this.categoryIdList };
-      } else {
-        param = { data: [id] };
-      }
-      this.axios.delete("/api/admin/categories", param).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-          this.listCategories();
-        } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
-        }
-        this.isDelete = false;
-      });
-    },
-    listCategories() {
-      this.axios
-        .get("/api/admin/categories", {
-          params: {
-            current: this.current,
-            size: this.size,
-            keywords: this.keywords
-          }
-        })
-        .then(({ data }) => {
-          this.categoryList = data.data.recordList;
-          this.count = data.data.count;
-          this.loading = false;
+    methods: {
+      selectionChange(categoryList) {
+        this.categoryIdList = [];
+        categoryList.forEach(item => {
+          this.categoryIdList.push(item.id);
         });
-    },
-    openModel(category) {
-      if (category != null) {
-        this.categoryForm = JSON.parse(JSON.stringify(category));
-        this.$refs.categoryTitle.innerHTML = "修改分类";
-      } else {
-        this.categoryForm.id = null;
-        this.categoryForm.categoryName = "";
-        this.$refs.categoryTitle.innerHTML = "添加分类";
-      }
-      this.addOrEdit = true;
-    },
-    addOrEditCategory() {
-      if (this.categoryForm.categoryName.trim() == "") {
-        this.$message.error("分类名不能为空");
-        return false;
-      }
-      this.axios
-        .post("/api/admin/categories", this.categoryForm)
-        .then(({ data }) => {
+      },
+      sizeChange(size) {
+        this.size = size;
+        this.listCategories();
+      },
+      currentChange(current) {
+        this.current = current;
+        this.listCategories();
+      },
+      deleteCategory(id) {
+        var param = {};
+        if (id == null) {
+          param = {data: this.categoryIdList};
+        } else {
+          param = {data: [id]};
+        }
+        this.axios.delete("/api/admin/categories", param).then(({data}) => {
           if (data.flag) {
             this.$notify.success({
               title: "成功",
@@ -225,9 +178,57 @@ export default {
               message: data.message
             });
           }
-          this.addOrEdit = false;
+          this.isDelete = false;
         });
+      },
+      listCategories() {
+        getCategories({
+          params: {
+            current: this.current,
+            size: this.size,
+            keywords: this.keywords
+          }
+        }).then(data => {
+          console.log(data);
+          this.categoryList = data.adminCategories.categoryList;
+          this.count = data.adminCategories.count;
+          this.loading = false;
+        });
+      },
+      openModel(category) {
+        if (category != null) {
+          this.categoryForm = JSON.parse(JSON.stringify(category));
+          this.$refs.categoryTitle.innerHTML = "修改分类";
+        } else {
+          this.categoryForm.id = null;
+          this.categoryForm.categoryName = "";
+          this.$refs.categoryTitle.innerHTML = "添加分类";
+        }
+        this.addOrEdit = true;
+      },
+      addOrEditCategory() {
+        if (this.categoryForm.categoryName.trim() === "") {
+          this.$message.error("分类名不能为空");
+          return false;
+        }
+        this.axios
+                .post("/api/admin/categories", this.categoryForm)
+                .then(({data}) => {
+                  if (data.flag) {
+                    this.$notify.success({
+                      title: "成功",
+                      message: data.message
+                    });
+                    this.listCategories();
+                  } else {
+                    this.$notify.error({
+                      title: "失败",
+                      message: data.message
+                    });
+                  }
+                  this.addOrEdit = false;
+                });
+      }
     }
-  }
 };
 </script>
