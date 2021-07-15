@@ -74,6 +74,7 @@ message Category {
   int32 id = 1;
   string categoryName = 2;
   int32 articleCount = 3;
+  int64 createTIme = 4;
 }
 
 message ArticlesByCategoryOrTag {

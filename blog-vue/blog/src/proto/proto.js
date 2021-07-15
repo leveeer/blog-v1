@@ -74,6 +74,26 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           articleIds: {
             type: "CsDeleteArticles",
             id: 13
+          },
+          articleTop: {
+            type: "CsUpdateArticleTop",
+            id: 14
+          },
+          csCategory: {
+            type: "CsCategory",
+            id: 15
+          },
+          categoryIds: {
+            type: "CsDeleteCategory",
+            id: 16
+          },
+          csTag: {
+            type: "CsTag",
+            id: 17
+          },
+          tagIds: {
+            type: "CsDeleteTag",
+            id: 18
           }
         }
       },
@@ -234,6 +254,80 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
       CsDeleteArticles: {
         fields: {
           articleIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          }
+        }
+      },
+      CsUpdateArticleTop: {
+        fields: {
+          isTop: {
+            type: "int32",
+            id: 1
+          }
+        }
+      },
+      CsCondition: {
+        fields: {
+          current: {
+            type: "int64",
+            id: 1
+          },
+          size: {
+            type: "int32",
+            id: 2
+          },
+          keywords: {
+            type: "string",
+            id: 3
+          }
+        }
+      },
+      CsCategory: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          categoryName: {
+            type: "string",
+            id: 2
+          },
+          createTime: {
+            type: "int64",
+            id: 3
+          }
+        }
+      },
+      CsDeleteCategory: {
+        fields: {
+          categoryIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          }
+        }
+      },
+      CsTag: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          tagName: {
+            type: "string",
+            id: 2
+          },
+          createTime: {
+            type: "int64",
+            id: 3
+          }
+        }
+      },
+      CsDeleteTag: {
+        fields: {
+          tagIdList: {
             rule: "repeated",
             type: "int64",
             id: 1
@@ -473,6 +567,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           articleCount: {
             type: "int32",
             id: 3
+          },
+          createTIme: {
+            type: "int64",
+            id: 4
           }
         }
       },
@@ -959,6 +1057,14 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           updateArticleInfo: {
             type: "ScArticleInfo",
             id: 24
+          },
+          adminCategories: {
+            type: "ScAdminCategories",
+            id: 25
+          },
+          adminTags: {
+            type: "ScAdminTags",
+            id: 26
           }
         }
       },
@@ -1204,6 +1310,32 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           isPublish: {
             type: "int32",
             id: 8
+          }
+        }
+      },
+      ScAdminCategories: {
+        fields: {
+          categoryList: {
+            rule: "repeated",
+            type: "Category",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      ScAdminTags: {
+        fields: {
+          tagList: {
+            rule: "repeated",
+            type: "Tag",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
           }
         }
       }
