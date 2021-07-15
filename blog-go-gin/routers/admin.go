@@ -31,5 +31,12 @@ func adminRouters(r *gin.Engine) {
 		admin.PUT(common.ArticlesStatus, ArticleApi.UpdateArticleStatus)
 		admin.PUT(common.ArticleTop, ArticleApi.UpdateArticleTop)
 		admin.GET(common.AdminCategories, CategoryApi.GetAdminCategories)
+		admin.POST(common.AdminCategories, CategoryApi.AddOrUpdateCategory)
+		admin.PUT(common.AdminCategories, CategoryApi.AddOrUpdateCategory)
+		admin.DELETE(common.AdminCategories, CategoryApi.DeleteCategory)
+		admin.GET(common.AdminTags, TagApi.GetAdminTags)
+		admin.POST(common.AdminTags, TagApi.AddOrUpdateTag)
+		admin.PUT(common.AdminTags, TagApi.AddOrUpdateTag)
+		admin.DELETE(common.AdminTags, TagApi.DeleteTag)
 	}
 }

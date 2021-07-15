@@ -55,7 +55,7 @@ func DeleteArticle(tx *gorm.DB, condition string, args ...interface{}) (int64, e
 }
 
 func UpdateArticle(tx *gorm.DB, m *Article) error {
-	return tx.Debug().Table("tb_article").Select("*").Omit("click_count", "collect_count").Updates(m).Error
+	return tx.Debug().Table("tb_article").Select("*").Omit("createTime", "click_count", "collect_count").Updates(m).Error
 }
 
 func UpdateArticleClickCount(tx *gorm.DB, articleId int) error {
@@ -79,9 +79,8 @@ func GetArticles(condition string, args ...interface{}) ([]*Article, error) {
 }
 
 func GetArticlesCountByCondition(condition string, args ...interface{}) (int64, error) {
-	var m Article
 	var count int64
-	if err := dao.Db.Debug().Table("tb_article").Where(condition, args...).Find(&m).Count(&count).Error; err != nil {
+	if err := dao.Db.Debug().Table("tb_article").Where(condition, args...).Count(&count).Error; err != nil {
 		return int64(0), err
 	}
 	return count, nil

@@ -2,8 +2,8 @@ package model
 
 import (
 	"blog-go-gin/dao"
-	"blog-go-gin/logging"
 	"blog-go-gin/models/page"
+	"gorm.io/gorm"
 )
 
 type Category struct {
@@ -19,8 +19,8 @@ func (model *Category) TableName() string {
 	return "tb_category"
 }
 
-func AddCategory(m *Category) error {
-	return dao.Db.Save(m).Error
+func AddCategory(tx *gorm.DB, m *Category) error {
+	return tx.Debug().Save(m).Error
 }
 
 func DeleteCategoryByID(id int) (bool, error) {
@@ -30,15 +30,15 @@ func DeleteCategoryByID(id int) (bool, error) {
 	return dao.Db.RowsAffected > 0, nil
 }
 
-func DeleteCategory(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Where(condition, args...).Delete(&Category{}).Error; err != nil {
+func DeleteCategory(tx *gorm.DB, condition string, args ...interface{}) (int64, error) {
+	if err := tx.Debug().Where(condition, args...).Delete(&Category{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.RowsAffected, nil
+	return tx.Debug().RowsAffected, nil
 }
 
-func UpdateCategory(m *Category) error {
-	return dao.Db.Save(m).Error
+func UpdateCategory(tx *gorm.DB, m *Category) error {
+	return tx.Debug().Select("*").Omit("createTime").Updates(m).Error
 }
 
 func GetCategoryByID(id int) (*Category, error) {
@@ -77,17 +77,23 @@ func GetCategoryList() ([]*Category, error) {
 
 func GetCategoriesByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*Category, error) {
 	res := make([]*Category, 0)
-	logging.Logger.Debug(args)
-	if err := dao.Db.Where(condition, args...).Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("category_name LIKE ?", args...)
+	}
+	if err := db.Debug().Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
 		return nil, err
 	}
 	return res, nil
 }
 
 func GetCategoriesCountByCondition(condition string, args ...interface{}) (int64, error) {
-	var m Category
 	var count int64
-	if err := dao.Db.Debug().Table("tb_category").Where(condition, args...).Find(&m).Count(&count).Error; err != nil {
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("category_name LIKE ?", args...)
+	}
+	if err := db.Debug().Table("tb_category").Count(&count).Error; err != nil {
 		return int64(0), err
 	}
 	return count, nil

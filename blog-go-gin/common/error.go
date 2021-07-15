@@ -93,6 +93,11 @@ const (
 	AddArticleFail
 	TokenHasExpired
 	UpdateArticleFail
+	AddOrUpdateCategoryFail
+	DeleteCategoryFail
+	DeleteArticleFail
+	AddOrUpdateTagFail
+	DeleteTagFail
 )
 
 // unknown group
@@ -186,6 +191,11 @@ var Error = map[ErrorCode]error{
 	AddArticleFail:             errors.New("添加文章失败"),
 	TokenHasExpired:            errors.New("token is "),
 	UpdateArticleFail:          errors.New("更新文章失败"),
+	AddOrUpdateCategoryFail:    errors.New("增加或更新分类失败"),
+	AddOrUpdateTagFail:         errors.New("增加或更新标签失败"),
+	DeleteCategoryFail:         errors.New("删除分类失败"),
+	DeleteArticleFail:          errors.New("删除文章失败"),
+	DeleteTagFail:              errors.New("删除标签失败"),
 }
 
 func GetMsg(code ErrorCode) string {

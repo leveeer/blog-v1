@@ -2,6 +2,7 @@ package model
 
 import (
 	"blog-go-gin/dao"
+	"blog-go-gin/models/page"
 	"gorm.io/gorm"
 	_ "gorm.io/gorm"
 )
@@ -24,22 +25,22 @@ func AddTag(tx *gorm.DB, m *Tag) error {
 	return tx.Debug().Save(m).Error
 }
 
-func DeleteTagByID(id int) (bool, error) {
-	if err := dao.Db.Delete(&Tag{}, id).Error; err != nil {
+func DeleteTagByID(tx *gorm.DB, id int) (bool, error) {
+	if err := tx.Debug().Delete(&Tag{}, id).Error; err != nil {
 		return false, err
 	}
-	return dao.Db.RowsAffected > 0, nil
+	return tx.RowsAffected > 0, nil
 }
 
-func DeleteTag(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Where(condition, args...).Delete(&Tag{}).Error; err != nil {
+func DeleteTag(tx *gorm.DB, condition string, args ...interface{}) (int64, error) {
+	if err := tx.Debug().Where(condition, args...).Delete(&Tag{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.RowsAffected, nil
+	return tx.RowsAffected, nil
 }
 
-func UpdateTag(m *Tag) error {
-	return dao.Db.Save(m).Error
+func UpdateTag(tx *gorm.DB, m *Tag) error {
+	return tx.Debug().Select("*").Omit("createTime", "status").Updates(m).Error
 }
 
 func GetTagByID(id int) (*Tag, error) {
@@ -73,4 +74,28 @@ func GetTagNameByArticleId(articleId int) ([]*Tag, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+func GetTagsByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*Tag, error) {
+	res := make([]*Tag, 0)
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("tag_name LIKE ?", args...)
+	}
+	if err := db.Debug().Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetTagsCountByCondition(condition string, args ...interface{}) (int64, error) {
+	var count int64
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("tag_name LIKE ?", args...)
+	}
+	if err := db.Debug().Table("tb_tag").Count(&count).Error; err != nil {
+		return int64(0), err
+	}
+	return count, nil
 }

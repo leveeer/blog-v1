@@ -299,7 +299,7 @@ func (c *ArticleRestApi) DeleteArticles(ctx *gin.Context) {
 	logging.Logger.Debug(request.ArticleIds)
 	err = ArticleService.DeleteArticles(request.ArticleIds)
 	if err != nil {
-		c.ProtoBufFail(ctx, http.StatusOK, common.UpdateArticleFail)
+		c.ProtoBufFail(ctx, http.StatusOK, common.DeleteArticleFail)
 		return
 	}
 	data := &pb.ResponsePkg{

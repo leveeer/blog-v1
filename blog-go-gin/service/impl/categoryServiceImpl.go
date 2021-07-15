@@ -1,27 +1,72 @@
 package impl
 
 import (
+	"blog-go-gin/dao"
 	pb "blog-go-gin/go_proto"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
-	"fmt"
+	"gorm.io/gorm"
 	"sync"
+	"time"
 )
 
 type CategoryServiceImpl struct {
 	wg sync.WaitGroup
 }
 
-func (receiver *CategoryServiceImpl) GetAdminCategory(csCondition *pb.CsCondition) (*pb.ScAdminCategories, error) {
-	condition := "1 = 1"
-	if csCondition.GetKeywords() != "" {
-		condition = fmt.Sprintf(condition+"%s", "AND category_name LIKE ?")
+func (receiver *CategoryServiceImpl) DeleteCategory(ids *pb.CsDeleteCategory) error {
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		_, err := model.DeleteCategory(tx, "id in (?)", ids.CategoryIdList)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (receiver *CategoryServiceImpl) AddOrUpdateCategory(category *pb.CsCategory) error {
+	if category.Id == 0 {
+		//新增
+		err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+			err := model.AddCategory(tx, &model.Category{
+				CategoryName: category.GetCategoryName(),
+				CreateTime:   time.Now().Unix(),
+			})
+			if err != nil {
+				return err
+			}
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+		return nil
+	}
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		err := model.UpdateCategory(tx, &model.Category{
+			ID:           int(category.Id),
+			CategoryName: category.CategoryName,
+			UpdateTime:   time.Now().Unix(),
+		})
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
 	}
 
-	//condition := "category_name LIKE ?"
-	logging.Logger.Debug(condition)
-	categories, err := model.GetCategoriesByConditionWithPage(condition, &page.IPage{Current: int(csCondition.GetCurrent()), Size: int(csCondition.GetSize())}, "%"+csCondition.GetKeywords()+"%")
+	return nil
+}
+
+func (receiver *CategoryServiceImpl) GetAdminCategory(csCondition *pb.CsCondition) (*pb.ScAdminCategories, error) {
+	categories, err := model.GetCategoriesByConditionWithPage(csCondition.GetKeywords(), &page.IPage{Current: int(csCondition.GetCurrent()), Size: int(csCondition.GetSize())}, "%"+csCondition.GetKeywords()+"%")
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +78,7 @@ func (receiver *CategoryServiceImpl) GetAdminCategory(csCondition *pb.CsConditio
 			CreateTIme:   category.CreateTime,
 		})
 	}
-	categoryCount, err := model.GetCategoriesCountByCondition(condition, "%"+csCondition.GetKeywords()+"%")
+	categoryCount, err := model.GetCategoriesCountByCondition(csCondition.GetKeywords(), "%"+csCondition.GetKeywords()+"%")
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +93,6 @@ func NewCategoryServiceImpl() *CategoryServiceImpl {
 }
 
 func (receiver *CategoryServiceImpl) GetCategories() ([]*pb.Category, error) {
-
 	categories, err := model.GetCategories("1 = 1")
 	if err != nil {
 		return nil, err

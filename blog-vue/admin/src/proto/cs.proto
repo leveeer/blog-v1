@@ -32,6 +32,10 @@ message RequestPkg{
   CsUpdateArticleStatus articleStatus = 12;
   CsDeleteArticles articleIds = 13;
   CsUpdateArticleTop articleTop = 14;
+  CsCategory csCategory = 15;
+  CsDeleteCategory categoryIds = 16;
+  CsTag csTag = 17;
+  CsDeleteTag tagIds = 18;
 }
 
 message CsComment{
@@ -97,5 +101,26 @@ message CsCondition{
   int32 size = 2;
   string keywords = 3;
 }
+
+message CsCategory{
+  int32 id = 1;
+  string categoryName = 2;
+  int64 createTime = 3;
+}
+
+message CsDeleteCategory{
+  repeated int64 categoryIdList = 1;
+}
+
+message CsTag{
+  int32 id = 1;
+  string tagName = 2;
+  int64 createTime = 3;
+}
+
+message CsDeleteTag{
+  repeated int64 tagIdList = 1;
+}
+
 
 

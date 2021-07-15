@@ -31,7 +31,7 @@ const (
 	Component         = "Layout"               //前端组件名
 )
 
-//code status
+// SuccessOK code status
 const (
 	SuccessOK = 1000
 )
@@ -69,4 +69,5 @@ const (
 	ArticlesStatus  = "/articles/status"
 	ArticleTop      = "/articles/top/:id"
 	AdminCategories = "/categories"
+	AdminTags       = "/tags"
 )
