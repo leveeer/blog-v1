@@ -66,3 +66,31 @@ export function getArticleByID(id) {
 export function getCategories(params) {
     return service.get(urls.categories, params)
 }
+
+export function addCategory(params) {
+    return service.post(urls.categories, params)
+}
+
+export function updateCategory(params) {
+    return service.put(urls.categories, params)
+}
+
+export function deleteCategory(params) {
+    return service.delete(urls.categories, params)
+}
+
+export function getTags(params) {
+    return service.get(urls.tags, params)
+}
+
+export function addTag(params) {
+    return service.post(urls.tags, params)
+}
+
+export function updateTag(params) {
+    return service.put(urls.tags, params)
+}
+
+export function deleteTag(params) {
+    return service.delete(urls.tags, params)
+}

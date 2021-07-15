@@ -120,7 +120,9 @@
 </template>
 
 <script>
-  import {getCategories} from "../../api/api";
+  import {addCategory, deleteCategory, getCategories, updateCategory} from "../../api/api";
+  import {getResultCode} from "../../utils/util";
+  import {resultMap} from "../../utils/constant";
 
   export default {
     created() {
@@ -159,25 +161,21 @@
         this.listCategories();
       },
       deleteCategory(id) {
-        var param = {};
-        if (id == null) {
-          param = {data: this.categoryIdList};
-        } else {
-          param = {data: [id]};
+        if (id != null) {
+          this.categoryIdList = [];
+          this.categoryIdList.push(id);
         }
-        this.axios.delete("/api/admin/categories", param).then(({data}) => {
-          if (data.flag) {
-            this.$notify.success({
-              title: "成功",
-              message: data.message
-            });
-            this.listCategories();
-          } else {
-            this.$notify.error({
-              title: "失败",
-              message: data.message
-            });
+        console.log(this.categoryIdList)
+        deleteCategory({
+          data:{
+            categoryIds: {
+              categoryIdList: this.categoryIdList,
+            }
           }
+        }).then(data => {
+          this.categoryIdList = [];
+          console.log(data);
+          this.notify(data);
           this.isDelete = false;
         });
       },
@@ -211,23 +209,38 @@
           this.$message.error("分类名不能为空");
           return false;
         }
-        this.axios
-                .post("/api/admin/categories", this.categoryForm)
-                .then(({data}) => {
-                  if (data.flag) {
-                    this.$notify.success({
-                      title: "成功",
-                      message: data.message
-                    });
-                    this.listCategories();
-                  } else {
-                    this.$notify.error({
-                      title: "失败",
-                      message: data.message
-                    });
-                  }
-                  this.addOrEdit = false;
-                });
+        let params = {
+          csCategory: {
+            id: this.categoryForm.id,
+            categoryName: this.categoryForm.categoryName,
+          }
+        };
+        if (this.categoryForm.id == null) {
+          addCategory(params).then(data => {
+            this.notify(data);
+            this.addOrEdit = false;
+          })
+        } else {
+          updateCategory(params).then(data => {
+            this.notify(data);
+            this.addOrEdit = false;
+          })
+        }
+      },
+
+      notify(data) {
+        if (data.code === getResultCode(resultMap.SuccessOK)) {
+          this.$notify.success({
+            title: "成功",
+            message: data.message
+          });
+          this.listCategories();
+        } else {
+          this.$notify.error({
+            title: "失败",
+            message: data.message
+          });
+        }
       }
     }
 };

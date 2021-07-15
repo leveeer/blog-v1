@@ -78,6 +78,22 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           articleTop: {
             type: "CsUpdateArticleTop",
             id: 14
+          },
+          csCategory: {
+            type: "CsCategory",
+            id: 15
+          },
+          categoryIds: {
+            type: "CsDeleteCategory",
+            id: 16
+          },
+          csTag: {
+            type: "CsTag",
+            id: 17
+          },
+          tagIds: {
+            type: "CsDeleteTag",
+            id: 18
           }
         }
       },
@@ -265,6 +281,56 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           keywords: {
             type: "string",
             id: 3
+          }
+        }
+      },
+      CsCategory: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          categoryName: {
+            type: "string",
+            id: 2
+          },
+          createTime: {
+            type: "int64",
+            id: 3
+          }
+        }
+      },
+      CsDeleteCategory: {
+        fields: {
+          categoryIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          }
+        }
+      },
+      CsTag: {
+        fields: {
+          id: {
+            type: "int32",
+            id: 1
+          },
+          tagName: {
+            type: "string",
+            id: 2
+          },
+          createTime: {
+            type: "int64",
+            id: 3
+          }
+        }
+      },
+      CsDeleteTag: {
+        fields: {
+          tagIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
           }
         }
       },
@@ -995,6 +1061,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           adminCategories: {
             type: "ScAdminCategories",
             id: 25
+          },
+          adminTags: {
+            type: "ScAdminTags",
+            id: 26
           }
         }
       },
@@ -1248,6 +1318,19 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           categoryList: {
             rule: "repeated",
             type: "Category",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      ScAdminTags: {
+        fields: {
+          tagList: {
+            rule: "repeated",
+            type: "Tag",
             id: 1
           },
           count: {

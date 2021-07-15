@@ -126,98 +126,113 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.listTags();
-  },
-  data: function() {
-    return {
-      isDelete: false,
-      loading: true,
-      addOrEdit: false,
-      keywords: null,
-      tagList: [],
-      tagIdList: [],
-      tagForm: {
-        id: null,
-        tagName: ""
+  import {getResultCode} from "../../utils/util";
+  import {resultMap} from "../../utils/constant";
+  import {addTag, deleteTag, getTags, updateTag} from "../../api/api";
+
+  export default {
+    created() {
+      this.listTags();
+    },
+    data: function () {
+      return {
+        isDelete: false,
+        loading: true,
+        addOrEdit: false,
+        keywords: "",
+        tagList: [],
+        tagIdList: [],
+        tagForm: {
+          id: 0,
+          tagName: ""
+        },
+        current: 1,
+        size: 10,
+        count: 0
+      };
+    },
+    methods: {
+      selectionChange(tagList) {
+        this.tagIdList = [];
+        tagList.forEach(item => {
+          this.tagIdList.push(item.id);
+        });
       },
-      current: 1,
-      size: 10,
-      count: 0
-    };
-  },
-  methods: {
-    selectionChange(tagList) {
-      this.tagIdList = [];
-      tagList.forEach(item => {
-        this.tagIdList.push(item.id);
-      });
-    },
-    sizeChange(size) {
-      this.size = size;
-      this.listTags();
-    },
-    currentChange(current) {
-      this.current = current;
-      this.listTags();
-    },
-    deleteTag(id) {
-      var param = {};
-      if (id == null) {
-        param = { data: this.tagIdList };
-      } else {
-        param = { data: [id] };
-      }
-      this.axios.delete("/api/admin/tags", param).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-          this.listTags();
-        } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
+      sizeChange(size) {
+        this.size = size;
+        this.listTags();
+      },
+      currentChange(current) {
+        this.current = current;
+        this.listTags();
+      },
+      deleteTag(id) {
+        if (id != null) {
+          this.tagIdList = [];
+          this.tagIdList.push(id);
         }
-      });
-      this.isDelete = false;
-    },
-    listTags() {
-      this.axios
-        .get("/api/admin/tags", {
+        deleteTag({
+          data: {
+            tagIds: {
+              tagIdList: this.tagIdList
+            }
+          }
+        }).then(data => {
+          this.tagIdList = [];
+          this.notify(data);
+          this.isDelete = false;
+        })
+      },
+      listTags() {
+        getTags({
           params: {
             current: this.current,
             size: this.size,
             keywords: this.keywords
           }
-        })
-        .then(({ data }) => {
-          this.tagList = data.data.recordList;
-          this.count = data.data.count;
+        }).then(data => {
+          this.tagList = data.adminTags.tagList;
+          this.count = data.adminTags.count;
           this.loading = false;
         });
-    },
-    openModel(tag) {
-      if (tag != null) {
-        this.tagForm = JSON.parse(JSON.stringify(tag));
-        this.$refs.tagTitle.innerHTML = "修改标签";
-      } else {
-        this.tagForm.id = null;
-        this.tagForm.tagName = "";
-        this.$refs.tagTitle.innerHTML = "添加标签";
-      }
-      this.addOrEdit = true;
-    },
-    addOrEditTag() {
-      if (this.tagForm.tagName.trim() == "") {
-        this.$message.error("标签名不能为空");
-        return false;
-      }
-      this.axios.post("/api/admin/tags", this.tagForm).then(({ data }) => {
-        if (data.flag) {
+      },
+      openModel(tag) {
+        if (tag != null) {
+          this.tagForm = JSON.parse(JSON.stringify(tag));
+          this.$refs.tagTitle.innerHTML = "修改标签";
+        } else {
+          this.tagForm.id = null;
+          this.tagForm.tagName = "";
+          this.$refs.tagTitle.innerHTML = "添加标签";
+        }
+        this.addOrEdit = true;
+      },
+      addOrEditTag() {
+        if (this.tagForm.tagName.trim() === "") {
+          this.$message.error("标签名不能为空");
+          return false;
+        }
+        let params = {
+          csTag: {
+            id: this.tagForm.id,
+            tagName: this.tagForm.tagName,
+          }
+        };
+        if (this.tagForm.id == null) {
+          addTag(params).then(data => {
+            this.notify(data);
+            this.addOrEdit = false;
+          })
+        } else {
+          updateTag(params).then(data => {
+            this.notify(data);
+            this.addOrEdit = false;
+          })
+        }
+      },
+
+      notify(data) {
+        if (data.code === getResultCode(resultMap.SuccessOK)) {
           this.$notify.success({
             title: "成功",
             message: data.message
@@ -229,9 +244,7 @@ export default {
             message: data.message
           });
         }
-      });
-      this.addOrEdit = false;
+      }
     }
-  }
 };
 </script>

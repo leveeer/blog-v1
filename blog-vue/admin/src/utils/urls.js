@@ -9,6 +9,7 @@ export const urls = {
   articles_top: "admin/articles/top/",
   refresh_token: "/admin/refresh_token",
   categories: "/admin/categories",
+  tags: "/admin/tags",
 };
 
 export default urls;
