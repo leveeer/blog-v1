@@ -134,8 +134,20 @@ message ScAdminTags{
   int64 count = 2;
 }
 
+message ScComment{
+  int64 id = 1;
+  string avatar = 2;
+  string nickname = 3;
+  string replyNickname = 4;
+  string articleTitle = 5;
+  string commentContent = 6;
+  int64 createTime = 7;
+  int32 isDelete = 8;
+  int64 likeCount = 9;
+}
+
 message ScAdminComments{
-  repeated Comment commentList = 1;
+  repeated ScComment commentList = 1;
   int64 count = 2;
 }
 

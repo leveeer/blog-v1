@@ -1409,11 +1409,51 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      ScComment: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 1
+          },
+          avatar: {
+            type: "string",
+            id: 2
+          },
+          nickname: {
+            type: "string",
+            id: 3
+          },
+          replyNickname: {
+            type: "string",
+            id: 4
+          },
+          articleTitle: {
+            type: "string",
+            id: 5
+          },
+          commentContent: {
+            type: "string",
+            id: 6
+          },
+          createTime: {
+            type: "int64",
+            id: 7
+          },
+          isDelete: {
+            type: "int32",
+            id: 8
+          },
+          likeCount: {
+            type: "int64",
+            id: 9
+          }
+        }
+      },
       ScAdminComments: {
         fields: {
           commentList: {
             rule: "repeated",
-            type: "Comment",
+            type: "ScComment",
             id: 1
           },
           count: {

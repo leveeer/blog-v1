@@ -21,6 +21,7 @@ type Comment struct {
 	ReplyCount     int    `gorm:"->"`
 	ReplyNickname  string `gorm:"->"`
 	ReplyWebSite   string `gorm:"->"`
+	ArticleTitle   string `gorm:"->"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -66,10 +67,21 @@ func GetComments(condition string, args ...interface{}) ([]*Comment, error) {
 	return res, nil
 }
 
+func GetCommentsByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*Comment, error) {
+	res := make([]*Comment, 0)
+	if err := dao.Db.Debug().Table("tb_comment c").
+		Select("c.id,u.avatar,u.nickname,r.nickname AS reply_nickname,a.article_title,c.comment_content,c.create_time,c.is_delete").
+		Where(condition, args...).Joins("LEFT JOIN tb_article a ON c.article_id = a.id").
+		Joins("LEFT JOIN tb_user_info u ON c.user_id = u.id").Joins("LEFT JOIN tb_user_info r ON c.reply_id = r.id").
+		Scopes(page.Paginate(iPage)).Order("create_time DESC").Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func GetCommentsCountByCondition(condition string, args ...interface{}) (int64, error) {
-	var m Comment
 	var count int64
-	if err := dao.Db.Debug().Table("tb_comment").Where(condition, args...).Find(&m).Count(&count).Error; err != nil {
+	if err := dao.Db.Debug().Table("tb_comment c").Where(condition, args...).Count(&count).Error; err != nil {
 		return int64(0), err
 	}
 	return count, nil

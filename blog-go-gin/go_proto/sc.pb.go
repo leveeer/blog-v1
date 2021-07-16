@@ -1265,19 +1265,130 @@ func (x *ScAdminTags) GetCount() int64 {
 	return 0
 }
 
+type ScComment struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id             int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Avatar         string `protobuf:"bytes,2,opt,name=avatar,proto3" json:"avatar,omitempty"`
+	Nickname       string `protobuf:"bytes,3,opt,name=nickname,proto3" json:"nickname,omitempty"`
+	ReplyNickname  string `protobuf:"bytes,4,opt,name=replyNickname,proto3" json:"replyNickname,omitempty"`
+	ArticleTitle   string `protobuf:"bytes,5,opt,name=articleTitle,proto3" json:"articleTitle,omitempty"`
+	CommentContent string `protobuf:"bytes,6,opt,name=commentContent,proto3" json:"commentContent,omitempty"`
+	CreateTime     int64  `protobuf:"varint,7,opt,name=createTime,proto3" json:"createTime,omitempty"`
+	IsDelete       int32  `protobuf:"varint,8,opt,name=isDelete,proto3" json:"isDelete,omitempty"`
+	LikeCount      int64  `protobuf:"varint,9,opt,name=likeCount,proto3" json:"likeCount,omitempty"`
+}
+
+func (x *ScComment) Reset() {
+	*x = ScComment{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_sc_proto_msgTypes[13]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ScComment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ScComment) ProtoMessage() {}
+
+func (x *ScComment) ProtoReflect() protoreflect.Message {
+	mi := &file_sc_proto_msgTypes[13]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ScComment.ProtoReflect.Descriptor instead.
+func (*ScComment) Descriptor() ([]byte, []int) {
+	return file_sc_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ScComment) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *ScComment) GetAvatar() string {
+	if x != nil {
+		return x.Avatar
+	}
+	return ""
+}
+
+func (x *ScComment) GetNickname() string {
+	if x != nil {
+		return x.Nickname
+	}
+	return ""
+}
+
+func (x *ScComment) GetReplyNickname() string {
+	if x != nil {
+		return x.ReplyNickname
+	}
+	return ""
+}
+
+func (x *ScComment) GetArticleTitle() string {
+	if x != nil {
+		return x.ArticleTitle
+	}
+	return ""
+}
+
+func (x *ScComment) GetCommentContent() string {
+	if x != nil {
+		return x.CommentContent
+	}
+	return ""
+}
+
+func (x *ScComment) GetCreateTime() int64 {
+	if x != nil {
+		return x.CreateTime
+	}
+	return 0
+}
+
+func (x *ScComment) GetIsDelete() int32 {
+	if x != nil {
+		return x.IsDelete
+	}
+	return 0
+}
+
+func (x *ScComment) GetLikeCount() int64 {
+	if x != nil {
+		return x.LikeCount
+	}
+	return 0
+}
+
 type ScAdminComments struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	CommentList []*Comment `protobuf:"bytes,1,rep,name=commentList,proto3" json:"commentList,omitempty"`
-	Count       int64      `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	CommentList []*ScComment `protobuf:"bytes,1,rep,name=commentList,proto3" json:"commentList,omitempty"`
+	Count       int64        `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
 }
 
 func (x *ScAdminComments) Reset() {
 	*x = ScAdminComments{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_sc_proto_msgTypes[13]
+		mi := &file_sc_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1290,7 +1401,7 @@ func (x *ScAdminComments) String() string {
 func (*ScAdminComments) ProtoMessage() {}
 
 func (x *ScAdminComments) ProtoReflect() protoreflect.Message {
-	mi := &file_sc_proto_msgTypes[13]
+	mi := &file_sc_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1303,10 +1414,10 @@ func (x *ScAdminComments) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ScAdminComments.ProtoReflect.Descriptor instead.
 func (*ScAdminComments) Descriptor() ([]byte, []int) {
-	return file_sc_proto_rawDescGZIP(), []int{13}
+	return file_sc_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *ScAdminComments) GetCommentList() []*Comment {
+func (x *ScAdminComments) GetCommentList() []*ScComment {
 	if x != nil {
 		return x.CommentList
 	}
@@ -1535,10 +1646,28 @@ var file_sc_proto_rawDesc = []byte{
 	0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e, 0x54,
 	0x61, 0x67, 0x52, 0x07, 0x74, 0x61, 0x67, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x63,
 	0x6f, 0x75, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x63, 0x6f, 0x75, 0x6e,
-	0x74, 0x22, 0x59, 0x0a, 0x0f, 0x53, 0x63, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x43, 0x6f, 0x6d, 0x6d,
-	0x65, 0x6e, 0x74, 0x73, 0x12, 0x30, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x4c,
-	0x69, 0x73, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x0e, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x2e, 0x43, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x65,
+	0x74, 0x22, 0x9b, 0x02, 0x0a, 0x09, 0x53, 0x63, 0x43, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x12,
+	0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x02, 0x69, 0x64, 0x12,
+	0x16, 0x0a, 0x06, 0x61, 0x76, 0x61, 0x74, 0x61, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x06, 0x61, 0x76, 0x61, 0x74, 0x61, 0x72, 0x12, 0x1a, 0x0a, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e,
+	0x61, 0x6d, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x6e, 0x69, 0x63, 0x6b, 0x6e,
+	0x61, 0x6d, 0x65, 0x12, 0x24, 0x0a, 0x0d, 0x72, 0x65, 0x70, 0x6c, 0x79, 0x4e, 0x69, 0x63, 0x6b,
+	0x6e, 0x61, 0x6d, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0d, 0x72, 0x65, 0x70, 0x6c,
+	0x79, 0x4e, 0x69, 0x63, 0x6b, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x22, 0x0a, 0x0c, 0x61, 0x72, 0x74,
+	0x69, 0x63, 0x6c, 0x65, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x0c, 0x61, 0x72, 0x74, 0x69, 0x63, 0x6c, 0x65, 0x54, 0x69, 0x74, 0x6c, 0x65, 0x12, 0x26, 0x0a,
+	0x0e, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f, 0x6e, 0x74, 0x65, 0x6e, 0x74, 0x18,
+	0x06, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0e, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f,
+	0x6e, 0x74, 0x65, 0x6e, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x54,
+	0x69, 0x6d, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74,
+	0x65, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x69, 0x73, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x69, 0x73, 0x44, 0x65, 0x6c, 0x65, 0x74,
+	0x65, 0x12, 0x1c, 0x0a, 0x09, 0x6c, 0x69, 0x6b, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x09,
+	0x20, 0x01, 0x28, 0x03, 0x52, 0x09, 0x6c, 0x69, 0x6b, 0x65, 0x43, 0x6f, 0x75, 0x6e, 0x74, 0x22,
+	0x5b, 0x0a, 0x0f, 0x53, 0x63, 0x41, 0x64, 0x6d, 0x69, 0x6e, 0x43, 0x6f, 0x6d, 0x6d, 0x65, 0x6e,
+	0x74, 0x73, 0x12, 0x32, 0x0a, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x4c, 0x69, 0x73,
+	0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x10, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2e,
+	0x53, 0x63, 0x43, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x52, 0x0b, 0x63, 0x6f, 0x6d, 0x6d, 0x65,
 	0x6e, 0x74, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x14, 0x0a, 0x05, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18,
 	0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x05, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x2a, 0x22, 0x0a, 0x08,
 	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x16, 0x0a, 0x12, 0x52, 0x65, 0x73, 0x70,
@@ -1566,7 +1695,7 @@ func file_sc_proto_rawDescGZIP() []byte {
 }
 
 var file_sc_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_sc_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_sc_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_sc_proto_goTypes = []interface{}{
 	(Response)(0),                   // 0: proto.Response
 	(ResultCode)(0),                 // 1: proto.ResultCode
@@ -1583,40 +1712,40 @@ var file_sc_proto_goTypes = []interface{}{
 	(*ScArticleInfo)(nil),           // 12: proto.ScArticleInfo
 	(*ScAdminCategories)(nil),       // 13: proto.ScAdminCategories
 	(*ScAdminTags)(nil),             // 14: proto.ScAdminTags
-	(*ScAdminComments)(nil),         // 15: proto.ScAdminComments
-	(*Category)(nil),                // 16: proto.Category
-	(*ArticlesByCategoryOrTag)(nil), // 17: proto.ArticlesByCategoryOrTag
-	(*Tag)(nil),                     // 18: proto.Tag
-	(*Message)(nil),                 // 19: proto.Message
-	(*FriendLink)(nil),              // 20: proto.FriendLink
-	(*CommentInfo)(nil),             // 21: proto.CommentInfo
-	(*LoginResponse)(nil),           // 22: proto.LoginResponse
-	(*Article)(nil),                 // 23: proto.Article
-	(*BlogHomeInfo)(nil),            // 24: proto.BlogHomeInfo
-	(*ArticleInfo)(nil),             // 25: proto.ArticleInfo
-	(*Archives)(nil),                // 26: proto.Archives
-	(*About)(nil),                   // 27: proto.About
-	(*Reply)(nil),                   // 28: proto.Reply
-	(*UniqueView)(nil),              // 29: proto.UniqueView
-	(*ArticleRank)(nil),             // 30: proto.ArticleRank
-	(*Comment)(nil),                 // 31: proto.Comment
+	(*ScComment)(nil),               // 15: proto.ScComment
+	(*ScAdminComments)(nil),         // 16: proto.ScAdminComments
+	(*Category)(nil),                // 17: proto.Category
+	(*ArticlesByCategoryOrTag)(nil), // 18: proto.ArticlesByCategoryOrTag
+	(*Tag)(nil),                     // 19: proto.Tag
+	(*Message)(nil),                 // 20: proto.Message
+	(*FriendLink)(nil),              // 21: proto.FriendLink
+	(*CommentInfo)(nil),             // 22: proto.CommentInfo
+	(*LoginResponse)(nil),           // 23: proto.LoginResponse
+	(*Article)(nil),                 // 24: proto.Article
+	(*BlogHomeInfo)(nil),            // 25: proto.BlogHomeInfo
+	(*ArticleInfo)(nil),             // 26: proto.ArticleInfo
+	(*Archives)(nil),                // 27: proto.Archives
+	(*About)(nil),                   // 28: proto.About
+	(*Reply)(nil),                   // 29: proto.Reply
+	(*UniqueView)(nil),              // 30: proto.UniqueView
+	(*ArticleRank)(nil),             // 31: proto.ArticleRank
 }
 var file_sc_proto_depIdxs = []int32{
 	0,  // 0: proto.ResponsePkg.cmdId:type_name -> proto.Response
 	1,  // 1: proto.ResponsePkg.code:type_name -> proto.ResultCode
-	16, // 2: proto.ResponsePkg.categories:type_name -> proto.Category
-	17, // 3: proto.ResponsePkg.articlesByCategoryOrTag:type_name -> proto.ArticlesByCategoryOrTag
-	18, // 4: proto.ResponsePkg.tags:type_name -> proto.Tag
-	19, // 5: proto.ResponsePkg.messages:type_name -> proto.Message
-	20, // 6: proto.ResponsePkg.friendLinks:type_name -> proto.FriendLink
-	21, // 7: proto.ResponsePkg.commentInfo:type_name -> proto.CommentInfo
-	22, // 8: proto.ResponsePkg.loginResponse:type_name -> proto.LoginResponse
-	23, // 9: proto.ResponsePkg.articleList:type_name -> proto.Article
-	24, // 10: proto.ResponsePkg.blogHomeInfo:type_name -> proto.BlogHomeInfo
-	25, // 11: proto.ResponsePkg.articleInfo:type_name -> proto.ArticleInfo
-	26, // 12: proto.ResponsePkg.archiveInfo:type_name -> proto.Archives
-	27, // 13: proto.ResponsePkg.about:type_name -> proto.About
-	28, // 14: proto.ResponsePkg.replyList:type_name -> proto.Reply
+	17, // 2: proto.ResponsePkg.categories:type_name -> proto.Category
+	18, // 3: proto.ResponsePkg.articlesByCategoryOrTag:type_name -> proto.ArticlesByCategoryOrTag
+	19, // 4: proto.ResponsePkg.tags:type_name -> proto.Tag
+	20, // 5: proto.ResponsePkg.messages:type_name -> proto.Message
+	21, // 6: proto.ResponsePkg.friendLinks:type_name -> proto.FriendLink
+	22, // 7: proto.ResponsePkg.commentInfo:type_name -> proto.CommentInfo
+	23, // 8: proto.ResponsePkg.loginResponse:type_name -> proto.LoginResponse
+	24, // 9: proto.ResponsePkg.articleList:type_name -> proto.Article
+	25, // 10: proto.ResponsePkg.blogHomeInfo:type_name -> proto.BlogHomeInfo
+	26, // 11: proto.ResponsePkg.articleInfo:type_name -> proto.ArticleInfo
+	27, // 12: proto.ResponsePkg.archiveInfo:type_name -> proto.Archives
+	28, // 13: proto.ResponsePkg.about:type_name -> proto.About
+	29, // 14: proto.ResponsePkg.replyList:type_name -> proto.Reply
 	4,  // 15: proto.ResponsePkg.scChat:type_name -> proto.ScChat
 	7,  // 16: proto.ResponsePkg.userMenu:type_name -> proto.ScUserMenuMessage
 	8,  // 17: proto.ResponsePkg.adminHomeData:type_name -> proto.ScAdminHomeData
@@ -1626,20 +1755,20 @@ var file_sc_proto_depIdxs = []int32{
 	12, // 21: proto.ResponsePkg.updateArticleInfo:type_name -> proto.ScArticleInfo
 	13, // 22: proto.ResponsePkg.adminCategories:type_name -> proto.ScAdminCategories
 	14, // 23: proto.ResponsePkg.adminTags:type_name -> proto.ScAdminTags
-	15, // 24: proto.ResponsePkg.adminComments:type_name -> proto.ScAdminComments
+	16, // 24: proto.ResponsePkg.adminComments:type_name -> proto.ScAdminComments
 	5,  // 25: proto.ScChat.scChatOnline:type_name -> proto.ScChatOnline
 	6,  // 26: proto.ScChat.scChatMessage:type_name -> proto.ScChatMessage
 	7,  // 27: proto.ScUserMenuMessage.children:type_name -> proto.ScUserMenuMessage
-	16, // 28: proto.ScAdminHomeData.categoryList:type_name -> proto.Category
-	29, // 29: proto.ScAdminHomeData.uniqueViewList:type_name -> proto.UniqueView
-	30, // 30: proto.ScAdminHomeData.articleRankList:type_name -> proto.ArticleRank
-	18, // 31: proto.ScArticleOptions.tagList:type_name -> proto.Tag
-	16, // 32: proto.ScArticleOptions.categoryList:type_name -> proto.Category
-	18, // 33: proto.ScAdminArticleList.tagList:type_name -> proto.Tag
+	17, // 28: proto.ScAdminHomeData.categoryList:type_name -> proto.Category
+	30, // 29: proto.ScAdminHomeData.uniqueViewList:type_name -> proto.UniqueView
+	31, // 30: proto.ScAdminHomeData.articleRankList:type_name -> proto.ArticleRank
+	19, // 31: proto.ScArticleOptions.tagList:type_name -> proto.Tag
+	17, // 32: proto.ScArticleOptions.categoryList:type_name -> proto.Category
+	19, // 33: proto.ScAdminArticleList.tagList:type_name -> proto.Tag
 	10, // 34: proto.ScAdminArticle.articleList:type_name -> proto.ScAdminArticleList
-	16, // 35: proto.ScAdminCategories.categoryList:type_name -> proto.Category
-	18, // 36: proto.ScAdminTags.tagList:type_name -> proto.Tag
-	31, // 37: proto.ScAdminComments.commentList:type_name -> proto.Comment
+	17, // 35: proto.ScAdminCategories.categoryList:type_name -> proto.Category
+	19, // 36: proto.ScAdminTags.tagList:type_name -> proto.Tag
+	15, // 37: proto.ScAdminComments.commentList:type_name -> proto.ScComment
 	38, // [38:38] is the sub-list for method output_type
 	38, // [38:38] is the sub-list for method input_type
 	38, // [38:38] is the sub-list for extension type_name
@@ -1811,6 +1940,18 @@ func file_sc_proto_init() {
 			}
 		}
 		file_sc_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ScComment); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_sc_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ScAdminComments); i {
 			case 0:
 				return &v.state
@@ -1829,7 +1970,7 @@ func file_sc_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_sc_proto_rawDesc,
 			NumEnums:      2,
-			NumMessages:   14,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

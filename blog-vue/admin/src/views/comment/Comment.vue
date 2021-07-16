@@ -316,6 +316,7 @@
             isDelete: this.isDelete
           }
         }).then(data => {
+          console.log(data)
           this.commentList = data.adminComments.commentList;
           this.count = data.adminComments.count;
           this.loading = false;

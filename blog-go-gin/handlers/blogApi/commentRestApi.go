@@ -154,6 +154,7 @@ func (c *CommentRestApi) GetAdminComments(ctx *gin.Context) {
 		IsDelete: condition.IsDelete,
 	})
 	if err != nil {
+		logging.Logger.Error(err)
 		c.ProtoBufFail(ctx, http.StatusOK, common.GetCommentsFail)
 		return
 	}

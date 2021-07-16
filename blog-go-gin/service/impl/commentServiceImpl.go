@@ -8,6 +8,8 @@ import (
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"strconv"
@@ -27,8 +29,50 @@ func (c *CommentServiceImpl) UpdateCommentStatus(status *pb.CsUpdateCommentStatu
 	panic("implement me")
 }
 
-func (c *CommentServiceImpl) GetAdminComments(condition *pb.CsCondition) (*pb.ScAdminComments, error) {
-	panic("implement me")
+func (c *CommentServiceImpl) GetAdminComments(csCondition *pb.CsCondition) (*pb.ScAdminComments, error) {
+	condition := "c.is_delete = ?"
+	if csCondition.GetKeywords() != "" {
+		condition = fmt.Sprintf(condition+"%s", "AND u.nick_name LIKE ?")
+	}
+	comments, err := model.GetCommentsByConditionWithPage(condition,
+		&page.IPage{Current: int(csCondition.GetCurrent()), Size: int(csCondition.GetSize())},
+		csCondition.GetIsDelete(),
+		"%"+csCondition.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+	var commentSlice []*pb.ScComment
+	for _, comment := range comments {
+		countString, err := common.GetRedisUtil().HashGet(common.CommentLikeCount, strconv.Itoa(comment.ID))
+		count, _ := strconv.Atoi(countString)
+		if err != nil && !errors.Is(err, redis.Nil) {
+			return nil, err
+		}
+		if errors.Is(err, redis.Nil) {
+			count = 0
+		}
+		commentSlice = append(commentSlice, &pb.ScComment{
+			Id:             int64(comment.ID),
+			Avatar:         comment.Avatar,
+			Nickname:       comment.Nickname,
+			ReplyNickname:  comment.ReplyNickname,
+			ArticleTitle:   comment.ArticleTitle,
+			CommentContent: comment.CommentContent,
+			CreateTime:     comment.CreateTime,
+			IsDelete:       int32(comment.IsDelete),
+			LikeCount:      int64(count),
+		})
+	}
+
+	commentsCount, err := model.GetCommentsCountByCondition(condition, csCondition.GetIsDelete(), "%"+csCondition.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+
+	return &pb.ScAdminComments{
+		CommentList: commentSlice,
+		Count:       commentsCount,
+	}, nil
 }
 
 func (c *CommentServiceImpl) LikeComment(commentId int64, userId int64) error {
