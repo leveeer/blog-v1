@@ -52,6 +52,7 @@ const (
 	FriendLinks         = "/links"
 	Comments            = "/comments"
 	Replies             = "/replies/:commentId"
+	LikeArticle         = "/articles/like"
 
 	UserBaseUrl = "/users"
 	VerifyCode  = "/code"

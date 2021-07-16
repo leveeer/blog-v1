@@ -36,6 +36,7 @@ message RequestPkg{
   CsDeleteCategory categoryIds = 16;
   CsTag csTag = 17;
   CsDeleteTag tagIds = 18;
+  CsLikeArticle likeArticle = 19;
 }
 
 message CsComment{
@@ -120,6 +121,11 @@ message CsTag{
 
 message CsDeleteTag{
   repeated int64 tagIdList = 1;
+}
+
+message CsLikeArticle{
+  int64 articleId = 1;
+  int64 userId = 2;
 }
 
 

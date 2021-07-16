@@ -62,9 +62,14 @@ func UpdateArticleClickCount(tx *gorm.DB, articleId int) error {
 	return tx.Debug().Table("tb_article").Where("id = ?", articleId).Select("click_count").Update("click_count", gorm.Expr("click_count + ?", 1)).Error
 }
 
+func UpdateArticleCollectCount(tx *gorm.DB, articleId, value int) error {
+	return tx.Debug().Table("tb_article").Where("id = ?", articleId).Select("collect_count").Update("collect_count", gorm.Expr("collect_count + ?", value)).Error
+}
+
 func GetArticleByID(id int) (*Article, error) {
 	var m Article
-	if err := dao.Db.Debug().Table("tb_article").First(&m, id).Error; err != nil {
+	if err := dao.Db.Debug().Table("tb_article").Select("tb_article.*,tb_category.category_name").
+		Joins("left join tb_category on tb_category.id = tb_article.category_id").First(&m, id).Error; err != nil {
 		return nil, err
 	}
 	return &m, nil

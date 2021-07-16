@@ -36,7 +36,7 @@ func StatisticArticleViews() gin.HandlerFunc {
 			logging.Logger.Debug(err)
 		}
 		id, _ := strconv.Atoi(articleID)
-		err = model.UpdateArticleClickCount(dao.Db.Begin(), id)
+		err = model.UpdateArticleClickCount(dao.Db, id)
 		if err != nil {
 			logging.Logger.Debug(err)
 		}

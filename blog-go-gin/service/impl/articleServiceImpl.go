@@ -7,14 +7,82 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
+	"encoding/json"
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
+	"strconv"
 	"sync"
 	"time"
 )
 
 type ArticleServiceImpl struct {
 	wg sync.WaitGroup
+}
+
+func (b *ArticleServiceImpl) LikeArticle(articleId int64, userId int64) error {
+	// 查询当前用户点赞过的文章id集合
+	ids, err := common.GetRedisUtil().HashGet(common.ArticleUserLike, strconv.Itoa(int(userId)))
+	if err != nil && err != redis.Nil {
+		return err
+	}
+	if ids == "" {
+		//不存在
+		var slice []int32
+		slice = append(slice, int32(articleId))
+		data := common.Serialization(slice)
+		err = common.GetRedisUtil().HashSet(common.ArticleUserLike, strconv.Itoa(int(userId)), data)
+		if err != nil {
+			return err
+		}
+		err = common.GetRedisUtil().HashIncrBy(common.ArticleLikeCount, strconv.Itoa(int(articleId)), 1)
+		if err != nil {
+			return err
+		}
+		err = model.UpdateArticleCollectCount(dao.Db, int(articleId), 1)
+		if err != nil {
+			return err
+		}
+	} else {
+		//存在，说明已点赞，再次点赞则取消
+		var articleLikeSet []int32
+		err := json.Unmarshal([]byte(ids), &articleLikeSet)
+		if err != nil {
+			return err
+		}
+		isExist, index := common.SliceFind(articleLikeSet, int32(articleId))
+		logging.Logger.Debug(isExist)
+		if isExist {
+			articleLikeSet = append(articleLikeSet[:index], articleLikeSet[index+1:]...)
+			err = common.GetRedisUtil().HashSet(common.ArticleUserLike, strconv.Itoa(int(userId)), common.Serialization(articleLikeSet))
+			if err != nil {
+				return err
+			}
+			err = common.GetRedisUtil().HashIncrBy(common.ArticleLikeCount, strconv.Itoa(int(articleId)), -1)
+			if err != nil {
+				return err
+			}
+			err = model.UpdateArticleCollectCount(dao.Db, int(articleId), -1)
+			if err != nil {
+				return err
+			}
+		} else {
+			articleLikeSet = append(articleLikeSet, int32(articleId))
+			err = common.GetRedisUtil().HashSet(common.ArticleUserLike, strconv.Itoa(int(userId)), common.Serialization(articleLikeSet))
+			if err != nil {
+				return err
+			}
+			err = common.GetRedisUtil().HashIncrBy(common.ArticleLikeCount, strconv.Itoa(int(articleId)), 1)
+			if err != nil {
+				return err
+			}
+			err = model.UpdateArticleCollectCount(dao.Db, int(articleId), 1)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func (b *ArticleServiceImpl) UpdateArticleTop(id int, isTop int8) error {

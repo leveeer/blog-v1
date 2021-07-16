@@ -7,12 +7,15 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models/enum"
 	"blog-go-gin/models/model"
+	"encoding/json"
 	"fmt"
+	"github.com/go-redis/redis/v8"
 	"github.com/jordan-wright/email"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"math/rand"
 	"net/smtp"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -28,15 +31,32 @@ func (u *UserAuthServiceImpl) GetLoginResponse(username string) (*pb.LoginRespon
 	if err != nil {
 		return nil, err
 	}
+	var articleLikeSet []int32
+	likeArticleIds, err := common.GetRedisUtil().HashGet(common.ArticleUserLike, strconv.Itoa(userAuth.UserInfoID))
+	if err != nil && err != redis.Nil {
+		logging.Logger.Debug(err)
+		return nil, err
+	} else {
+		articleLikeSet = []int32{}
+	}
+	if likeArticleIds != "" {
+		err = json.Unmarshal([]byte(likeArticleIds), &articleLikeSet)
+		if err != nil {
+			logging.Logger.Debug(err)
+			return nil, err
+		}
+	}
 	return &pb.LoginResponse{
-		UserId:    int32(userAuth.UserInfoID),
-		Email:     userAuth.Username,
-		NickName:  userAuth.NickName,
-		Avatar:    userAuth.Avatar,
-		Intro:     userAuth.Intro,
-		Website:   userAuth.WebSite,
-		IsDisable: userAuth.IsDisable,
-		LoginType: int32(userAuth.LoginType),
+		UserId:         int32(userAuth.UserInfoID),
+		Email:          userAuth.Username,
+		NickName:       userAuth.NickName,
+		Avatar:         userAuth.Avatar,
+		Intro:          userAuth.Intro,
+		Website:        userAuth.WebSite,
+		IsDisable:      userAuth.IsDisable,
+		LoginType:      int32(userAuth.LoginType),
+		ArticleLikeSet: articleLikeSet,
+		CommentLikeSet: []int32{},
 	}, nil
 }
 

@@ -145,18 +145,15 @@ func (r *RedisUtil) IncrBy(key string, increment int64) int64 {
 
 // HashSet 向key的hash中添加元素field的值
 func (r *RedisUtil) HashSet(key, field string, data interface{}) error {
-	err := r.redisClient.HSet(ctx, key, field, data).Err()
-	if err != nil {
-		return err
-	}
-	return nil
+	return r.redisClient.HSet(ctx, key, field, data).Err()
+}
+
+func (r *RedisUtil) HashIncrBy(key, field string, incr int64) error {
+	return r.redisClient.HIncrBy(ctx, key, field, incr).Err()
 }
 
 func (r *RedisUtil) HashDel(key, field string) error {
-	if err := r.redisClient.HDel(ctx, key, field).Err(); err != nil {
-		return err
-	}
-	return nil
+	return r.redisClient.HDel(ctx, key, field).Err()
 }
 
 // BatchHashSet 批量向key的hash添加对应元素field的值
@@ -171,14 +168,17 @@ func (r *RedisUtil) BatchHashSet(key string, fields map[string]interface{}) (boo
 
 // HashGet 通过key获取hash的元素值
 func (r *RedisUtil) HashGet(key, field string) (string, error) {
-	result := ""
+	//result := ""
 	val, err := r.redisClient.HGet(ctx, key, field).Result()
-	if err == redis.Nil {
+	/*if err == redis.Nil {
 		logging.Logger.Info("Key Doesn't Exists:", field)
 		return result, err
 	} else if err != nil {
 		logging.Logger.Error("Redis HGet Error:", err)
 		return result, err
+	}*/
+	if err != nil {
+		return "", err
 	}
 	return val, nil
 }

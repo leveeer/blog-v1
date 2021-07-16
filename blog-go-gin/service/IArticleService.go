@@ -20,4 +20,5 @@ type IArticleService interface {
 	UpdateArticleStatus(status *pb.CsUpdateArticleStatus) error
 	DeleteArticles(ids *pb.CsDeleteArticles) error
 	UpdateArticleTop(id int, isTop int8) error
+	LikeArticle(articleId int64, userId int64) error
 }

@@ -10,6 +10,7 @@ export const urls = {
   links: "/blog/links",
   comments: "/blog/comments",
   replies: "/blog/replies/",
+  like_article: "/blog/articles/like",
   code: "/users/code",
   register: "/users/register",
   login: "/users/login"

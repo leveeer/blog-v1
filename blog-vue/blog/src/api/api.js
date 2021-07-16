@@ -54,12 +54,16 @@ export function addComments(params) {
   return service.post(urls.comments, params);
 }
 
-export function getReplies(commentId,params) {
+export function likeArticle(params) {
+  return service.post(urls.like_article, params);
+}
+
+export function getReplies(commentId, params) {
   return service.get(urls.replies + commentId, params);
 }
 
 export function getLoginCode(params) {
-  return service.get(urls.code,params)
+  return service.get(urls.code, params);
 }
 
 export function register(params) {

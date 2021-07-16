@@ -340,3 +340,31 @@ func (c *ArticleRestApi) UpdateArticleTop(ctx *gin.Context) {
 	}
 	c.ProtoBuf(ctx, http.StatusOK, data)
 }
+
+func (c *ArticleRestApi) LikeArticle(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request.LikeArticle)
+	err = ArticleService.LikeArticle(request.LikeArticle.ArticleId, request.LikeArticle.UserId)
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.LikeArticleFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}

@@ -30,7 +30,7 @@ func (s *Set) Add(k interface{}) {
 
 func (s *Set) Remove(k interface{}) {
 	s.Lock()
-	s.Unlock()
+	defer s.Unlock()
 
 	// 集合没元素直接返回
 	if s.len == 0 {

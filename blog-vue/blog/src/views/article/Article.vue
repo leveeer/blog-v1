@@ -264,7 +264,9 @@
   import Clipboard from "clipboard";
   import Comment from "../../components/Comment";
   import tocbot from "tocbot";
-  import { getArticleById, getComments } from "../../api/api";
+  import { getArticleById, getComments, likeArticle } from "../../api/api";
+  import { getResultCode } from "../../utils/util";
+  import { resultMap } from "../../utils/constant";
 
   export default {
     components: {
@@ -303,7 +305,7 @@
         const that = this;
         //查询文章
         getArticleById(this.$route.path).then((data) => {
-          console.log(data);
+          console.log(data)
           document.title = data.articleInfo.article.articleTitle;
           this.lastArticle = data.articleInfo.lastArticle;
           this.nextArticle = data.articleInfo.nextArticle;
@@ -376,15 +378,19 @@
           return false;
         }
         //发送请求
-        let param = new URLSearchParams();
-        param.append("articleId", this.article.id);
-        this.axios.post("/api/articles/like", param).then(({ res }) => {
-          if (res.flag) {
+        likeArticle({
+          likeArticle: {
+            articleId: this.article.id,
+            userId: this.$store.state.userId,
+          }
+        }).then(data => {
+          console.log(data);
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
             //判断是否点赞
             if (this.$store.state.articleLikeSet.indexOf(this.article.id) !== -1) {
-              this.$set(this.article, "likeCount", this.article.likeCount - 1);
+              this.$set(this.article, "collectCount", this.article.collectCount - 1);
             } else {
-              this.$set(this.article, "likeCount", this.article.likeCount + 1);
+              this.$set(this.article, "collectCount", this.article.collectCount + 1);
             }
             this.$store.commit("articleLike", this.article.id);
           }
@@ -464,7 +470,7 @@
         );
       },
       isLike() {
-        var articleLikeSet = this.$store.state.articleLikeSet;
+        const articleLikeSet = this.$store.state.articleLikeSet;
         return articleLikeSet.indexOf(this.article.id) !== -1
           ? "like-btn-active"
           : "like-btn";

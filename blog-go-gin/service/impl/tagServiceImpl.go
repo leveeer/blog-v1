@@ -35,6 +35,7 @@ func (t *TagServiceImpl) AddOrUpdateTag(tag *pb.CsTag) error {
 			err := model.AddTag(tx, &model.Tag{
 				TagName:    tag.GetTagName(),
 				CreateTime: time.Now().Unix(),
+				Status:     1,
 			})
 			if err != nil {
 				return err

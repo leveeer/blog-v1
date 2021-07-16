@@ -10,6 +10,7 @@ import (
 	"math"
 	"math/rand"
 	"os"
+	"reflect"
 	"runtime"
 	"strconv"
 	"strings"
@@ -166,10 +167,25 @@ func InterfaceToInt(json interface{}) int {
 	return i
 }
 
-func SliceFind(slice []string, val string) bool {
-	for _, item := range slice {
+func SliceFind(slice []int32, val int32) (bool, int) {
+	for index, item := range slice {
 		if item == val {
-			return true
+			return true, index
+		}
+	}
+	return false, -1
+}
+
+func IsItemExist(slice interface{}, element interface{}) bool {
+	logging.Logger.Debug("slice:", slice)
+	logging.Logger.Debug("element:", element)
+	switch reflect.TypeOf(slice).Kind() {
+	case reflect.Slice:
+		s := reflect.ValueOf(slice)
+		for i := 0; i < s.Len(); i++ {
+			if reflect.DeepEqual(element, s.Index(i).Interface()) {
+				return true
+			}
 		}
 	}
 	return false

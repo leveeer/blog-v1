@@ -94,6 +94,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           tagIds: {
             type: "CsDeleteTag",
             id: 18
+          },
+          likeArticle: {
+            type: "CsLikeArticle",
+            id: 19
           }
         }
       },
@@ -331,6 +335,18 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "int64",
             id: 1
+          }
+        }
+      },
+      CsLikeArticle: {
+        fields: {
+          articleId: {
+            type: "int64",
+            id: 1
+          },
+          userId: {
+            type: "int64",
+            id: 2
           }
         }
       },
