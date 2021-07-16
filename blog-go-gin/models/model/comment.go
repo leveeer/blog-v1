@@ -81,7 +81,7 @@ func GetCommentsByConditionWithPage(condition string, iPage *page.IPage, args ..
 
 func GetCommentsCountByCondition(condition string, args ...interface{}) (int64, error) {
 	var count int64
-	if err := dao.Db.Debug().Table("tb_comment c").Where(condition, args...).Count(&count).Error; err != nil {
+	if err := dao.Db.Debug().Table("tb_comment c").Joins("LEFT JOIN tb_user_info u ON c.user_id = u.id").Where(condition, args...).Count(&count).Error; err != nil {
 		return int64(0), err
 	}
 	return count, nil

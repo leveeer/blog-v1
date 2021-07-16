@@ -30,9 +30,9 @@ func (c *CommentServiceImpl) UpdateCommentStatus(status *pb.CsUpdateCommentStatu
 }
 
 func (c *CommentServiceImpl) GetAdminComments(csCondition *pb.CsCondition) (*pb.ScAdminComments, error) {
-	condition := "c.is_delete = ?"
+	condition := "c.is_delete = ? "
 	if csCondition.GetKeywords() != "" {
-		condition = fmt.Sprintf(condition+"%s", "AND u.nick_name LIKE ?")
+		condition = fmt.Sprintf(condition+"%s", " AND u.nickname LIKE ?")
 	}
 	comments, err := model.GetCommentsByConditionWithPage(condition,
 		&page.IPage{Current: int(csCondition.GetCurrent()), Size: int(csCondition.GetSize())},
