@@ -102,3 +102,31 @@ func (c *CommentRestApi) GetReplies(ctx *gin.Context) {
 	}
 	c.ProtoBuf(ctx, http.StatusOK, data)
 }
+
+func (c *CommentRestApi) LikeComment(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request.LikeComment)
+	err = CommentService.LikeComment(request.LikeComment.CommentId, request.LikeComment.UserId)
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.LikeCommentFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}

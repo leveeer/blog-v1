@@ -11,6 +11,7 @@ export const urls = {
   comments: "/blog/comments",
   replies: "/blog/replies/",
   like_article: "/blog/articles/like",
+  like_comment: "/blog/comments/like",
   code: "/users/code",
   register: "/users/register",
   login: "/users/login"

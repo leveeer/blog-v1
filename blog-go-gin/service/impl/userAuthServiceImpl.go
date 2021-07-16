@@ -26,11 +26,10 @@ type UserAuthServiceImpl struct {
 
 func (u *UserAuthServiceImpl) GetLoginResponse(username string) (*pb.LoginResponse, error) {
 	userAuth, err := model.GetLoginResponse(username)
-	//TODO 获取用户点赞的文章id集合
-	//TODO 获取用户点赞的评论d集合
 	if err != nil {
 		return nil, err
 	}
+	//获取用户点赞的文章id集合
 	var articleLikeSet []int32
 	likeArticleIds, err := common.GetRedisUtil().HashGet(common.ArticleUserLike, strconv.Itoa(userAuth.UserInfoID))
 	if err != nil && err != redis.Nil {
@@ -46,6 +45,23 @@ func (u *UserAuthServiceImpl) GetLoginResponse(username string) (*pb.LoginRespon
 			return nil, err
 		}
 	}
+	//获取用户点赞的评论d集合
+	var commentLikeSet []int32
+	likeCommentIds, err := common.GetRedisUtil().HashGet(common.CommentUserLike, strconv.Itoa(userAuth.UserInfoID))
+	if err != nil && err != redis.Nil {
+		logging.Logger.Debug(err)
+		return nil, err
+	} else {
+		commentLikeSet = []int32{}
+	}
+	if likeCommentIds != "" {
+		err = json.Unmarshal([]byte(likeCommentIds), &commentLikeSet)
+		if err != nil {
+			logging.Logger.Debug(err)
+			return nil, err
+		}
+	}
+
 	return &pb.LoginResponse{
 		UserId:         int32(userAuth.UserInfoID),
 		Email:          userAuth.Username,
@@ -56,7 +72,7 @@ func (u *UserAuthServiceImpl) GetLoginResponse(username string) (*pb.LoginRespon
 		IsDisable:      userAuth.IsDisable,
 		LoginType:      int32(userAuth.LoginType),
 		ArticleLikeSet: articleLikeSet,
-		CommentLikeSet: []int32{},
+		CommentLikeSet: commentLikeSet,
 	}, nil
 }
 

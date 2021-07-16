@@ -202,7 +202,7 @@
   import Paging from "./Paging";
   import Emoji from "./Emoji";
   import EmojiList from "../assets/js/emoji";
-  import { addComments, getComments, getReplies } from "../api/api";
+  import { addComments, getComments, getReplies, likeComment } from "../api/api";
   import { getResultCode } from "../utils/util";
   import { resultMap } from "../utils/constant";
 
@@ -334,8 +334,13 @@
         //发送请求
         let param = new URLSearchParams();
         param.append("commentId", comment.id);
-        this.axios.post("/api/comments/like", param).then(({ data }) => {
-          if (data.flag) {
+        likeComment({
+          likeComment: {
+            commentId: comment.id,
+            userId: this.$store.state.userId,
+          }
+        }).then(data => {
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
             //判断是否点赞
             if (this.$store.state.commentLikeSet.indexOf(comment.id) !== -1) {
               this.$set(comment, "likeCount", comment.likeCount - 1);

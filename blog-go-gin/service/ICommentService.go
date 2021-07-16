@@ -9,4 +9,5 @@ type ICommentService interface {
 	GetComments(articleId int, page *page.IPage) (*pb.CommentInfo, error)
 	GetReplies(commentId int, page *page.IPage) ([]*pb.Reply, error)
 	AddComment(comment *pb.CsComment) error
+	LikeComment(commentId int64, userId int64) error
 }

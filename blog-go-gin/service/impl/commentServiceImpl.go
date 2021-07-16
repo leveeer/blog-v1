@@ -7,6 +7,8 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models/model"
 	"blog-go-gin/models/page"
+	"encoding/json"
+	"github.com/go-redis/redis/v8"
 	"gorm.io/gorm"
 	"strconv"
 	"sync"
@@ -15,6 +17,58 @@ import (
 
 type CommentServiceImpl struct {
 	wg sync.WaitGroup
+}
+
+func (c *CommentServiceImpl) LikeComment(commentId int64, userId int64) error {
+	// 查询当前用户点赞过的评论id集合
+	ids, err := common.GetRedisUtil().HashGet(common.CommentUserLike, strconv.Itoa(int(userId)))
+	if err != nil && err != redis.Nil {
+		return err
+	}
+	if ids == "" {
+		//不存在
+		var slice []int32
+		slice = append(slice, int32(commentId))
+		err = common.GetRedisUtil().HashSet(common.CommentUserLike, strconv.Itoa(int(userId)), common.Serialization(slice))
+		if err != nil {
+			return err
+		}
+		err = common.GetRedisUtil().HashIncrBy(common.CommentLikeCount, strconv.Itoa(int(commentId)), 1)
+		if err != nil {
+			return err
+		}
+	} else {
+		//存在，说明已点赞，再次点赞则取消
+		var commentLikeSet []int32
+		err := json.Unmarshal([]byte(ids), &commentLikeSet)
+		if err != nil {
+			return err
+		}
+		isExist, index := common.SliceFind(commentLikeSet, int32(commentId))
+		logging.Logger.Debug(isExist)
+		if isExist {
+			commentLikeSet = append(commentLikeSet[:index], commentLikeSet[index+1:]...)
+			err = common.GetRedisUtil().HashSet(common.CommentUserLike, strconv.Itoa(int(userId)), common.Serialization(commentLikeSet))
+			if err != nil {
+				return err
+			}
+			err = common.GetRedisUtil().HashIncrBy(common.CommentLikeCount, strconv.Itoa(int(commentId)), -1)
+			if err != nil {
+				return err
+			}
+		} else {
+			commentLikeSet = append(commentLikeSet, int32(commentId))
+			err = common.GetRedisUtil().HashSet(common.CommentUserLike, strconv.Itoa(int(userId)), common.Serialization(commentLikeSet))
+			if err != nil {
+				return err
+			}
+			err = common.GetRedisUtil().HashIncrBy(common.CommentLikeCount, strconv.Itoa(int(commentId)), 1)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func NewCommentServiceImpl() *CommentServiceImpl {

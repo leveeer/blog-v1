@@ -54,6 +54,10 @@ export function addComments(params) {
   return service.post(urls.comments, params);
 }
 
+export function likeComment(params) {
+  return service.post(urls.like_comment, params);
+}
+
 export function likeArticle(params) {
   return service.post(urls.like_article, params);
 }

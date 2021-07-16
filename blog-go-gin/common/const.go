@@ -53,6 +53,7 @@ const (
 	Comments            = "/comments"
 	Replies             = "/replies/:commentId"
 	LikeArticle         = "/articles/like"
+	LikeComment         = "/comments/like"
 
 	UserBaseUrl = "/users"
 	VerifyCode  = "/code"

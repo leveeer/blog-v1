@@ -98,6 +98,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           likeArticle: {
             type: "CsLikeArticle",
             id: 19
+          },
+          likeComment: {
+            type: "CsLikeComment",
+            id: 20
           }
         }
       },
@@ -341,6 +345,18 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
       CsLikeArticle: {
         fields: {
           articleId: {
+            type: "int64",
+            id: 1
+          },
+          userId: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      CsLikeComment: {
+        fields: {
+          commentId: {
             type: "int64",
             id: 1
           },

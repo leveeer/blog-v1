@@ -36,5 +36,6 @@ func blogRouters(r *gin.Engine) {
 		blog.POST(common.Comments, CommentApi.AddComment)
 		blog.GET(common.Replies, CommentApi.GetReplies)
 		blog.POST(common.LikeArticle, ArticleApi.LikeArticle)
+		blog.POST(common.LikeComment, CommentApi.LikeComment)
 	}
 }
