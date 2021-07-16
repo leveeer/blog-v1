@@ -215,112 +215,112 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.listComments();
-  },
-  data: function() {
-    return {
-      loading: true,
-      remove: false,
-      updateIsDelete: false,
-      options: [
-        {
-          value: 0,
-          label: "正常"
-        },
-        {
-          value: 1,
-          label: "回收站"
-        }
-      ],
-      commentList: [],
-      commentIdList: [],
-      keywords: null,
-      isDelete: 0,
-      current: 1,
-      size: 10,
-      count: 0
-    };
-  },
-  methods: {
-    selectionChange(commentList) {
-      this.commentIdList = [];
-      commentList.forEach(item => {
-        this.commentIdList.push(item.id);
-      });
-    },
-    sizeChange(size) {
-      this.size = size;
+  import {getComments} from "../../api/api";
+
+  export default {
+    created() {
       this.listComments();
     },
-    currentChange(current) {
-      this.current = current;
-      this.listComments();
+    data: function () {
+      return {
+        loading: true,
+        remove: false,
+        updateIsDelete: false,
+        options: [
+          {
+            value: 0,
+            label: "正常"
+          },
+          {
+            value: 1,
+            label: "回收站"
+          }
+        ],
+        commentList: [],
+        commentIdList: [],
+        keywords: "",
+        isDelete: 0,
+        current: 1,
+        size: 10,
+        count: 0
+      };
     },
-    updateCommentStatus(id) {
-      let param = new URLSearchParams();
-      if (id != null) {
-        param.append("idList", [id]);
-      } else {
-        param.append("idList", this.commentIdList);
-      }
-      param.append("isDelete", this.isDelete == 0 ? 1 : 0);
-      this.axios.put("/api/admin/comments", param).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-          this.listComments();
+    methods: {
+      selectionChange(commentList) {
+        this.commentIdList = [];
+        commentList.forEach(item => {
+          this.commentIdList.push(item.id);
+        });
+      },
+      sizeChange(size) {
+        this.size = size;
+        this.listComments();
+      },
+      currentChange(current) {
+        this.current = current;
+        this.listComments();
+      },
+      updateCommentStatus(id) {
+        let param = new URLSearchParams();
+        if (id != null) {
+          param.append("idList", [id]);
         } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
+          param.append("idList", this.commentIdList);
         }
-        this.updateIsDelete = false;
-      });
-    },
-    deleteComments(id) {
-      var param = {};
-      if (id == null) {
-        param = { data: this.commentIdList };
-      } else {
-        param = { data: [id] };
-      }
-      this.axios.delete("/api/admin/comments", param).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-          this.listComments();
+        param.append("isDelete", this.isDelete === 0 ? 1 : 0);
+        this.axios.put("/api/admin/comments", param).then(({data}) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+            this.listComments();
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+          this.updateIsDelete = false;
+        });
+      },
+      deleteComments(id) {
+        var param = {};
+        if (id == null) {
+          param = {data: this.commentIdList};
         } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
+          param = {data: [id]};
         }
-        this.remove = false;
-      });
-    },
-    listComments() {
-      this.axios
-        .get("/api/admin/comments", {
+        this.axios.delete("/api/admin/comments", param).then(({data}) => {
+          if (data.flag) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+            this.listComments();
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+          this.remove = false;
+        });
+      },
+      listComments() {
+        getComments({
           params: {
             current: this.current,
             size: this.size,
             keywords: this.keywords,
             isDelete: this.isDelete
           }
-        })
-        .then(({ data }) => {
-          this.commentList = data.data.recordList;
-          this.count = data.data.count;
+        }).then(data => {
+          this.commentList = data.adminComments.commentList;
+          this.count = data.adminComments.count;
           this.loading = false;
         });
-    }
+      }
   },
   watch: {
     isDelete() {

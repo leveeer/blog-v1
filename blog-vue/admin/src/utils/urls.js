@@ -10,6 +10,7 @@ export const urls = {
   refresh_token: "/admin/refresh_token",
   categories: "/admin/categories",
   tags: "/admin/tags",
+  comments: "/admin/comments",
 };
 
 export default urls;

@@ -98,6 +98,18 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           likeArticle: {
             type: "CsLikeArticle",
             id: 19
+          },
+          likeComment: {
+            type: "CsLikeComment",
+            id: 20
+          },
+          commentStatus: {
+            type: "CsUpdateCommentStatus",
+            id: 21
+          },
+          commentIds: {
+            type: "CsDeleteComments",
+            id: 22
           }
         }
       },
@@ -285,6 +297,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           keywords: {
             type: "string",
             id: 3
+          },
+          isDelete: {
+            type: "int32",
+            id: 4
           }
         }
       },
@@ -347,6 +363,40 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           userId: {
             type: "int64",
             id: 2
+          }
+        }
+      },
+      CsLikeComment: {
+        fields: {
+          commentId: {
+            type: "int64",
+            id: 1
+          },
+          userId: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      CsUpdateCommentStatus: {
+        fields: {
+          commentIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          },
+          isDelete: {
+            type: "int32",
+            id: 2
+          }
+        }
+      },
+      CsDeleteComments: {
+        fields: {
+          commentIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
           }
         }
       },
@@ -1081,6 +1131,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           adminTags: {
             type: "ScAdminTags",
             id: 26
+          },
+          adminComments: {
+            type: "ScAdminComments",
+            id: 27
           }
         }
       },
@@ -1347,6 +1401,19 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           tagList: {
             rule: "repeated",
             type: "Tag",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      ScAdminComments: {
+        fields: {
+          commentList: {
+            rule: "repeated",
+            type: "Comment",
             id: 1
           },
           count: {

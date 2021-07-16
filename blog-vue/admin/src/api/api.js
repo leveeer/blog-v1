@@ -94,3 +94,15 @@ export function updateTag(params) {
 export function deleteTag(params) {
     return service.delete(urls.tags, params)
 }
+
+export function getComments(params) {
+    return service.get(urls.comments, params)
+}
+
+export function updateCommentStatus(params) {
+    return service.put(urls.comments, params)
+}
+
+export function deleteComment(params) {
+    return service.delete(urls.comments, params)
+}

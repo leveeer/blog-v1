@@ -49,6 +49,8 @@ const (
 	DeleteTagFail
 	LikeArticleFail
 	LikeCommentFail
+	UpdateCommentFail
+	DeleteCommentFail
 )
 
 // unknown group
@@ -97,6 +99,8 @@ var Error = map[ErrorCode]error{
 	DeleteTagFail:              errors.New("删除标签失败"),
 	LikeArticleFail:            errors.New("点赞文章失败"),
 	LikeCommentFail:            errors.New("点赞评论失败"),
+	UpdateCommentFail:          errors.New("更新评论失败"),
+	DeleteCommentFail:          errors.New("删除评论失败"),
 }
 
 func GetMsg(code ErrorCode) string {

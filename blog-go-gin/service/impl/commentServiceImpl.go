@@ -19,6 +19,18 @@ type CommentServiceImpl struct {
 	wg sync.WaitGroup
 }
 
+func (c *CommentServiceImpl) DeleteComments(ids *pb.CsDeleteComments) error {
+	panic("implement me")
+}
+
+func (c *CommentServiceImpl) UpdateCommentStatus(status *pb.CsUpdateCommentStatus) error {
+	panic("implement me")
+}
+
+func (c *CommentServiceImpl) GetAdminComments(condition *pb.CsCondition) (*pb.ScAdminComments, error) {
+	panic("implement me")
+}
+
 func (c *CommentServiceImpl) LikeComment(commentId int64, userId int64) error {
 	// 查询当前用户点赞过的评论id集合
 	ids, err := common.GetRedisUtil().HashGet(common.CommentUserLike, strconv.Itoa(int(userId)))

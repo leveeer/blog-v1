@@ -72,4 +72,5 @@ const (
 	ArticleTop      = "/articles/top/:id"
 	AdminCategories = "/categories"
 	AdminTags       = "/tags"
+	AdminComments   = "/comments"
 )

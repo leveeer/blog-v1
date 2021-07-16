@@ -130,3 +130,96 @@ func (c *CommentRestApi) LikeComment(ctx *gin.Context) {
 	}
 	c.ProtoBuf(ctx, http.StatusOK, data)
 }
+
+func (c *CommentRestApi) GetAdminComments(ctx *gin.Context) {
+	type Condition struct {
+		Current  int64  `json:"current" form:"current"`
+		Size     int32  `json:"size" form:"size"`
+		Keywords string `json:"keywords" form:"keywords"`
+		IsDelete int32  `json:"isDelete" form:"isDelete"`
+	}
+	var condition Condition
+	err := ctx.ShouldBind(&condition)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(condition)
+
+	adminComment, err := CommentService.GetAdminComments(&pb.CsCondition{
+		Current:  condition.Current,
+		Size:     condition.Size,
+		Keywords: condition.Keywords,
+		IsDelete: condition.IsDelete,
+	})
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.GetCommentsFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:         pb.Response_ResponseBeginIndex,
+		Code:          pb.ResultCode_SuccessOK,
+		ServerTime:    time.Now().Unix(),
+		AdminComments: adminComment,
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}
+
+func (c *CommentRestApi) UpdateCommentStatus(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request.CommentStatus)
+	err = CommentService.UpdateCommentStatus(request.CommentStatus)
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.UpdateCommentFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+		Message:    "更新成功",
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}
+
+func (c *CommentRestApi) DeleteComment(ctx *gin.Context) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		logging.Logger.Error(err)
+		c.ProtoBufFail(ctx, http.StatusOK, common.InvalidRequestParams)
+		return
+	}
+	logging.Logger.Debug(request.CommentIds)
+	err = CommentService.DeleteComments(request.CommentIds)
+	if err != nil {
+		c.ProtoBufFail(ctx, http.StatusOK, common.DeleteCommentFail)
+		return
+	}
+	data := &pb.ResponsePkg{
+		CmdId:      pb.Response_ResponseBeginIndex,
+		Code:       pb.ResultCode_SuccessOK,
+		ServerTime: time.Now().Unix(),
+		Message:    "删除成功",
+	}
+	c.ProtoBuf(ctx, http.StatusOK, data)
+}
