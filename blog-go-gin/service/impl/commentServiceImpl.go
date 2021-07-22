@@ -22,11 +22,31 @@ type CommentServiceImpl struct {
 }
 
 func (c *CommentServiceImpl) DeleteComments(ids *pb.CsDeleteComments) error {
-	panic("implement me")
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		_, err := model.DeleteComment(tx, "id in (?)", ids.CommentIdList)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CommentServiceImpl) UpdateCommentStatus(status *pb.CsUpdateCommentStatus) error {
-	panic("implement me")
+	err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+		err := model.UpdateCommentStatus(tx, "id in (?)", int8(status.IsDelete), status.CommentIdList)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *CommentServiceImpl) GetAdminComments(csCondition *pb.CsCondition) (*pb.ScAdminComments, error) {

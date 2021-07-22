@@ -143,28 +143,28 @@
       <el-table-column label="操作" width="160" align="center">
         <template slot-scope="scope">
           <el-popconfirm
-            v-if="scope.row.isDelete == 0"
-            title="确定删除吗？"
-            @onConfirm="updateCommentStatus(scope.row.id)"
+                  v-if="scope.row.isDelete === 0 || scope.row.isDelete == null"
+                  title="确定删除吗？"
+                  @onConfirm="updateCommentStatus(scope.row.id)"
           >
             <el-button size="mini" type="danger" slot="reference">
               删除
             </el-button>
           </el-popconfirm>
           <el-popconfirm
-            v-if="scope.row.isDelete == 1"
-            title="确定恢复吗？"
-            @onConfirm="updateCommentStatus(scope.row.id)"
+                  v-if="scope.row.isDelete === 1"
+                  title="确定恢复吗？"
+                  @onConfirm="updateCommentStatus(scope.row.id)"
           >
             <el-button size="mini" type="success" slot="reference">
               恢复
             </el-button>
           </el-popconfirm>
           <el-popconfirm
-            style="margin-left:10px"
-            v-if="scope.row.isDelete == 1"
-            title="确定彻底删除吗？"
-            @onConfirm="deleteComments(scope.row.id)"
+                  style="margin-left:10px"
+                  v-if="scope.row.isDelete === 1"
+                  title="确定彻底删除吗？"
+                  @onConfirm="deleteComments(scope.row.id)"
           >
             <el-button size="mini" type="danger" slot="reference">
               删除
@@ -215,7 +215,9 @@
 </template>
 
 <script>
-  import {getComments} from "../../api/api";
+  import {deleteComment, getComments, updateCommentStatus} from "../../api/api";
+  import {getResultCode} from "../../utils/util";
+  import {resultMap} from "../../utils/constant";
 
   export default {
     created() {
@@ -260,50 +262,51 @@
         this.current = current;
         this.listComments();
       },
-      updateCommentStatus(id) {
-        let param = new URLSearchParams();
-        if (id != null) {
-          param.append("idList", [id]);
+
+      notify(data) {
+        if (data.code === getResultCode(resultMap.SuccessOK)) {
+          this.$notify.success({
+            title: "成功",
+            message: data.message
+          });
+          this.listComments();
         } else {
-          param.append("idList", this.commentIdList);
+          this.$notify.error({
+            title: "失败",
+            message: data.message
+          });
         }
-        param.append("isDelete", this.isDelete === 0 ? 1 : 0);
-        this.axios.put("/api/admin/comments", param).then(({data}) => {
-          if (data.flag) {
-            this.$notify.success({
-              title: "成功",
-              message: data.message
-            });
-            this.listComments();
-          } else {
-            this.$notify.error({
-              title: "失败",
-              message: data.message
-            });
+      },
+      updateCommentStatus(id) {
+        if (id != null) {
+          this.commentIdList = [];
+          this.commentIdList.push(id);
+        }
+        updateCommentStatus({
+          commentStatus: {
+            commentIdList: this.commentIdList,
+            isDelete: this.isDelete === 0 ? 1 : 0
           }
+        }).then(data => {
+          this.commentIdList = [];
+          this.notify(data);
           this.updateIsDelete = false;
         });
       },
       deleteComments(id) {
-        var param = {};
-        if (id == null) {
-          param = {data: this.commentIdList};
-        } else {
-          param = {data: [id]};
+        if (id != null) {
+          this.commentIdList = [];
+          this.commentIdList.push(id);
         }
-        this.axios.delete("/api/admin/comments", param).then(({data}) => {
-          if (data.flag) {
-            this.$notify.success({
-              title: "成功",
-              message: data.message
-            });
-            this.listComments();
-          } else {
-            this.$notify.error({
-              title: "失败",
-              message: data.message
-            });
+        deleteComment({
+          data: {
+            commentIds: {
+              commentIdList: this.commentIdList,
+            }
           }
+        }).then(data => {
+          this.commentIdList = [];
+          this.notify(data);
           this.remove = false;
         });
       },
@@ -316,7 +319,7 @@
             isDelete: this.isDelete
           }
         }).then(data => {
-          console.log(data)
+          console.log(data);
           this.commentList = data.adminComments.commentList;
           this.count = data.adminComments.count;
           this.loading = false;

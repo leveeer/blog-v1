@@ -40,11 +40,11 @@ func DeleteCommentByID(id int) (bool, error) {
 	return dao.Db.Debug().RowsAffected > 0, nil
 }
 
-func DeleteComment(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Debug().Where(condition, args...).Delete(&Comment{}).Error; err != nil {
+func DeleteComment(tx *gorm.DB, condition string, args ...interface{}) (int64, error) {
+	if err := tx.Debug().Where(condition, args...).Delete(&Comment{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.Debug().RowsAffected, nil
+	return tx.Debug().RowsAffected, nil
 }
 
 func UpdateComment(m *Comment) error {
@@ -138,4 +138,8 @@ func GetRepliesByCommentId(iPage *page.IPage, commentIds []int64) ([]*Comment, e
 		return nil, err
 	}
 	return res, nil
+}
+
+func UpdateCommentStatus(tx *gorm.DB, condition string, status int8, args ...interface{}) error {
+	return tx.Debug().Table("tb_comment").Where(condition, args...).Select("is_delete").Update("is_delete", status).Error
 }

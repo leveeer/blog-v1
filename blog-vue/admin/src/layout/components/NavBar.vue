@@ -200,7 +200,7 @@ export default {
   font-size: 12px;
   margin-top: 4px;
   margin-left: 5px;
-  background-color: #42b983;
+  background-color: #304156;
   color: #fff;
   border-color: #42b983;
 }

@@ -62,31 +62,6 @@ router.afterEach(() => {
   NProgress.done();
 });
 
-// 响应拦截器
-// axios.interceptors.response.use(
-//   function(response) {
-//     switch (response.data.code) {
-//       case 40001:
-//         Vue.prototype.$message({
-//           type: "error",
-//           message: response.data.message
-//         });
-//         router.push({ path: "/login" });
-//         break;
-//       case 50000:
-//         Vue.prototype.$message({
-//           type: "error",
-//           message: response.data.message
-//         });
-//         break;
-//     }
-//     return response;
-//   },
-//   function(error) {
-//     return Promise.reject(error);
-//   }
-// );
-
 const vue = new Vue({
   router,
   store,
