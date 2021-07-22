@@ -43,6 +43,7 @@ message ResponsePkg {
   ScAdminCategories adminCategories = 25;
   ScAdminTags adminTags = 26;
   ScAdminComments adminComments = 27;
+  ScAdminMessages adminMessages = 28;
 }
 
 message ScImage{
@@ -148,6 +149,11 @@ message ScComment{
 
 message ScAdminComments{
   repeated ScComment commentList = 1;
+  int64 count = 2;
+}
+
+message ScAdminMessages{
+  repeated Message messageList = 1;
   int64 count = 2;
 }
 

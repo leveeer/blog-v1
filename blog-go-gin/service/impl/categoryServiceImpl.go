@@ -75,7 +75,7 @@ func (receiver *CategoryServiceImpl) GetAdminCategory(csCondition *pb.CsConditio
 		categorySlice = append(categorySlice, &pb.Category{
 			Id:           int32(category.ID),
 			CategoryName: category.CategoryName,
-			CreateTIme:   category.CreateTime,
+			CreateTime:   category.CreateTime,
 		})
 	}
 	categoryCount, err := model.GetCategoriesCountByCondition(csCondition.GetKeywords(), "%"+csCondition.GetKeywords()+"%")

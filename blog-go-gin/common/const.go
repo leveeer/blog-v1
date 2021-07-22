@@ -73,4 +73,5 @@ const (
 	AdminCategories = "/categories"
 	AdminTags       = "/tags"
 	AdminComments   = "/comments"
+	AdminMessages   = "/messages"
 )

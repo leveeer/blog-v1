@@ -2,6 +2,7 @@ package model
 
 import (
 	"blog-go-gin/dao"
+	"blog-go-gin/models/page"
 	"gorm.io/gorm"
 )
 
@@ -32,11 +33,11 @@ func DeleteMessageByID(id int) (bool, error) {
 	return dao.Db.Debug().RowsAffected > 0, nil
 }
 
-func DeleteMessage(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Debug().Where(condition, args...).Delete(&Message{}).Error; err != nil {
+func DeleteMessage(tx *gorm.DB, condition string, args ...interface{}) (int64, error) {
+	if err := tx.Debug().Where(condition, args...).Delete(&Message{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.Debug().RowsAffected, nil
+	return tx.Debug().RowsAffected, nil
 }
 
 func UpdateMessage(m *Message) error {
@@ -65,4 +66,28 @@ func GetMessagesCount() (count int64, err error) {
 		return 0, err
 	}
 	return messageCount, nil
+}
+
+func GetMessagesByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*Message, error) {
+	res := make([]*Message, 0)
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("nickname LIKE ?", args...)
+	}
+	if err := db.Debug().Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetMessagesCountByCondition(condition string, args ...interface{}) (int64, error) {
+	var count int64
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("nickname LIKE ?", args...)
+	}
+	if err := db.Debug().Table("tb_message").Count(&count).Error; err != nil {
+		return int64(0), err
+	}
+	return count, nil
 }

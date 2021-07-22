@@ -40,6 +40,7 @@ message RequestPkg{
   CsLikeComment likeComment = 20;
   CsUpdateCommentStatus commentStatus = 21;
   CsDeleteComments commentIds = 22;
+  CsDeleteMessages messageIds = 23;
 }
 
 message CsComment{
@@ -144,6 +145,10 @@ message CsUpdateCommentStatus{
 
 message CsDeleteComments{
   repeated int64 commentIdList = 1;
+}
+
+message CsDeleteMessages{
+  repeated int64 messageIdList = 1;
 }
 
 
