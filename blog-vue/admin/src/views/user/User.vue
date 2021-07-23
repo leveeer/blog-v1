@@ -41,7 +41,7 @@
         prop="nickname"
         label="昵称"
         align="center"
-        width="140"
+        width="150"
       />
       <el-table-column
         prop="loginType"
@@ -50,15 +50,15 @@
         width="80"
       >
         <template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.loginType == 0">邮箱</el-tag>
-          <el-tag v-if="scope.row.loginType == 1">QQ</el-tag>
-          <el-tag type="danger" v-if="scope.row.loginType == 2">微博</el-tag>
+          <el-tag type="success" v-if="scope.row.loginType === 0 || scope.row.loginType == null">邮箱</el-tag>
+          <el-tag v-if="scope.row.loginType === 1">QQ</el-tag>
+          <el-tag type="danger" v-if="scope.row.loginType === 2">微博</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="roleList" label="用户角色" align="center">
         <template slot-scope="scope">
           <el-tag
-            v-for="(item, index) of scope.row.roleList"
+            v-for="(item, index) of scope.row.userRoleList"
             :key="index"
             style="margin-right:4px;margin-top:4px"
           >
@@ -93,7 +93,7 @@
       <el-table-column
         prop="createTime"
         label="创建时间"
-        width="130"
+        width="140"
         align="center"
       >
         <template slot-scope="scope">
@@ -104,7 +104,7 @@
       <el-table-column
         prop="lastLoginTime"
         label="上次登录时间"
-        width="130"
+        width="140"
         align="center"
       >
         <template slot-scope="scope">
@@ -169,87 +169,88 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.listUsers();
-  },
-  data: function() {
-    return {
-      loading: true,
-      isEdit: false,
-      userForm: {
-        userInfoId: null,
-        nickname: ""
+  import {getUserRoles, getUsers} from "../../api/api";
+
+  export default {
+    created() {
+      this.listUsers();
+    },
+    data: function () {
+      return {
+        loading: true,
+        isEdit: false,
+        userForm: {
+          userInfoId: null,
+          nickname: ""
+        },
+        userRoleList: [],
+        roleIdList: [],
+        userList: [],
+        keywords: null,
+        current: 1,
+        size: 10,
+        count: 0
+      };
+    },
+    methods: {
+      sizeChange(size) {
+        this.size = size;
+        this.listUsers();
       },
-      userRoleList: [],
-      roleIdList: [],
-      userList: [],
-      keywords: null,
-      current: 1,
-      size: 10,
-      count: 0
-    };
-  },
-  methods: {
-    sizeChange(size) {
-      this.size = size;
-      this.listUsers();
-    },
-    currentChange(current) {
-      this.current = current;
-      this.listUsers();
-    },
-    changeDisable(user) {
-      let param = new URLSearchParams();
-      param.append("isDisable", user.isDisable);
-      this.axios.put("/api/admin/users/disable/" + user.userInfoId, param);
-    },
-    openEditModel(user) {
-      this.roleIdList = [];
-      this.userForm = JSON.parse(JSON.stringify(user));
-      this.userForm.roleList.forEach(item => {
-        this.roleIdList.push(item.id);
-      });
-      this.isEdit = true;
-    },
-    editUserRole() {
-      this.userForm.roleIdList = this.roleIdList;
-      this.axios
-        .put("/api/admin/users/role", this.userForm)
-        .then(({ data }) => {
-          if (data.flag) {
-            this.$notify.success({
-              title: "成功",
-              message: data.message
-            });
-            this.listUsers();
-          } else {
-            this.$notify.error({
-              title: "失败",
-              message: data.message
-            });
-          }
-          this.isEdit = false;
+      currentChange(current) {
+        this.current = current;
+        this.listUsers();
+      },
+      changeDisable(user) {
+        let param = new URLSearchParams();
+        param.append("isDisable", user.isDisable);
+        this.axios.put("/api/admin/users/disable/" + user.userInfoId, param);
+      },
+      openEditModel(user) {
+        this.roleIdList = [];
+        this.userForm = JSON.parse(JSON.stringify(user));
+        this.userForm.roleList.forEach(item => {
+          this.roleIdList.push(item.id);
         });
-    },
-    listUsers() {
-      this.axios
-        .get("/api/admin/users", {
+        this.isEdit = true;
+      },
+      editUserRole() {
+        this.userForm.roleIdList = this.roleIdList;
+        this.axios
+                .put("/api/admin/users/role", this.userForm)
+                .then(({data}) => {
+                  if (data.flag) {
+                    this.$notify.success({
+                      title: "成功",
+                      message: data.message
+                    });
+                    this.listUsers();
+                  } else {
+                    this.$notify.error({
+                      title: "失败",
+                      message: data.message
+                    });
+                  }
+                  this.isEdit = false;
+                });
+      },
+      listUsers() {
+        getUsers({
           params: {
             current: this.current,
             size: this.size,
             keywords: this.keywords
           }
-        })
-        .then(({ data }) => {
-          this.userList = data.data.recordList;
-          this.count = data.data.count;
+        }).then(data => {
+          console.log(data);
+          this.userList = data.adminUsers.userList;
+          this.count = data.adminUsers.count;
           this.loading = false;
         });
-      this.axios.get("/api/admin/users/role").then(({ data }) => {
-        this.userRoleList = data.data;
-      });
-    }
+        getUserRoles().then(data => {
+          this.userRoleList = data.adminRoles;
+        });
+      }
   }
 };
 </script>
