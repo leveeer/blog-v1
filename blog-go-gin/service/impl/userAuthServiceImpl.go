@@ -7,6 +7,7 @@ import (
 	"blog-go-gin/logging"
 	"blog-go-gin/models/enum"
 	"blog-go-gin/models/model"
+	"blog-go-gin/models/page"
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v8"
@@ -22,6 +23,55 @@ import (
 
 type UserAuthServiceImpl struct {
 	wg sync.WaitGroup
+}
+
+func (u *UserAuthServiceImpl) GetAdminUsers(c *pb.CsCondition) (*pb.ScAdminUsers, error) {
+	users, err := model.GetUsersByConditionWithPage(c.GetKeywords(), &page.IPage{Current: int(c.GetCurrent()), Size: int(c.GetSize())}, "%"+c.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+	var userSlice []*pb.ScUsers
+	var isDisable int32
+	for _, user := range users {
+		if user.IsDisable {
+			isDisable = 1
+		} else {
+			isDisable = 0
+		}
+		roles, err := model.GetUserRoles("user_id = ?", user.UserInfoID)
+		if err != nil {
+			return nil, err
+		}
+		var roleSlice []*pb.ScUserRole
+		for _, role := range roles {
+			roleSlice = append(roleSlice, &pb.ScUserRole{
+				Id:       int64(role.RoleID),
+				RoleName: enum.GetRoleKey(role.RoleID).GetRoleCh(),
+			})
+		}
+		userSlice = append(userSlice, &pb.ScUsers{
+			Id:            int64(user.ID),
+			UserInfoId:    int64(user.UserInfoID),
+			IpAddr:        user.IPAddr,
+			IpSource:      user.IPSource,
+			Nickname:      user.Nickname,
+			Avatar:        user.Avatar,
+			LoginType:     int32(user.LoginType),
+			CreateTime:    user.CreateTime,
+			LastLoginTime: user.LastLoginTime,
+			IsDisable:     isDisable,
+			UserRoleList:  roleSlice,
+		})
+
+	}
+	usersCount, err := model.GetUsersCountByCondition(c.GetKeywords(), "%"+c.GetKeywords()+"%")
+	if err != nil {
+		return nil, err
+	}
+	return &pb.ScAdminUsers{
+		UserList: userSlice,
+		Count:    usersCount,
+	}, nil
 }
 
 func (u *UserAuthServiceImpl) GetLoginResponse(username string) (*pb.LoginResponse, error) {
@@ -65,7 +115,7 @@ func (u *UserAuthServiceImpl) GetLoginResponse(username string) (*pb.LoginRespon
 	return &pb.LoginResponse{
 		UserId:         int32(userAuth.UserInfoID),
 		Email:          userAuth.Username,
-		NickName:       userAuth.NickName,
+		NickName:       userAuth.Nickname,
 		Avatar:         userAuth.Avatar,
 		Intro:          userAuth.Intro,
 		Website:        userAuth.WebSite,
@@ -91,7 +141,7 @@ func (u *UserAuthServiceImpl) GetUserAuthByUsername(username string) (*pb.UserAu
 		IpSource:      userAuth.IPSource,
 		LastLoginTime: userAuth.LastLoginTime,
 		RoleId:        int32(userAuth.RoleId),
-		NickName:      userAuth.NickName,
+		NickName:      userAuth.Nickname,
 		Avatar:        userAuth.Avatar,
 		WebSite:       userAuth.WebSite,
 		Intro:         userAuth.Intro,

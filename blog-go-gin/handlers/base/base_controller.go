@@ -3,7 +3,10 @@ package base
 import (
 	"blog-go-gin/common"
 	pb "blog-go-gin/go_proto"
+	"blog-go-gin/logging"
 	"github.com/gin-gonic/gin"
+	"github.com/golang/protobuf/proto"
+	"io/ioutil"
 	"sync"
 	"time"
 )
@@ -15,10 +18,25 @@ type Base interface {
 	ThrowError(code string, message string)
 	ProtoBuf(ctx *gin.Context, httpCode int, data interface{})
 	ProtoBufFail(ctx *gin.Context, httpCode int, code common.ErrorCode)
+	ReadRequestBody(ctx *gin.Context) (*pb.RequestPkg, error)
 }
 
 type Handler struct {
 	Wg sync.WaitGroup
+}
+
+func (c *Handler) ReadRequestBody(ctx *gin.Context) (*pb.RequestPkg, error) {
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		return nil, err
+	}
+	request := &pb.RequestPkg{}
+	err = proto.Unmarshal(body, request)
+	if err != nil {
+		return nil, err
+	}
+	logging.Logger.Debug(request)
+	return request, nil
 }
 
 func (c *Handler) RespSuccess(ctx *gin.Context, httpCode, code int, data interface{}) {

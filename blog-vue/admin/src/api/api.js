@@ -106,3 +106,19 @@ export function updateCommentStatus(params) {
 export function deleteComment(params) {
     return service.delete(urls.comments, params)
 }
+
+export function getMessages(params) {
+    return service.get(urls.messages, params)
+}
+
+export function deleteMessage(params) {
+    return service.delete(urls.messages, params)
+}
+
+export function getUsers(params) {
+    return service.get(urls.users, params)
+}
+
+export function getUserRoles() {
+    return service.get(urls.users_role)
+}

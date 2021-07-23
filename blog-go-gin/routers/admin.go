@@ -44,5 +44,7 @@ func adminRouters(r *gin.Engine) {
 
 		admin.GET(common.AdminMessages, MessageApi.GetAdminMessages)
 		admin.DELETE(common.AdminMessages, MessageApi.DeleteMessage)
+
+		admin.GET(common.AdminUsers, UserAuthApi.GetAdminUsers)
 	}
 }

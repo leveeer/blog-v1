@@ -2,6 +2,7 @@ package model
 
 import (
 	"blog-go-gin/dao"
+	"blog-go-gin/models/page"
 	"gorm.io/gorm"
 )
 
@@ -16,10 +17,11 @@ type UserAuth struct {
 	UserInfoID    int    `gorm:"column:user_info_id;not null"`
 	Username      string `gorm:"column:username;unique;not null"`
 	RoleId        int    `json:"role_id" gorm:"->"`
-	NickName      string `gorm:"->"`
+	Nickname      string `gorm:"->"`
 	Avatar        string `gorm:"->"`
 	Intro         string `gorm:"->"`
 	WebSite       string `gorm:"->"`
+	RoleName      string `gorm:"->"`
 	IsDisable     bool   `gorm:"->"`
 }
 
@@ -87,5 +89,32 @@ func GetLoginResponse(username string) (*UserAuth, error) {
 		return nil, err
 	}
 	return &m, nil
+}
 
+func GetUsersByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*UserAuth, error) {
+	res := make([]*UserAuth, 0)
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("ua.nickname LIKE ?", args...)
+	}
+	if err := db.Debug().Table("tb_user_auth ua").Select("ua.id,user_info_id,avatar, nickname,login_type,r.id as role_id, role_name,ip_addr, ip_source, ua.create_time,last_login_time,ui.is_disable").
+		Joins("LEFT JOIN tb_user_info ui ON ua.user_info_id = ui.id").
+		Joins("LEFT JOIN tb_user_role ur ON ui.id = ur.user_id").
+		Joins("LEFT JOIN tb_role r ON ur.role_id = r.id").
+		Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetUsersCountByCondition(condition string, args ...interface{}) (int64, error) {
+	var count int64
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("nickname LIKE ?", args...)
+	}
+	if err := db.Debug().Table("tb_user_auth ").Joins(" LEFT JOIN tb_user_info ui ON user_info_id = ui.id").Count(&count).Error; err != nil {
+		return int64(0), err
+	}
+	return count, nil
 }

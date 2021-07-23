@@ -11,6 +11,9 @@ export const urls = {
   categories: "/admin/categories",
   tags: "/admin/tags",
   comments: "/admin/comments",
+  messages: "/admin/messages",
+  users: "/admin/users",
+  users_role: "/admin/users/role",
 };
 
 export default urls;

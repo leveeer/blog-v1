@@ -10,4 +10,5 @@ type IUserAuthService interface {
 	Login(user *pb.User) (bool, error)
 	GetUserAuthByUsername(username string) (*pb.UserAuth, error)
 	GetLoginResponse(username string) (*pb.LoginResponse, error)
+	GetAdminUsers(c *pb.CsCondition) (*pb.ScAdminUsers, error)
 }

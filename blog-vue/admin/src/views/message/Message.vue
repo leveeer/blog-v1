@@ -120,75 +120,81 @@
 </template>
 
 <script>
-export default {
-  created() {
-    this.listMessages();
-  },
-  data: function() {
-    return {
-      loading: true,
-      deleteFlag: false,
-      messageIdList: [],
-      messageList: [],
-      keywords: null,
-      current: 1,
-      size: 10,
-      count: 0
-    };
-  },
-  methods: {
-    selectionChange(messageList) {
-      this.messageIdList = [];
-      messageList.forEach(item => {
-        this.messageIdList.push(item.id);
-      });
-    },
-    sizeChange(size) {
-      this.size = size;
+  import {deleteMessage, getMessages} from "../../api/api";
+  import {getResultCode} from "../../utils/util";
+  import {resultMap} from "../../utils/constant";
+
+  export default {
+    created() {
       this.listMessages();
     },
-    currentChange(current) {
-      this.current = current;
-      this.listMessages();
+    data: function () {
+      return {
+        loading: true,
+        deleteFlag: false,
+        messageIdList: [],
+        messageList: [],
+        keywords: null,
+        current: 1,
+        size: 10,
+        count: 0
+      };
     },
-    deleteMessage(id) {
-      var param = {};
-      if (id != null) {
-        param = { data: [id] };
-      } else {
-        param = { data: this.messageIdList };
-      }
-      this.axios.delete("/api/admin/messages", param).then(({ data }) => {
-        if (data.flag) {
-          this.$notify.success({
-            title: "成功",
-            message: data.message
-          });
-          this.listMessages();
-        } else {
-          this.$notify.error({
-            title: "失败",
-            message: data.message
-          });
+    methods: {
+      selectionChange(messageList) {
+        this.messageIdList = [];
+        messageList.forEach(item => {
+          this.messageIdList.push(item.id);
+        });
+      },
+      sizeChange(size) {
+        this.size = size;
+        this.listMessages();
+      },
+      currentChange(current) {
+        this.current = current;
+        this.listMessages();
+      },
+      deleteMessage(id) {
+        if (id != null) {
+          this.messageIdList = [];
+          this.messageIdList.push(id);
         }
-        this.deleteFlag = false;
-      });
-    },
-    listMessages() {
-      this.axios
-        .get("/api/admin/messages", {
+        deleteMessage({
+          data: {
+            messageIds: {
+              messageIdList: this.messageIdList,
+            }
+          }
+        }).then(data => {
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+            this.listMessages();
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+          this.deleteFlag = false;
+        });
+      },
+      listMessages() {
+        getMessages({
           params: {
             current: this.current,
             size: this.size,
             keywords: this.keywords
           }
-        })
-        .then(({ data }) => {
-          this.messageList = data.data.recordList;
-          this.count = data.data.count;
+        }).then(data => {
+          this.messageList = data.adminMessages.messageList;
+          this.count = data.adminMessages.count;
           this.loading = false;
         });
-    }
+      }
   }
 };
 </script>

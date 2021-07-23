@@ -44,6 +44,8 @@ message ResponsePkg {
   ScAdminTags adminTags = 26;
   ScAdminComments adminComments = 27;
   ScAdminMessages adminMessages = 28;
+  ScAdminUsers adminUsers = 29;
+  ScUserRole adminRoles = 30;
 }
 
 message ScImage{
@@ -155,5 +157,30 @@ message ScAdminComments{
 message ScAdminMessages{
   repeated Message messageList = 1;
   int64 count = 2;
+}
+
+message ScUsers{
+  repeated ScUserRole userRoleList = 1;
+  int64 id = 10;
+  int64 userInfoId = 11;
+  string avatar = 12;
+  string nickname = 13;
+  int32 loginType = 14;
+  string ipAddr = 15;
+  string ipSource = 16;
+  int64 lastLoginTime = 17;
+  int32 isDisable = 18;
+  int32 status = 19;
+  int64 createTime = 20;
+}
+
+message ScAdminUsers{
+  repeated ScUsers userList = 1;
+  int64 count = 2;
+}
+
+message ScUserRole{
+  int64 id = 1;
+  string roleName = 2;
 }
 
