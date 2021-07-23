@@ -97,10 +97,8 @@ func GetUsersByConditionWithPage(condition string, iPage *page.IPage, args ...in
 	if condition != "" {
 		db = db.Where("ua.nickname LIKE ?", args...)
 	}
-	if err := db.Debug().Table("tb_user_auth ua").Select("ua.id,user_info_id,avatar, nickname,login_type,r.id as role_id, role_name,ip_addr, ip_source, ua.create_time,last_login_time,ui.is_disable").
+	if err := db.Debug().Table("tb_user_auth ua").Select("ua.id,user_info_id,avatar, nickname,login_type,ip_addr, ip_source, ua.create_time,last_login_time,ui.is_disable").
 		Joins("LEFT JOIN tb_user_info ui ON ua.user_info_id = ui.id").
-		Joins("LEFT JOIN tb_user_role ur ON ui.id = ur.user_id").
-		Joins("LEFT JOIN tb_role r ON ur.role_id = r.id").
 		Scopes(page.Paginate(iPage)).Find(&res).Error; err != nil {
 		return nil, err
 	}

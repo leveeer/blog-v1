@@ -75,4 +75,5 @@ const (
 	AdminComments   = "/comments"
 	AdminMessages   = "/messages"
 	AdminUsers      = "/users"
+	AdminUsersRole  = "/users/role"
 )

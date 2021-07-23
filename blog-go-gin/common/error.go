@@ -52,6 +52,8 @@ const (
 	UpdateCommentFail
 	DeleteCommentFail
 	DeleteMessageFail
+	GetRolesFail
+	UpdateUserRoleFail
 )
 
 // unknown group
@@ -103,6 +105,8 @@ var Error = map[ErrorCode]error{
 	UpdateCommentFail:          errors.New("更新评论失败"),
 	DeleteCommentFail:          errors.New("删除评论失败"),
 	DeleteMessageFail:          errors.New("删除留言失败"),
+	GetRolesFail:               errors.New("获取角色失败"),
+	UpdateUserRoleFail:         errors.New("更新用户角色失败"),
 }
 
 func GetMsg(code ErrorCode) string {

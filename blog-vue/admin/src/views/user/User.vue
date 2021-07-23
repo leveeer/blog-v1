@@ -169,7 +169,9 @@
 </template>
 
 <script>
-  import {getUserRoles, getUsers} from "../../api/api";
+  import {getUserRoles, getUsers, UpdateUserRoles} from "../../api/api";
+  import {getResultCode} from "../../utils/util";
+  import {resultMap} from "../../utils/constant";
 
   export default {
     created() {
@@ -209,30 +211,31 @@
       openEditModel(user) {
         this.roleIdList = [];
         this.userForm = JSON.parse(JSON.stringify(user));
-        this.userForm.roleList.forEach(item => {
+        this.userForm.userRoleList.forEach(item => {
           this.roleIdList.push(item.id);
         });
         this.isEdit = true;
       },
       editUserRole() {
         this.userForm.roleIdList = this.roleIdList;
-        this.axios
-                .put("/api/admin/users/role", this.userForm)
-                .then(({data}) => {
-                  if (data.flag) {
-                    this.$notify.success({
-                      title: "成功",
-                      message: data.message
-                    });
-                    this.listUsers();
-                  } else {
-                    this.$notify.error({
-                      title: "失败",
-                      message: data.message
-                    });
-                  }
-                  this.isEdit = false;
-                });
+        console.log(this.userForm);
+        UpdateUserRoles({
+          userRole: this.userForm
+        }).then(data => {
+          if (data.code === getResultCode(resultMap.SuccessOK)) {
+            this.$notify.success({
+              title: "成功",
+              message: data.message
+            });
+            this.listUsers();
+          } else {
+            this.$notify.error({
+              title: "失败",
+              message: data.message
+            });
+          }
+          this.isEdit = false;
+        });
       },
       listUsers() {
         getUsers({
@@ -248,6 +251,7 @@
           this.loading = false;
         });
         getUserRoles().then(data => {
+          console.log(data);
           this.userRoleList = data.adminRoles;
         });
       }

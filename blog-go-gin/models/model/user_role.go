@@ -28,11 +28,11 @@ func DeleteUserRoleByID(id int) (bool, error) {
 	return dao.Db.Debug().RowsAffected > 0, nil
 }
 
-func DeleteUserRole(condition string, args ...interface{}) (int64, error) {
-	if err := dao.Db.Debug().Where(condition, args...).Delete(&UserRole{}).Error; err != nil {
+func DeleteUserRole(tx *gorm.DB, condition string, args ...interface{}) (int64, error) {
+	if err := tx.Debug().Where(condition, args...).Delete(&UserRole{}).Error; err != nil {
 		return 0, err
 	}
-	return dao.Db.Debug().RowsAffected, nil
+	return tx.Debug().RowsAffected, nil
 }
 
 func UpdateUserRole(m *UserRole) error {

@@ -41,6 +41,7 @@ message RequestPkg{
   CsUpdateCommentStatus commentStatus = 21;
   CsDeleteComments commentIds = 22;
   CsDeleteMessages messageIds = 23;
+  CsUpdateUserRole userRole = 25;
 }
 
 message CsComment{
@@ -149,6 +150,22 @@ message CsDeleteComments{
 
 message CsDeleteMessages{
   repeated int64 messageIdList = 1;
+}
+
+message CsUpdateUserRole{
+  string avatar = 1;
+  int64 createTime = 2;
+  int64 id = 3;
+  int32 isDisable = 4;
+  string  nickname = 5;
+  repeated int32 roleIdList = 6;
+  int64 userInfoId = 7;
+  repeated CsUserRoleList userRoleList = 8;
+}
+
+message CsUserRoleList{
+  int64 id = 1;
+  string roleName = 2;
 }
 
 

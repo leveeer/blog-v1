@@ -44,8 +44,12 @@ func DeleteUserInfo(condition string, args ...interface{}) (int64, error) {
 	return dao.Db.Debug().RowsAffected, nil
 }
 
-func UpdateUserInfo(m *UserInfo) error {
-	return dao.Db.Debug().Save(m).Error
+func UpdateUserInfo(tx *gorm.DB, m *UserInfo) error {
+	return tx.Debug().Save(m).Error
+}
+
+func UpdateNicknameByCondition(tx *gorm.DB, condition, value string, args ...interface{}) error {
+	return tx.Debug().Table("tb_user_info").Where(condition, args...).Update("nickname", value).Error
 }
 
 func GetUserInfoByID(id int) (*UserInfo, error) {

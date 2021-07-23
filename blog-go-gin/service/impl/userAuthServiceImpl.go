@@ -33,6 +33,7 @@ func (u *UserAuthServiceImpl) GetAdminUsers(c *pb.CsCondition) (*pb.ScAdminUsers
 	var userSlice []*pb.ScUsers
 	var isDisable int32
 	for _, user := range users {
+		logging.Logger.Debug(user)
 		if user.IsDisable {
 			isDisable = 1
 		} else {
@@ -62,7 +63,6 @@ func (u *UserAuthServiceImpl) GetAdminUsers(c *pb.CsCondition) (*pb.ScAdminUsers
 			IsDisable:     isDisable,
 			UserRoleList:  roleSlice,
 		})
-
 	}
 	usersCount, err := model.GetUsersCountByCondition(c.GetKeywords(), "%"+c.GetKeywords()+"%")
 	if err != nil {

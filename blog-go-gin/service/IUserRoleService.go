@@ -4,4 +4,5 @@ import pb "blog-go-gin/go_proto"
 
 type IUserRoleService interface {
 	GetUserRoleAndUsername(userId int) (*pb.UserRole, error)
+	UpdateUserRole(userRole *pb.CsUpdateUserRole) error
 }

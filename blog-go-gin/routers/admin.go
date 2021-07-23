@@ -3,12 +3,15 @@ package routers
 import (
 	"blog-go-gin/common"
 	"blog-go-gin/handlers/adminApi"
+	"blog-go-gin/handlers/usersApi"
 	"blog-go-gin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 var (
-	MenuApi = adminApi.NewMenuRestApi()
+	MenuApi     = adminApi.NewMenuRestApi()
+	UserRoleApi = usersApi.NewUserRoleRestApi()
+	RoleApi     = adminApi.NewRoleRestApi()
 )
 
 func adminRouters(r *gin.Engine) {
@@ -41,10 +44,10 @@ func adminRouters(r *gin.Engine) {
 		admin.GET(common.AdminComments, CommentApi.GetAdminComments)
 		admin.PUT(common.AdminComments, CommentApi.UpdateCommentStatus)
 		admin.DELETE(common.AdminComments, CommentApi.DeleteComment)
-
 		admin.GET(common.AdminMessages, MessageApi.GetAdminMessages)
 		admin.DELETE(common.AdminMessages, MessageApi.DeleteMessage)
-
 		admin.GET(common.AdminUsers, UserAuthApi.GetAdminUsers)
+		admin.PUT(common.AdminUsersRole, UserRoleApi.UpdateUserRole)
+		admin.GET(common.AdminUsersRole, RoleApi.GetAdminUsersRole)
 	}
 }

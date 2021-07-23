@@ -45,7 +45,7 @@ message ResponsePkg {
   ScAdminComments adminComments = 27;
   ScAdminMessages adminMessages = 28;
   ScAdminUsers adminUsers = 29;
-  ScUserRole adminRoles = 30;
+  repeated ScUserRole adminRoles = 30;
 }
 
 message ScImage{

@@ -114,6 +114,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           messageIds: {
             type: "CsDeleteMessages",
             id: 23
+          },
+          userRole: {
+            type: "CsUpdateUserRole",
+            id: 25
           }
         }
       },
@@ -410,6 +414,56 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "int64",
             id: 1
+          }
+        }
+      },
+      CsUpdateUserRole: {
+        fields: {
+          avatar: {
+            type: "string",
+            id: 1
+          },
+          createTime: {
+            type: "int64",
+            id: 2
+          },
+          id: {
+            type: "int64",
+            id: 3
+          },
+          isDisable: {
+            type: "int32",
+            id: 4
+          },
+          nickname: {
+            type: "string",
+            id: 5
+          },
+          roleIdList: {
+            rule: "repeated",
+            type: "int32",
+            id: 6
+          },
+          userInfoId: {
+            type: "int64",
+            id: 7
+          },
+          userRoleList: {
+            rule: "repeated",
+            type: "CsUserRoleList",
+            id: 8
+          }
+        }
+      },
+      CsUserRoleList: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 1
+          },
+          roleName: {
+            type: "string",
+            id: 2
           }
         }
       },
@@ -1158,6 +1212,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             id: 29
           },
           adminRoles: {
+            rule: "repeated",
             type: "ScUserRole",
             id: 30
           }

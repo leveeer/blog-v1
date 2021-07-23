@@ -122,3 +122,7 @@ export function getUsers(params) {
 export function getUserRoles() {
     return service.get(urls.users_role)
 }
+
+export function UpdateUserRoles(params) {
+    return service.put(urls.users_role, params)
+}
