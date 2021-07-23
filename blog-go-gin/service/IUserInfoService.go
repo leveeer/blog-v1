@@ -1,7 +1,9 @@
 package service
 
-import pb "blog-go-gin/go_proto"
+import (
+	pb "blog-go-gin/go_proto"
+)
 
 type IUserInfoService interface {
-	GetUserInfoByUid(userId int) pb.UserInfo
+	UpdateUserStatus(userStatus *pb.CsUserStatus) error
 }

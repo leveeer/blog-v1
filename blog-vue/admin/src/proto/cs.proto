@@ -42,6 +42,7 @@ message RequestPkg{
   CsDeleteComments commentIds = 22;
   CsDeleteMessages messageIds = 23;
   CsUpdateUserRole userRole = 25;
+  CsUserStatus userStatus = 26;
 }
 
 message CsComment{
@@ -166,6 +167,11 @@ message CsUpdateUserRole{
 message CsUserRoleList{
   int64 id = 1;
   string roleName = 2;
+}
+
+message CsUserStatus{
+  int64 userId = 1;
+  bool isDisable = 2;
 }
 
 

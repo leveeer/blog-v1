@@ -118,6 +118,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           userRole: {
             type: "CsUpdateUserRole",
             id: 25
+          },
+          userStatus: {
+            type: "CsUserStatus",
+            id: 26
           }
         }
       },
@@ -463,6 +467,18 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           },
           roleName: {
             type: "string",
+            id: 2
+          }
+        }
+      },
+      CsUserStatus: {
+        fields: {
+          userId: {
+            type: "int64",
+            id: 1
+          },
+          isDisable: {
+            type: "bool",
             id: 2
           }
         }

@@ -12,6 +12,7 @@ var (
 	MenuApi     = adminApi.NewMenuRestApi()
 	UserRoleApi = usersApi.NewUserRoleRestApi()
 	RoleApi     = adminApi.NewRoleRestApi()
+	UserInfoApi = usersApi.NewUserInfoRestApi()
 )
 
 func adminRouters(r *gin.Engine) {
@@ -49,5 +50,6 @@ func adminRouters(r *gin.Engine) {
 		admin.GET(common.AdminUsers, UserAuthApi.GetAdminUsers)
 		admin.PUT(common.AdminUsersRole, UserRoleApi.UpdateUserRole)
 		admin.GET(common.AdminUsersRole, RoleApi.GetAdminUsersRole)
+		admin.PUT(common.AdminUserStatus, UserInfoApi.UpdateUserStatus)
 	}
 }

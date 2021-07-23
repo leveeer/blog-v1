@@ -126,3 +126,9 @@ export function getUserRoles() {
 export function UpdateUserRoles(params) {
     return service.put(urls.users_role, params)
 }
+
+export function UpdateUserStatus(params) {
+    console.log(params)
+    return service.put(urls.users_status, params)
+}
+

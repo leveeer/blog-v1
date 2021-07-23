@@ -169,7 +169,7 @@
 </template>
 
 <script>
-  import {getUserRoles, getUsers, UpdateUserRoles} from "../../api/api";
+  import {getUserRoles, getUsers, UpdateUserRoles, UpdateUserStatus} from "../../api/api";
   import {getResultCode} from "../../utils/util";
   import {resultMap} from "../../utils/constant";
 
@@ -204,9 +204,13 @@
         this.listUsers();
       },
       changeDisable(user) {
-        let param = new URLSearchParams();
-        param.append("isDisable", user.isDisable);
-        this.axios.put("/api/admin/users/disable/" + user.userInfoId, param);
+        console.log(user)
+        UpdateUserStatus({
+            userStatus: {
+              userId: user.userInfoId,
+              isDisable: user.isDisable,
+          }
+        });
       },
       openEditModel(user) {
         this.roleIdList = [];
@@ -218,7 +222,6 @@
       },
       editUserRole() {
         this.userForm.roleIdList = this.roleIdList;
-        console.log(this.userForm);
         UpdateUserRoles({
           userRole: this.userForm
         }).then(data => {
@@ -245,13 +248,11 @@
             keywords: this.keywords
           }
         }).then(data => {
-          console.log(data);
           this.userList = data.adminUsers.userList;
           this.count = data.adminUsers.count;
           this.loading = false;
         });
         getUserRoles().then(data => {
-          console.log(data);
           this.userRoleList = data.adminRoles;
         });
       }

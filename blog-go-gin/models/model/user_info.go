@@ -52,6 +52,10 @@ func UpdateNicknameByCondition(tx *gorm.DB, condition, value string, args ...int
 	return tx.Debug().Table("tb_user_info").Where(condition, args...).Update("nickname", value).Error
 }
 
+func UpdateUserStatus(tx *gorm.DB, condition string, value bool, args ...interface{}) error {
+	return tx.Debug().Table("tb_user_info").Where(condition, args...).Select("is_disable").Update("is_disable", value).Error
+}
+
 func GetUserInfoByID(id int) (*UserInfo, error) {
 	var m UserInfo
 	if err := dao.Db.Debug().First(&m, id).Error; err != nil {
