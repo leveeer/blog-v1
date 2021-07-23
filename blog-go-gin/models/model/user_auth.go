@@ -95,7 +95,7 @@ func GetUsersByConditionWithPage(condition string, iPage *page.IPage, args ...in
 	res := make([]*UserAuth, 0)
 	db := dao.Db
 	if condition != "" {
-		db = db.Where("ua.nickname LIKE ?", args...)
+		db = db.Where("nickname LIKE ?", args...)
 	}
 	if err := db.Debug().Table("tb_user_auth ua").Select("ua.id,user_info_id,avatar, nickname,login_type,ip_addr, ip_source, ua.create_time,last_login_time,ui.is_disable").
 		Joins("LEFT JOIN tb_user_info ui ON ua.user_info_id = ui.id").
