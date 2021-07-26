@@ -38,6 +38,11 @@ message RequestPkg{
   CsDeleteTag tagIds = 18;
   CsLikeArticle likeArticle = 19;
   CsLikeComment likeComment = 20;
+  CsUpdateCommentStatus commentStatus = 21;
+  CsDeleteComments commentIds = 22;
+  CsDeleteMessages messageIds = 23;
+  CsUpdateUserRole userRole = 25;
+  CsUserStatus userStatus = 26;
 }
 
 message CsComment{
@@ -102,6 +107,7 @@ message CsCondition{
   int64 current = 1;
   int32 size = 2;
   string keywords = 3;
+  int32 isDelete = 4;
 }
 
 message CsCategory{
@@ -132,6 +138,40 @@ message CsLikeArticle{
 message CsLikeComment{
   int64 commentId = 1;
   int64 userId = 2;
+}
+
+message CsUpdateCommentStatus{
+  repeated int64 commentIdList = 1;
+  int32 isDelete = 2;
+}
+
+message CsDeleteComments{
+  repeated int64 commentIdList = 1;
+}
+
+message CsDeleteMessages{
+  repeated int64 messageIdList = 1;
+}
+
+message CsUpdateUserRole{
+  string avatar = 1;
+  int64 createTime = 2;
+  int64 id = 3;
+  int32 isDisable = 4;
+  string  nickname = 5;
+  repeated int32 roleIdList = 6;
+  int64 userInfoId = 7;
+  repeated CsUserRoleList userRoleList = 8;
+}
+
+message CsUserRoleList{
+  int64 id = 1;
+  string roleName = 2;
+}
+
+message CsUserStatus{
+  int64 userId = 1;
+  bool isDisable = 2;
 }
 
 

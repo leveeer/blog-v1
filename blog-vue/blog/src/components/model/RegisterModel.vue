@@ -129,7 +129,9 @@
         const userModel = {
           username: this.username,
           password: this.password,
-          code: this.code
+          code: this.code,
+          ipAddr:localStorage.getItem("ip"),
+          ipSource:localStorage.getItem("cName")
         };
         register({
           user: userModel

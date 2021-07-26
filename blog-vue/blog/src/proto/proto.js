@@ -102,6 +102,26 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           likeComment: {
             type: "CsLikeComment",
             id: 20
+          },
+          commentStatus: {
+            type: "CsUpdateCommentStatus",
+            id: 21
+          },
+          commentIds: {
+            type: "CsDeleteComments",
+            id: 22
+          },
+          messageIds: {
+            type: "CsDeleteMessages",
+            id: 23
+          },
+          userRole: {
+            type: "CsUpdateUserRole",
+            id: 25
+          },
+          userStatus: {
+            type: "CsUserStatus",
+            id: 26
           }
         }
       },
@@ -289,6 +309,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           keywords: {
             type: "string",
             id: 3
+          },
+          isDelete: {
+            type: "int32",
+            id: 4
           }
         }
       },
@@ -362,6 +386,99 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           },
           userId: {
             type: "int64",
+            id: 2
+          }
+        }
+      },
+      CsUpdateCommentStatus: {
+        fields: {
+          commentIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          },
+          isDelete: {
+            type: "int32",
+            id: 2
+          }
+        }
+      },
+      CsDeleteComments: {
+        fields: {
+          commentIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          }
+        }
+      },
+      CsDeleteMessages: {
+        fields: {
+          messageIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          }
+        }
+      },
+      CsUpdateUserRole: {
+        fields: {
+          avatar: {
+            type: "string",
+            id: 1
+          },
+          createTime: {
+            type: "int64",
+            id: 2
+          },
+          id: {
+            type: "int64",
+            id: 3
+          },
+          isDisable: {
+            type: "int32",
+            id: 4
+          },
+          nickname: {
+            type: "string",
+            id: 5
+          },
+          roleIdList: {
+            rule: "repeated",
+            type: "int32",
+            id: 6
+          },
+          userInfoId: {
+            type: "int64",
+            id: 7
+          },
+          userRoleList: {
+            rule: "repeated",
+            type: "CsUserRoleList",
+            id: 8
+          }
+        }
+      },
+      CsUserRoleList: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 1
+          },
+          roleName: {
+            type: "string",
+            id: 2
+          }
+        }
+      },
+      CsUserStatus: {
+        fields: {
+          userId: {
+            type: "int64",
+            id: 1
+          },
+          isDisable: {
+            type: "bool",
             id: 2
           }
         }
@@ -600,7 +717,7 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             type: "int32",
             id: 3
           },
-          createTIme: {
+          createTime: {
             type: "int64",
             id: 4
           }
@@ -814,6 +931,14 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           code: {
             type: "string",
             id: 3
+          },
+          ipAddr: {
+            type: "string",
+            id: 4
+          },
+          ipSource: {
+            type: "string",
+            id: 5
           }
         }
       },
@@ -1097,6 +1222,23 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           adminTags: {
             type: "ScAdminTags",
             id: 26
+          },
+          adminComments: {
+            type: "ScAdminComments",
+            id: 27
+          },
+          adminMessages: {
+            type: "ScAdminMessages",
+            id: 28
+          },
+          adminUsers: {
+            type: "ScAdminUsers",
+            id: 29
+          },
+          adminRoles: {
+            rule: "repeated",
+            type: "ScUserRole",
+            id: 30
           }
         }
       },
@@ -1367,6 +1509,150 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           },
           count: {
             type: "int64",
+            id: 2
+          }
+        }
+      },
+      ScComment: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 1
+          },
+          avatar: {
+            type: "string",
+            id: 2
+          },
+          nickname: {
+            type: "string",
+            id: 3
+          },
+          replyNickname: {
+            type: "string",
+            id: 4
+          },
+          articleTitle: {
+            type: "string",
+            id: 5
+          },
+          commentContent: {
+            type: "string",
+            id: 6
+          },
+          createTime: {
+            type: "int64",
+            id: 7
+          },
+          isDelete: {
+            type: "int32",
+            id: 8
+          },
+          likeCount: {
+            type: "int64",
+            id: 9
+          }
+        }
+      },
+      ScAdminComments: {
+        fields: {
+          commentList: {
+            rule: "repeated",
+            type: "ScComment",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      ScAdminMessages: {
+        fields: {
+          messageList: {
+            rule: "repeated",
+            type: "Message",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      ScUsers: {
+        fields: {
+          userRoleList: {
+            rule: "repeated",
+            type: "ScUserRole",
+            id: 1
+          },
+          id: {
+            type: "int64",
+            id: 10
+          },
+          userInfoId: {
+            type: "int64",
+            id: 11
+          },
+          avatar: {
+            type: "string",
+            id: 12
+          },
+          nickname: {
+            type: "string",
+            id: 13
+          },
+          loginType: {
+            type: "int32",
+            id: 14
+          },
+          ipAddr: {
+            type: "string",
+            id: 15
+          },
+          ipSource: {
+            type: "string",
+            id: 16
+          },
+          lastLoginTime: {
+            type: "int64",
+            id: 17
+          },
+          isDisable: {
+            type: "int32",
+            id: 18
+          },
+          status: {
+            type: "int32",
+            id: 19
+          },
+          createTime: {
+            type: "int64",
+            id: 20
+          }
+        }
+      },
+      ScAdminUsers: {
+        fields: {
+          userList: {
+            rule: "repeated",
+            type: "ScUsers",
+            id: 1
+          },
+          count: {
+            type: "int64",
+            id: 2
+          }
+        }
+      },
+      ScUserRole: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 1
+          },
+          roleName: {
+            type: "string",
             id: 2
           }
         }

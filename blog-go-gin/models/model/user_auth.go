@@ -4,6 +4,7 @@ import (
 	"blog-go-gin/dao"
 	"blog-go-gin/models/page"
 	"gorm.io/gorm"
+	"time"
 )
 
 type UserAuth struct {
@@ -115,4 +116,8 @@ func GetUsersCountByCondition(condition string, args ...interface{}) (int64, err
 		return int64(0), err
 	}
 	return count, nil
+}
+
+func UpdateUserLoginTime(tx *gorm.DB, username string) error {
+	return tx.Debug().Table("tb_user_auth ").Where("username = ?", username).Select("last_login_time").Update("last_login_time", time.Now().Unix()).Error
 }

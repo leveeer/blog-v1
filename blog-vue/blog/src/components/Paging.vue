@@ -96,7 +96,7 @@
       }}</a>
     </template>
     <!-- 下一页按钮 最后一页不显示 -->
-    <a @click="nextPage" v-show="current != totalPage" class="ml-1 mr-1">
+    <a @click="nextPage" v-show="current !== totalPage" class="ml-1 mr-1">
       下一页
     </a>
   </div>

@@ -42,6 +42,10 @@ message ResponsePkg {
   ScArticleInfo updateArticleInfo = 24;
   ScAdminCategories adminCategories = 25;
   ScAdminTags adminTags = 26;
+  ScAdminComments adminComments = 27;
+  ScAdminMessages adminMessages = 28;
+  ScAdminUsers adminUsers = 29;
+  repeated ScUserRole adminRoles = 30;
 }
 
 message ScImage{
@@ -131,5 +135,52 @@ message ScAdminCategories{
 message ScAdminTags{
   repeated Tag tagList = 1;
   int64 count = 2;
+}
+
+message ScComment{
+  int64 id = 1;
+  string avatar = 2;
+  string nickname = 3;
+  string replyNickname = 4;
+  string articleTitle = 5;
+  string commentContent = 6;
+  int64 createTime = 7;
+  int32 isDelete = 8;
+  int64 likeCount = 9;
+}
+
+message ScAdminComments{
+  repeated ScComment commentList = 1;
+  int64 count = 2;
+}
+
+message ScAdminMessages{
+  repeated Message messageList = 1;
+  int64 count = 2;
+}
+
+message ScUsers{
+  repeated ScUserRole userRoleList = 1;
+  int64 id = 10;
+  int64 userInfoId = 11;
+  string avatar = 12;
+  string nickname = 13;
+  int32 loginType = 14;
+  string ipAddr = 15;
+  string ipSource = 16;
+  int64 lastLoginTime = 17;
+  int32 isDisable = 18;
+  int32 status = 19;
+  int64 createTime = 20;
+}
+
+message ScAdminUsers{
+  repeated ScUsers userList = 1;
+  int64 count = 2;
+}
+
+message ScUserRole{
+  int64 id = 1;
+  string roleName = 2;
 }
 

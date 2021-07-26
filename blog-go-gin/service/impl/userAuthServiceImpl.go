@@ -178,6 +178,8 @@ func (u *UserAuthServiceImpl) Register(user *pb.User) error {
 			Password:   string(hashPwd),
 			CreateTime: time.Now().Unix(),
 			LoginType:  enum.EMAIL.GetLoginType(),
+			IPAddr:     user.IpAddr,
+			IPSource:   user.IpSource,
 		})
 		if err != nil {
 			return err

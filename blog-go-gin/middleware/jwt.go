@@ -2,15 +2,18 @@ package middleware
 
 import (
 	"blog-go-gin/common"
+	"blog-go-gin/dao"
 	pb "blog-go-gin/go_proto"
 	jwt "blog-go-gin/helper"
 	"blog-go-gin/logging"
 	"blog-go-gin/models/enum"
+	"blog-go-gin/models/model"
 	"blog-go-gin/service"
 	"blog-go-gin/service/impl"
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/protobuf/proto"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -99,6 +102,14 @@ func (j *JWT) GinJWTMiddlewareInit() (authMiddleware *jwt.GinJWTMiddleware) {
 				return nil, errors.New(common.GetMsg(common.LoginFail))
 			}
 			if ok {
+				//更新登录时间
+				err := dao.SqlTransaction(dao.Db.Begin(), func(tx *gorm.DB) error {
+					_ = model.UpdateUserLoginTime(tx, request.User.Username)
+					return nil
+				})
+				if err != nil {
+					return nil, err
+				}
 				loginResponse, err = j.UserAuthService.GetLoginResponse(request.User.Username)
 				if err != nil {
 					return nil, errors.New(common.GetMsg(common.GetUserInfoFail))

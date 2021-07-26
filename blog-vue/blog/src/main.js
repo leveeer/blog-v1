@@ -19,6 +19,9 @@ import "vue-image-swipe/dist/vue-image-swipe.css";
 import Toast from "./components/toast/index";
 import NProgress from "nprogress";
 import "nprogress/nprogress.css";
+import echarts from 'echarts';
+Vue.prototype.$echarts = echarts;
+require('echarts-wordcloud');
 
 Vue.prototype.config = config;
 Vue.config.productionTip = false;

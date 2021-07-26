@@ -143,6 +143,8 @@ message User {
   string username = 1;
   string password = 2;
   string code = 3;
+  string ipAddr = 4;
+  string ipSource = 5;
 }
 
 message UserRole {

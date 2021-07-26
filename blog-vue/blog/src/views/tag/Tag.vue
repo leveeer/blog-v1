@@ -6,12 +6,12 @@
     </div>
     <!-- 标签列表 -->
     <v-card class="blog-container">
-      <div class="tag-cloud-title">标签 - {{ count }}</div>
+      <div class="tag-cloud-title">标签<span style="font-size: medium;color: #6c9d8f"><{{ count }}个></span></div>
       <div class="tag-cloud">
         <router-link
-          :style="{ 'font-size': Math.floor(Math.random() * 10) + 18 + 'px' }"
           v-for="item of tagList"
           :key="item.id"
+          :style="tagStyle"
           :to="'/tags/' + item.id"
         >
           {{ item.tagName }}
@@ -30,6 +30,10 @@
     },
     data: function() {
       return {
+        tagStyle: {
+          fontSize: Math.floor(Math.random() * 10) + 18 + 'px',
+          color: 'rgb(' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ',' + Math.round(Math.random() * 255) + ')'
+        },
         tagList: [],
         count: 0
       };
@@ -37,7 +41,7 @@
     methods: {
       listTags() {
         getTags().then((data) => {
-          console.log(data)
+          console.log(data);
           this.tagList = data.tags;
           this.count = data.tags.length;
         });
