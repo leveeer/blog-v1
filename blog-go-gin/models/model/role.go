@@ -1,6 +1,9 @@
 package model
 
-import "blog-go-gin/dao"
+import (
+	"blog-go-gin/dao"
+	"blog-go-gin/models/page"
+)
 
 type Role struct {
 	CreateTime int64  `gorm:"column:create_time" json:"create_time"`
@@ -9,6 +12,8 @@ type Role struct {
 	RoleLabel  string `gorm:"column:role_label;not null" json:"role_label"`
 	RoleName   string `gorm:"column:role_name;not null" json:"role_name"`
 	UpdateTime int64  `gorm:"column:update_time" json:"update_time"`
+	ResourceId int    `gorm:"->"`
+	MenuId     int    `gorm:"->"`
 }
 
 // TableName sets the insert table name for this struct type
@@ -52,4 +57,31 @@ func GetRoles(condition string, args ...interface{}) ([]*Role, error) {
 		return nil, err
 	}
 	return res, nil
+}
+
+func GetRolesByConditionWithPage(condition string, iPage *page.IPage, args ...interface{}) ([]*Role, error) {
+	res := make([]*Role, 0)
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("role_name LIKE ?", args...)
+	}
+	subQuery := db.Debug().Table("tb_role").Scopes(page.Paginate(iPage))
+	if err := dao.Db.Debug().Table("(?) as r", subQuery).Select("r.id,role_name,role_label,r.create_time,r.is_disable,rr.resource_id,rm.menu_id").
+		Joins("LEFT JOIN tb_role_resource rr ON r.id = rr.role_id").Joins("LEFT JOIN tb_role_menu rm on r.id = rm.role_id").
+		Order("r.id DESC").Find(&res).Error; err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func GetRolesCountByCondition(condition string, args ...interface{}) (int64, error) {
+	var count int64
+	db := dao.Db
+	if condition != "" {
+		db = db.Where("role_name LIKE ?", args...)
+	}
+	if err := db.Debug().Table("tb_role ").Count(&count).Error; err != nil {
+		return int64(0), err
+	}
+	return count, nil
 }

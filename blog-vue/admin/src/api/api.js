@@ -128,7 +128,28 @@ export function UpdateUserRoles(params) {
 }
 
 export function UpdateUserStatus(params) {
-    console.log(params)
     return service.put(urls.users_status, params)
 }
+
+export function getAdminRoles(params) {
+    return service.get(urls.users_role, params)
+}
+
+export function getRoleResources() {
+    return service.get(urls.role_resources)
+}
+
+export function getRoleMenus() {
+    return service.get(urls.role_menus)
+}
+
+export function deleteRoles(params) {
+    return service.delete(urls.roles, params)
+}
+
+export function saveOrUpdateRoles(params) {
+    return service.post(urls.roles, params)
+}
+
+
 

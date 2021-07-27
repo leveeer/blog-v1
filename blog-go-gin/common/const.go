@@ -77,4 +77,5 @@ const (
 	AdminUsers      = "/users"
 	AdminUsersRole  = "/users/role"
 	AdminUserStatus = "/users/disable"
+	AdminRoles      = "/roles"
 )

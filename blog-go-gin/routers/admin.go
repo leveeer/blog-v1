@@ -51,5 +51,6 @@ func adminRouters(r *gin.Engine) {
 		admin.PUT(common.AdminUsersRole, UserRoleApi.UpdateUserRole)
 		admin.GET(common.AdminUsersRole, RoleApi.GetAdminUsersRole)
 		admin.PUT(common.AdminUserStatus, UserInfoApi.UpdateUserStatus)
+		admin.GET(common.AdminRoles, RoleApi.GetRoles)
 	}
 }

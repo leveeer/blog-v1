@@ -14,7 +14,10 @@ export const urls = {
   messages: "/admin/messages",
   users: "/admin/users",
   users_role: "/admin/users/role",
-  users_status: "admin/users/disable",
+  users_status: "/admin/users/disable",
+  role_resources: "/admin/role/resources",
+  role_menus: "/admin/role/menus",
+  roles: "/admin/roles",
 };
 
 export default urls;

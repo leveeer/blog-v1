@@ -194,3 +194,13 @@ message ArticleRank{
   string articleTitle = 1;
   int64 viewsCount = 2;
 }
+
+message Role{
+  int64 id = 10;
+  string roleName = 11;
+  string roleLabel = 12;
+  int64 createTime = 13;
+  int32 isDisable = 14;
+  repeated int64 resourceIdList = 1;
+  repeated int64 menuIdList = 2;
+}

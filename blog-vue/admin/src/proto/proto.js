@@ -931,6 +931,14 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           code: {
             type: "string",
             id: 3
+          },
+          ipAddr: {
+            type: "string",
+            id: 4
+          },
+          ipSource: {
+            type: "string",
+            id: 5
           }
         }
       },
@@ -1088,6 +1096,40 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           }
         }
       },
+      Role: {
+        fields: {
+          id: {
+            type: "int64",
+            id: 10
+          },
+          roleName: {
+            type: "string",
+            id: 11
+          },
+          roleLabel: {
+            type: "string",
+            id: 12
+          },
+          createTime: {
+            type: "int64",
+            id: 13
+          },
+          isDisable: {
+            type: "int32",
+            id: 14
+          },
+          resourceIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 1
+          },
+          menuIdList: {
+            rule: "repeated",
+            type: "int64",
+            id: 2
+          }
+        }
+      },
       Response: {
         values: {
           ResponseBeginIndex: 0
@@ -1231,6 +1273,10 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
             rule: "repeated",
             type: "ScUserRole",
             id: 30
+          },
+          roles: {
+            type: "ScAdminRoles",
+            id: 31
           }
         }
       },
@@ -1645,6 +1691,19 @@ var $root = ($protobuf.roots["default"] || ($protobuf.roots["default"] = new $pr
           },
           roleName: {
             type: "string",
+            id: 2
+          }
+        }
+      },
+      ScAdminRoles: {
+        fields: {
+          roleList: {
+            rule: "repeated",
+            type: "Role",
+            id: 1
+          },
+          count: {
+            type: "int64",
             id: 2
           }
         }

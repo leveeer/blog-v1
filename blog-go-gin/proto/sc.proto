@@ -46,6 +46,7 @@ message ResponsePkg {
   ScAdminMessages adminMessages = 28;
   ScAdminUsers adminUsers = 29;
   repeated ScUserRole adminRoles = 30;
+  ScAdminRoles roles = 31;
 }
 
 message ScImage{
@@ -184,3 +185,7 @@ message ScUserRole{
   string roleName = 2;
 }
 
+message ScAdminRoles{
+  repeated Role roleList = 1;
+  int64 count = 2;
+}
